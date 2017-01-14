@@ -1,0 +1,24 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "removeComments": true,
+        "target": "es6",
+        "module": "system",
+        "declaration": true,
+        "outFile": "dist/blueberry.js"
+    },
+    "files": [
+        "./src/core/Types.ts",
+        "./src/core/Enums.ts",
+        "./src/core/BlueberryObject.ts",
+        "./src/core/Component.ts",
+        "./src/core/Blueberry.ts",
+        "./src/core/Observable.ts",
+        "./src/core/dom/DomElement.ts",
+        "./src/core/dom/Dom.ts",
+        "./src/core/dom/Class.ts",
+        "./src/core/dom/Style.ts",
+        "./src/core/http/Ajax.ts",
+        "./src/main.ts"
+    ]
+}
