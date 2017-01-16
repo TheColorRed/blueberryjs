@@ -1,0 +1,104 @@
+extends ../../partials/head.pug
+block title
+    title Api &ndash; Ajax
+block content
+    .scrollspy#intro
+        h2.header Ajax
+        p.flow-text.card-panel Ajax is used in almost all applications now, making it basically impossible not to have it in your toolbox.
+    //- The Ajax request method
+    .scrollspy.section#ajax-request
+        h4 Ajax.request()
+        p Makes an ajax request to the provided url.
+        pre: code.language-javascript.
+            Ajax.request('/path/to/file.html');
+        p The request can also take an object.
+        ul
+            li #[code url: #[code string]] The url to make the request to.
+            li #[code method: #[code AjaxMethod]] The method to make the request as; acceptable values are:
+                ul
+                    li #[code AjaxMethod.Get] Sends a GET request
+                    li #[code AjaxMethod.Post] Sends a POST request
+                    li #[code AjaxMethod.Put] Currently sends a POST request
+                    li #[code AjaxMethod.Patch] Currently sends a POST request
+                    li #[code AjaxMethod.Delete] Currently sends a POST request
+            li #[code data: #[code object]] The data to be sent to the server. If #[code method] is a #[code GET] request the data will be appended to the url as a querystring. Otherwise if #[code method] is anything else it will be sent as a payload.
+            li #[code query: #[code object]] The querystring to be appended to the url. If #[code data] is also set and the method is a #[code GET], then the two will be combinded to make one querystring.
+        pre: code.language-javascript.
+            Ajax.request({
+                url: '/path/to/file.html',
+                method: AjaxMethod.Post,
+                data: {test: 'some data'},
+            );
+    //- The success method
+    .scrollspy.section#ajax-success
+        h4 Ajax.success()
+        p Executes a callback when the request was successful. Such as when a #[code 200] is returned.
+        pre: code.language-javascript.
+            Ajax.request('/path/to/file.html').success(response => {
+                console.log(response.data);
+                console.log(response.headers);
+            });
+    //- The error method
+    .scrollspy.section#ajax-error
+        h4 Ajax.error()
+        p Executes a callback when the request was not successful. Such as when a #[code 200] is not returned.
+        pre: code.language-javascript.
+            Ajax.request('/path/to/file.html').error(response => {
+                console.log(response.data);
+                console.log(response.headers);
+            });
+    //- The complete method
+    .scrollspy.section#ajax-complete
+        h4 Ajax.complete()
+        p Executes a callback when the request was completed. This callback will execute if the response was successful or if the response was not successful. It always runs.
+        pre: code.language-javascript.
+            Ajax.request('/path/to/file.html').complete(response => {
+                console.log(response.data);
+                console.log(response.headers);
+            });
+    //- The AjaxResponse class
+    .scrollspy.section#ajaxresponse
+        h2.header AjaxResponse
+        h5 Getters
+        ul.properties
+            +property('code', 'number', 'The http response code that was returned during the http response.')
+            +property('data', 'object', 'The data that was returned from the http response.')
+            +property('headers', 'AjaxHeader[]', 'The headers that were returned from the http response.')
+            +property('contentType', 'string', 'Gets the <b>Content-Type</b> header from the response.')
+            +property('contentLength', 'string', 'Gets the <b> Content-Length</b> header from the response.')
+            +property('server', 'string', 'Gets the <b> Server</b> header from the response.')
+            +property('date', 'string', 'Gets the <b> Date</b> header from the response.')
+            +property('lastModified', 'string', 'Gets the <b> Last-Modified</b> header from the response.')
+    .scrollspy.section#ajaxresponse-getheader
+        h4 AjaxResponse.getHeader()
+        p Gets a specific header from the response.
+        ul.properties
+            +property('key', 'string', 'The header name to search for. This search is case insensitive.')
+        +returnVal('AjaxHeader', 'A response header object.')
+    .scrollspy.section#ajaxresponse-getheadervalue
+        h4 AjaxResponse.getHeaderValue()
+        p Gets a specific header value from the response.
+        ul.properties
+            +property('key', 'string', 'The header name to search for. This search is case insensitive.')
+        +returnVal('string', 'The string value of the http header.')
+    .scrollspy.section#ajaxheader
+        h2.header AjaxHeader
+        p The content of a single header.
+        h5 Getters
+        ul.properties
+            +property('name', 'string', 'The name of the header')
+            +property('value', 'string', 'The value of the header')
+block sideContent
+    ul.section.table-of-contents.pinned
+        li: a(href='#intro') Introduction
+        li Ajax
+        li: a(href='#ajax-request') Ajax Request
+        li: a(href='#ajax-success') Ajax Success
+        li: a(href='#ajax-error') Ajax Error
+        li: a(href='#ajax-complete') Ajax Complete
+        li AjaxResponse
+        li: a(href='#ajaxresponse') AjaxResponse
+        li: a(href='#ajaxresponse-getheader') AjaxResponse Get Header
+        li: a(href='#ajaxresponse-getheadervalue') AjaxResponse Get Header Value
+        li AjaxHeader
+        li: a(href='#ajaxheader') AjaxHeader

@@ -1,0 +1,34 @@
+mixin listItem(text, filename)
+    li(class=`${file == filename ? 'active' : ''}`): a.waves-effect(href=`/${filename}.html`) #{text}
+mixin collapsible(text, root)
+    a(class=`${'collapsible-header waves-effect ' + (rootdir == root ? 'active' : '')}`) #{text}
+.navbar-fixed
+    nav
+        .container
+            .nav-wrapper
+                .row
+                    .col.offset-s1
+                        a(href='/').brand-logo Blueberry.js
+    ul.side-nav.fixed
+        li
+            ul.collapsible.collapsible-accordion
+                li
+                    +collapsible('JavaScript Api', 'api/js')
+                    .collapsible-body
+                        ul
+                            +listItem('Blueberry', 'api/js/blueberry')
+                            +listItem('BlueberryObject', 'api/js/blueberry-object')
+                            +listItem('Ajax', 'api/js/ajax')
+                            +listItem('Components', 'api/js/component')
+                li
+                    +collapsible('HTML Api', 'api/html')
+                    .collapsible-body
+                        ul
+                            +listItem('Components', 'api/html/component')
+                li
+                    +collapsible('Examples', 'examples')
+                    .collapsible-body
+                        ul
+                            +listItem('Ajax', 'examples/ajax')
+                            +listItem('Clock', 'examples/clock')
+                            +listItem('Observable', 'examples/observe')

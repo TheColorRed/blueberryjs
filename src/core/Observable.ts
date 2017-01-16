@@ -26,13 +26,13 @@ class Observable extends BlueberryObject {
     }
 
     public set(key: string, value: any) {
-        if (this._observable[key]) {
+        if (key in this._observable) {
             // if (Object.getOwnPropertyDescriptor(this._observable, key).set != undefined) {
             //     this._observable[key] = this._observable[key]();
             // } else {
             this._observable[key] = value;
             // }
-            let elem = this.element.querySelectorAll(`[observe=${key}]`) as NodeListOf<HTMLElement>
+            let elem = this.element.querySelectorAll(`[observe=${key}]`) as NodeListOf<HTMLElement>;
             for (let i = 0, l = elem.length; i < l; i++) {
                 let element = elem[i];
                 if (element instanceof HTMLInputElement) {

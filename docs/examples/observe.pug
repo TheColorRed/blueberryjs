@@ -1,0 +1,51 @@
+extends ../partials/head.pug
+block title
+    title Observable Example
+block content
+    h2.header Observable Example
+    p.flow-text Sometimes you need to watch a value for changes, this can be done using an observable object.
+    h2.header Final Result
+    script.
+        Blueberry.register(
+            class Observe extends Component {
+                observe() {
+                    return {
+                        name: ''
+                    }
+                }
+            }
+        );
+    .row(component='Observe')
+        .input-field.col.s6
+            input.validate(model='name' type='text')
+            label What is your name?
+        h3.col.s6(observe='name')
+    h2.header The Source Code
+    h4 observe.js
+    pre: code.language-js.
+        Blueberry.register(
+            class Observe extends Component {
+                observe() {
+                    return {
+                        name: ''
+                    }
+                }
+            }
+        );
+    p With our #[code Observe] component, we can add an #[code observe()] method which will be called before the #[code start()] method is called. This will tell the component what items to watch; your html your child elements can then watch thier parent for changes.
+    h4 observe.html
+    pre: code.language-markup
+        ='<head>\n'
+        ='    <title>Observer Example</title>\n'
+        ='    <script src="/dist/blueberry.js"></script>\n'
+        ='    <script src="./observe.js"></script>\n'
+        ='</head>\n'
+        ='<body>\n'
+        ='    <div component="Observe">\n'
+        ='        <p><input type="text" model="name"></p>\n'
+        ='        <p observe="name"></p>\n'
+        ='    </div>\n'
+        ='</body>'
+    p You can see here that we have a component attribute called #[code Observe] which then has children elements.
+    p Our input element has a #[code model] attribute which is used to manipulate the value in the observer.
+    p Our last #[code p] element has an #[code observe] attribute which is used to show the state of the item that is getting watched.

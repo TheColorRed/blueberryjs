@@ -1,0 +1,97 @@
+extends ../partials/head.pug
+block title
+    title Ajax Example
+block content
+    h2.header Ajax Example
+    p.flow-text Ajax is a really useful tool when working with a JavaScript library so we included one for you.
+    h2.header Final Result
+    script.
+        Blueberry.register(
+            class GetJsonFile extends Component {
+                observe() {
+                    return {
+                        title: '',
+                        descr: '',
+                        colors: []
+                    };
+                }
+                click(e) {
+                    e.preventDefault();
+                    let url = e.target.getAttribute('href');
+                    if(url && url.length > 0){
+                        Ajax.request({url: url, data:{one:'one',two:'two'}}).success(response => {
+                            this.observable.set('title', response.data.title);
+                            this.observable.set('descr', response.data.description);
+                            this.observable.set('colors', response.data.colors);
+                        });
+                    }
+                }
+            }
+        );
+    .row.valign-wrapper(component='GetJsonFile')
+        .col.s6
+            .row
+                .col.s6
+                    a.waves-effect.btn-large(href='/assets/examples/ajax.json') Click Me!
+                .col.s6
+                    a.waves-effect.btn-large(href='/assets/examples/ajax2.json') Or Click Me!
+        .col.s6
+            h4(observe='title')
+            p(observe='descr')
+    h2.header The Source Code
+    h4 ajax.js
+    pre: code.language-javascript.
+        Blueberry.register(
+            class GetJsonFile extends Component {
+                observe() {
+                    return {
+                        title: '',
+                        descr: '',
+                        colors: []
+                    };
+                }
+                click(e) {
+                    e.preventDefault();
+                    let url = e.target.getAttribute('href');
+                    if(url && url.length > 0){
+                        Ajax.request(url).success(response => {
+                            this.observable.set('title', response.data.title);
+                            this.observable.set('descr', response.data.description);
+                            this.observable.set('colors', response.data.colors);
+                        });
+                    }
+                }
+            }
+        );
+    p With our #[code Observe] component, we can add an #[code observe()] method which will be called before the #[code start()] method is called. This will tell the component what items to watch; your html your child elements can then watch thier parent for changes.
+    h4 ajax.html
+    pre: code.language-markup
+        ='<head>\n'
+        ='    <title>Ajax Example</title>\n'
+        ='    <script src="/dist/blueberry.js"></script>\n'
+        ='    <script src="./ajax.js"></script>\n'
+        ='</head>\n'
+        ='<body>\n'
+        ='    <div component="GetJsonFile">\n'
+        ='        <p><a class="btn-large" href="./ajax.json">Click Me!</a></p>\n'
+        ='        <p><a class="btn-large" href="./ajax2.json">Or Click Me!</a></p>\n'
+        ='        <h1 observe="title"></h1>\n'
+        ='        <p observe="descr"></p>\n'
+        ='    </div>\n'
+        ='</body>'
+    p You can see here that we have a component attribute called #[code Observe] which then has children elements.
+    p Our input element has a #[code model] attribute which is used to manipulate the value in the observer.
+    p Our last #[code p] element has an #[code observe] attribute which is used to show the state of the item that is getting watched.
+    h4 ajax.json
+    pre: code.language-js.
+        {
+            "title": "Ajax Example",
+            "description": "This is an Blueberry ajax example",
+            "colors": ["Red", "Green", "Blue", "Yellow"]
+        }
+    h4 ajax2.json
+    pre: code.language-js.
+        {
+            "title": "Blueberry.js",
+            "description": "Blueberry.js is a framework built to make javascript pages easy to make."
+        }

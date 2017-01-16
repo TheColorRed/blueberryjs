@@ -1,0 +1,29 @@
+extends ../../partials/head.pug
+block title
+    title Api &ndash; BlueberryObject
+block content
+    .scrollspy#intro
+        h2.header BlueberryObject
+        p.flow-text.card-panel BlueberryObject is a helper class that Component and other classes extend for functionality.
+    //- The component
+    .scrollspy.section#registered-components
+        h4 registered
+        p This field is mostly for internal use, but can be used in your project if needed to get a list of all the registered components.
+        +returnVal('Component[]', 'Returns a list of registered components.')
+        pre: code.language-javascript.
+            console.log(Blueberry.registered);
+    .scrollspy.section#register
+        h4 register()
+        p This method is used to register a component to Blueberry for usage.
+        ul.properties
+            +property('component', 'Component', 'The component to register with Blueberry.')
+        pre: code.language-javascript.
+            Blueberry.register(
+                class MyComponent extends Component { }
+            );
+
+block sideContent
+    ul.section.table-of-contents.pinned
+        li: a(href='#intro') Introduction
+        li: a(href='#registered-components') Registered Components
+        li: a(href='#register') Component Registration

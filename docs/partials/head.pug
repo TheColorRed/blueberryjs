@@ -1,0 +1,61 @@
+//- The return value for an document item
+mixin returnVal(type, text)
+    ul.return
+        li.indigo-text Returns #[code #{type}]
+            ul
+                li= text
+//- A property item
+mixin property(prop, type, text)
+    li #{prop} #[code #{type}]
+        ul
+            li!= text
+//- An item the inherits from another item link
+mixin inherit(text, url)
+    p.flow-text Inherits from #[a(href=`${url}.html`) #{text}]
+//- A document header item
+mixin header(title, message)
+    h2.header!= title
+    p!= message
+//- A document definition
+mixin def(title, message)
+    h4!= title
+    p!= message
+doctype html
+html
+    head
+        block title
+            title Blueberry.js
+        link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css')
+        link(rel='stylesheet' href='/assets/css/prism.css')
+        script(src='https://code.jquery.com/jquery-2.2.4.js')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js')
+        script(src='/assets/js/prism.js')
+        script(src='/assets/js/master.js')
+        script(src='/assets/js/master.js')
+        script(src='/assets/js/blueberry.js')
+        style.
+            body{font-size:16px;display:flex;min-height:100vh;flex-direction: column;}
+            main{flex: 1 0 auto;}
+            code{background-color:rgb(245, 242, 240);padding:2px 5px;color:#E57373;}
+            code>code{color:#66bb6a;}
+            h2.header{font-weight:200;color:#E57373}
+            .container li>ul{padding-left: 30px !important;}
+            ul.properties>li{color: #66bb6a;font-size: 20px;margin-bottom:30px;}
+            ul.properties>li>ul>li{font-size: 16px;color:rgba(0,0,0,0.87);}
+            .class{color: #e57373;border-bottom: solid 1px #e57373;padding-bottom: 5px;}
+            ul.return>li{font-size: 20px;}
+            ul.return>li>ul>li{font-size: 16px;color:rgba(0,0,0,0.87);}
+        script.
+            $(document).ready(function(){
+                $('.scrollspy').scrollSpy({scrollOffset: 100});
+            });
+    body
+        main
+            include ./nav.pug
+            .container
+                .row.section
+                    .col.offset-s1.s9
+                        block content
+                    .col.s2
+                        block sideContent
+        include ./footer.pug

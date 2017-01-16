@@ -1,0 +1,37 @@
+extends ../../partials/head.pug
+block title
+    title Api &ndash; Blueberry
+block content
+    .scrollspy#intro
+        h2.header Blueberry
+        p.flow-text.card-panel Blueberry is where most of the core flow of the library lies, it controlls flow and many events that happen.
+    //- The component
+    .scrollspy.section#registered-components
+        +def('registered', 'This field is mostly for internal use, but can be used in your project if needed to get a list of all the registered components.')
+        +returnVal('Component[]', 'Returns a list of registered components.')
+        pre: code.language-javascript.
+            console.log(Blueberry.registered);
+    .scrollspy.section#register
+        +def('register()', 'This method is used to register a component to Blueberry for usage.')
+        ul.properties
+            +property('component', 'Component', 'The component to register with Blueberry.')
+        +returnVal('Blueberry', 'The Blueberry object')
+        pre: code.language-javascript.
+            Blueberry.register(
+                class MyComponent extends Component { }
+            );
+    .scrollspy.section#uniqid
+        +def('uniqId()', 'uniqId allows you to generate alpha numeric ids for any use.')
+        ul.properties
+            +property('length', 'number', 'The length of the returned id. Default is 6 characters.')
+        +returnVal('string', 'The unique string of the specified length.')
+        pre: code.language-javascript.
+            console.log(Blueberry.uniqId());
+            console.log(Blueberry.uniqId(10));
+
+block sideContent
+    ul.section.table-of-contents.pinned
+        li: a(href='#intro') Introduction
+        li: a(href='#registered-components') Registered Components
+        li: a(href='#register') Component Registration
+        li: a(href='#uniqid') Unique Id
