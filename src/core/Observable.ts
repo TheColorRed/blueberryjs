@@ -1,19 +1,15 @@
 class Observable extends BlueberryObject {
 
     private _observable: {} = null;
-    private _proxyHandler = {
-        get: function (target, name) {
-            return name in target ? target[name] : 37;
-        }
-    };
+    private _component: Component;
 
-    public constructor(observable: any, element: DomElement) {
+    public constructor(component: Component, observable: any, element: DomElement) {
         super();
+        this._component = component;
         this._observable = observable;
         this.object = element;
         this.element = element.element;
         this.id = Blueberry.uniqId();
-        let observe
     }
 
     public get(key: string) {
@@ -27,18 +23,20 @@ class Observable extends BlueberryObject {
 
     public set(key: string, value: any) {
         if (key in this._observable) {
-            // if (Object.getOwnPropertyDescriptor(this._observable, key).set != undefined) {
-            //     this._observable[key] = this._observable[key]();
-            // } else {
+            let old = copy(this._observable);
             this._observable[key] = value;
-            // }
-            let elem = this.element.querySelectorAll(`[observe=${key}]`) as NodeListOf<HTMLElement>;
-            for (let i = 0, l = elem.length; i < l; i++) {
-                let element = elem[i];
-                if (element instanceof HTMLInputElement) {
-                    element.value = value;
-                } else if (element instanceof HTMLElement) {
-                    element.innerText = value;
+            for (let k in this._observable) {
+                if (typeof this._component['change'] == 'function' && this._observable[k] != old[k]) {
+                    this._component['change'](k, this._observable[k], old[k]);
+                }
+                let elem = this.element.querySelectorAll(`[observe=${k}]`) as NodeListOf<HTMLElement>;
+                for (let i = 0, l = elem.length; i < l; i++) {
+                    let element = elem[i];
+                    if (element instanceof HTMLInputElement) {
+                        element.value = this._observable[k];
+                    } else if (element instanceof HTMLElement) {
+                        element.innerText = this._observable[k];
+                    }
                 }
             }
         }

@@ -4,7 +4,7 @@ abstract class Component extends BlueberryObject {
     private started: boolean = false;
 
     public getObservables() {
-        this.observable = new Observable(this['observe'](), this.object);
+        this.observable = new Observable(this, this['observe'](), this.object);
         let observables = this.element.querySelectorAll('[observe]') as NodeListOf<HTMLElement>;
         for (let i = 0, l = observables.length; i < l; i++) {
             let element = observables[i];
@@ -24,7 +24,7 @@ abstract class Component extends BlueberryObject {
                 element.addEventListener('input', e => {
                     this.observable.set(observeKey, (<HTMLInputElement>e.currentTarget).value);
                 });
-                element.value = typeof observeVal == 'function' ? observeVal() : observeVal;
+                element.value = (typeof observeVal == 'function' ? observeVal() : observeVal) || '';
             }
         }
     }

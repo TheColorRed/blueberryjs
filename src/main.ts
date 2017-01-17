@@ -7,8 +7,21 @@ interface String {
     capitalizeFirstLetter();
 }
 
+interface Object {
+    copy();
+}
+
 String.prototype.capitalizeFirstLetter = function () {
     return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
+function copy(obj) {
+    if (null == obj || 'object' != typeof obj) return obj;
+    var copy = obj.constructor();
+    for (var attr in obj) {
+        if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+    }
+    return copy;
 }
 
 function serialize(obj, prefix?) {

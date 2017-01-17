@@ -10,8 +10,17 @@ block content
             class Observe extends Component {
                 observe() {
                     return {
-                        name: ''
+                        first: 'Who knows?',
+                        last: 'Who knows?',
+                        set name(value) {
+                            let name = value.split(' ', 2);
+                            this.first = name[0] || 'Who knows?';
+                            this.last = name[1] || 'Who knows?';
+                        }
                     }
+                }
+                change(key, oldVal, newVal) {
+                    console.log(key, oldVal, newVal);
                 }
             }
         );
@@ -19,7 +28,9 @@ block content
         .input-field.col.s6
             input.validate(model='name' type='text')
             label What is your name?
-        h3.col.s6(observe='name')
+        .col.s6
+            h4.truncate First Name: #[span.green-text(observe='first')]
+            h4.truncate Last Name: #[span.green-text(observe='last')]
     h2.header The Source Code
     h4 observe.js
     pre: code.language-js.
@@ -27,7 +38,13 @@ block content
             class Observe extends Component {
                 observe() {
                     return {
-                        name: ''
+                        first: 'Who knows?',
+                        last: 'Who knows?',
+                        set name(value) {
+                            let name = value.split(' ', 2);
+                            this.first = name[0] || 'Who knows?';
+                            this.last = name[1] || 'Who knows?';
+                        }
                     }
                 }
             }
@@ -43,7 +60,8 @@ block content
         ='<body>\n'
         ='    <div component="Observe">\n'
         ='        <p><input type="text" model="name"></p>\n'
-        ='        <p observe="name"></p>\n'
+        ='        <p>First Name: <span observe="first"></span></p>\n'
+        ='        <p>Last Name: <span observe="last"></span></p>\n'
         ='    </div>\n'
         ='</body>'
     p You can see here that we have a component attribute called #[code Observe] which then has children elements.
