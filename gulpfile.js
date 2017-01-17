@@ -13,6 +13,7 @@ const paths = {
 const pugFiles = [
     'index',
     'examples/clock',
+    'examples/timer',
     'examples/observe',
     'examples/ajax',
     'api/js/ajax',

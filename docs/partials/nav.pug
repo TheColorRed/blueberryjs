@@ -13,6 +13,7 @@ mixin collapsible(text, root)
         li
             ul.collapsible.collapsible-accordion
                 li
+                    //- JavaScript Api
                     +collapsible('JavaScript Api', 'api/js')
                     .collapsible-body
                         ul
@@ -21,14 +22,17 @@ mixin collapsible(text, root)
                             +listItem('Ajax', 'api/js/ajax')
                             +listItem('Components', 'api/js/component')
                 li
+                    //- HTML API
                     +collapsible('HTML Api', 'api/html')
                     .collapsible-body
                         ul
                             +listItem('Components', 'api/html/component')
                 li
+                    //- Examples
                     +collapsible('Examples', 'examples')
                     .collapsible-body
                         ul
                             +listItem('Ajax', 'examples/ajax')
                             +listItem('Clock', 'examples/clock')
+                            +listItem('Timer', 'examples/timer')
                             +listItem('Observable', 'examples/observe')

@@ -1,0 +1,54 @@
+extends ../partials/head.pug
+block title
+    title Clock Example
+block content
+    h2.header Clock Example
+    p.flow-text In this example, you will see a timer that shows how long you have been on the page.
+    h2.header Final Result
+    script.
+        Blueberry.register(
+            class Timer extends Component {
+                observe() {
+                    return { elapsed: 0 };
+                }
+                created() {
+                    this.started = new Date();
+                }
+                update() {
+                    this.set({ elapsed: this.time });
+                }
+                get time() {
+                    return ((new Date().getTime() - this.started.getTime()) / 1000).toFixed(1);
+                }
+            }
+        );
+    p This example was started #[b(component='Timer' observe='elapsed')] #[b seconds] ago.
+    h2.header The Source Code
+    h4 timer.js
+    pre: code.language-javascript.
+        Blueberry.register(
+            class Timer extends Component {
+                observe() {
+                    return { elapsed: 0 };
+                }
+                created() {
+                    this.started = new Date();
+                }
+                update() {
+                    this.set({ elapsed: this.time });
+                }
+                get time() {
+                    return ((new Date().getTime() - this.started.getTime()) / 1000).toFixed(1);
+                }
+            }
+        );
+    h4 timer.html
+    pre: code.language-markup
+        ='<head>\n'
+        ='    <title>Clock Example</title>\n'
+        ='    <script src="/dist/blueberry.js"></script>\n'
+        ='    <script src="./clock.js"></script>\n'
+        ='</head>\n'
+        ='<body>\n'
+        ='    <p>This example was started <b component="Timer" observe="elapsed"></b> <b>seconds</b> ago.</p>\n'
+        ='</body>'

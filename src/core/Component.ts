@@ -1,7 +1,16 @@
 abstract class Component extends BlueberryObject {
 
     public observable: Observable = null;
-    private started: boolean = false;
+    private _started: boolean = false;
+
+    public set(key: string | Object, value): this {
+        this.observable.set(key, value);
+        return this;
+    }
+
+    public get(key: string) {
+        return this.observable.get(key);
+    }
 
     public getObservables() {
         this.observable = new Observable(this, this['observe'](), this.object);

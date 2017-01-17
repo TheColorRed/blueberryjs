@@ -19,8 +19,8 @@ class DomElement extends BlueberryObject {
     public sendMessage(message: string, ...options: any[]) {
         this._components.forEach(comp => {
             if (message == 'created') {
-                if (comp['started']) { return; }
-                comp['started'] = true;
+                if (comp['_started']) { return; }
+                comp['_started'] = true;
                 if (typeof comp['observe'] == 'function') {
                     comp.getObservables();
                     comp.getModels();

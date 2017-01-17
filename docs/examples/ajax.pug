@@ -20,9 +20,11 @@ block content
                     let url = e.target.getAttribute('href');
                     if(url && url.length > 0){
                         Ajax.request({url: url, data:{one:'one',two:'two'}}).success(response => {
-                            this.observable.set('title', response.data.title);
-                            this.observable.set('descr', response.data.description);
-                            this.observable.set('colors', response.data.colors);
+                            this.set({
+                                title: response.data.title,
+                                descr: response.data.description,
+                                colors: response.data.colors
+                            });
                         });
                     }
                 }
@@ -54,10 +56,12 @@ block content
                     e.preventDefault();
                     let url = e.target.getAttribute('href');
                     if(url && url.length > 0){
-                        Ajax.request(url).success(response => {
-                            this.observable.set('title', response.data.title);
-                            this.observable.set('descr', response.data.description);
-                            this.observable.set('colors', response.data.colors);
+                        Ajax.request({url: url, data:{one:'one',two:'two'}}).success(response => {
+                            this.set({
+                                title: response.data.title,
+                                descr: response.data.description,
+                                colors: response.data.colors
+                            });
                         });
                     }
                 }

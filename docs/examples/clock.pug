@@ -8,24 +8,26 @@ block content
     script.
         Blueberry.register(
             class Clock extends Component {
+                observe() {
+                    return { time: 0 };
+                }
                 update() {
-                    this.dom.content(new Date().toLocaleTimeString());
+                    this.set({ time: new Date().toLocaleTimeString() });
                 }
             }
         );
     h1 Hello, world!
-    h2 It is #[span(component="Clock")] somewhere
+    h2 It is #[span(component='Clock' observe='time')] somewhere
     h2.header The Source Code
     h4 clock.js
     pre: code.language-javascript.
         Blueberry.register(
             class Clock extends Component {
-                // Update the text on every animation frame (about 60 times per second).
+                observe() {
+                    return { time: 0 };
+                }
                 update() {
-                    // By using content instead of html/text data will be inserted as text
-                    // or an input value based on the type of element that this component is attached to.
-                    // If the component is attached to the document or window nothing will happen.
-                    this.dom.content(new Date().toLocaleTimeString());
+                    this.set({ time: new Date().toLocaleTimeString() });
                 }
             }
         );
@@ -39,6 +41,6 @@ block content
         ='</head>\n'
         ='<body>\n'
         ='    <h1>Hello, world!</h1>\n'
-        ='    <h2>It is <span component="Clock"></span> somewhere</h2>\n'
+        ='    <h2>It is <span component="Clock" observe="time"></span> somewhere</h2>\n'
         ='</body>'
     p Here you can see where the #[code component] attribute is located, and it has the content of #[code Clock], which matches the clock javascript class.
