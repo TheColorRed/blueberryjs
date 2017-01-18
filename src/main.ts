@@ -9,6 +9,7 @@ interface String {
 
 interface Object {
     copy();
+    query(path: string, obj?);
 }
 
 String.prototype.capitalizeFirstLetter = function () {

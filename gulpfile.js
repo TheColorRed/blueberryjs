@@ -29,6 +29,7 @@ gulp.task('typescript', () => {
     let tsResult = tsProject.src().pipe(tsProject());
     // Save typescript to javascript
     // Compile non es6 project
+    tsResult.dts.pipe(gulp.dest('./'));
     if (require('./tsconfig.json').compilerOptions.target != 'es6') {
         return tsResult.js.pipe(uglify({ mangle: true })).pipe(gulp.dest('./')).on('finish', function () {
             fs.createReadStream('./dist/blueberry.js').pipe(fs.createWriteStream('./public/assets/js/blueberry.js'));

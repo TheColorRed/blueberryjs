@@ -40,6 +40,18 @@ class Blueberry {
         return (Math.random().toString(36) + Math.random().toString(36)).substr(2, length);
     }
 
+    public static query(path: string, obj = null) {
+        let previous = null;
+        obj = !obj ? this : obj;
+        for (let i = 0, p = path.split(/[\[\]\.]/), len = p.length; i < len; i++) {
+            if (p[i] == '') { continue; }
+            let item = p[i];//.match(/[0-9]+/) ? path[i] : path[i];
+            obj = obj[item];
+            previous = obj;
+        }
+        return obj;
+    }
+
     private static findAllComponents() {
         let e = document.querySelectorAll('[component], [data-component]') as NodeListOf<HTMLElement>;
         let elen = this._elements.length;

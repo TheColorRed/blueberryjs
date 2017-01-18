@@ -104,10 +104,10 @@ class Ajax {
 
 class AjaxResponse {
     private _headers: AjaxHeader[] = [];
-    private _data: any = null;
+    private _data: Object = null;
     private _code: number = null;
 
-    public get data(): any {
+    public get data(): Object {
         return this._data;
     }
 

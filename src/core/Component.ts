@@ -3,7 +3,15 @@ abstract class Component extends BlueberryObject {
     public observable: Observable = null;
     private _started: boolean = false;
 
-    public set(key: string | Object, value): this {
+    public get attrs(): Object {
+        let attrs = {};
+        for (let i = 0, l = this.element.attributes.length; i < l; i++) {
+            attrs[this.element.attributes[i].name] = this.element.attributes[i].value;
+        }
+        return attrs;
+    }
+
+    public set(key: string | Object, value?: any): this {
         this.observable.set(key, value);
         return this;
     }
