@@ -19,6 +19,7 @@
         "./src/core/dom/Class.ts",
         "./src/core/dom/Style.ts",
         "./src/core/http/Ajax.ts",
+        "./src/core/http/Watch.ts",
         "./src/main.ts"
     ]
 }

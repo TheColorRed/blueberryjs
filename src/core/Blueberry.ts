@@ -9,8 +9,13 @@ class Blueberry {
         return this._registeredComponents;
     }
 
+    public static get elements(): DomElement[] {
+        return this._elements;
+    }
+
     public static register(c): Blueberry {
         this._registeredComponents[c.name] = c;
+        window[c.name] = c;
         return this;
     }
 
@@ -52,6 +57,18 @@ class Blueberry {
         return obj;
     }
 
+    public static findWithComponent<T extends Component>(type: ComponentType<T>): DomElement[] {
+        let elements: DomElement[] = [];
+        this._elements.forEach(el => {
+            el.components.forEach(comp => {
+                if (comp instanceof type) {
+                    elements.push(el);
+                }
+            });
+        });
+        return elements;
+    }
+
     private static findAllComponents() {
         let e = document.querySelectorAll('[component], [data-component]') as NodeListOf<HTMLElement>;
         let elen = this._elements.length;
@@ -74,11 +91,14 @@ class Blueberry {
 
     private static createClickHandlers() {
         this._elements.forEach(element => {
-            element.components.forEach(component => {
-                if (typeof component['click'] == 'function') {
-                    element.element.onclick = component['click'].bind(component);
-                }
-            });
+            element.element.onclick = function (e) {
+                e.preventDefault();
+                element.components.forEach(component => {
+                    if (typeof component['click'] == 'function') {
+                        component['click'].bind(component).call();
+                    }
+                });
+            };
         });
     }
 

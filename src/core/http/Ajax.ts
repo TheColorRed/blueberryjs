@@ -1,5 +1,15 @@
 class Ajax {
 
+    private _done: boolean = false;
+
+    public get done(): boolean {
+        return this._done;
+    }
+
+    public get response(): AjaxResponse {
+        return this._response;
+    }
+
     private _options: { url: string, method?: AjaxMethod, data?: any, query?: any } = {
         url: '',
         method: AjaxMethod.Get
@@ -76,8 +86,11 @@ class Ajax {
                 this._error(this._response);
             }
 
-            if (xhttp.readyState == 4 && typeof this._complete == 'function') {
-                this._complete(this._response);
+            if (xhttp.readyState == 4) {
+                this._done = true;
+                if (typeof this._complete == 'function') {
+                    this._complete(this._response);
+                }
             }
         };
 

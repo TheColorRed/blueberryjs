@@ -59,7 +59,7 @@ class Dom {
                         item.setAttribute(attrName, v);
                     }
                 }
-                finalTemp.appendChild(newTemp);
+                finalTemp.appendChild(newTemp.firstChild);
             }
             this.content(finalTemp.children as HTMLCollectionOf<HTMLElement>);
         }
@@ -69,7 +69,7 @@ class Dom {
     private getTemplate(template: string): HTMLElement {
         let root = document.createElement('div');
         root.innerHTML = template;
-        return <HTMLElement>root.firstChild;
+        return <HTMLElement>root;
     }
 
 }

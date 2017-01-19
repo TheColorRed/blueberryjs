@@ -1,6 +1,7 @@
 class DomElement extends BlueberryObject {
 
     private _components: Component[] = [];
+    private _parent: DomElement = null;
 
     public get components(): Component[] {
         return this._components;
@@ -37,15 +38,6 @@ class DomElement extends BlueberryObject {
                 this.element.parentNode.removeChild(this.element);
             }
         });
-    }
-
-    public addComponent<T extends Component>(type: ComponentType<T>) {
-        let c = new type() as T;
-        c.element = this.element;
-        c.object = this;
-        c.init();
-        this._components.push(c);
-        return c;
     }
 
     private getComponents() {
