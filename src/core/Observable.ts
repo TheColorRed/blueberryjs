@@ -2,6 +2,7 @@ class Observable extends BlueberryObject {
 
     private _observable: {} = null;
     private _component: Component;
+    private _init: boolean = false;
 
     public constructor(component: Component, observable: any, element: DomElement) {
         super();
@@ -36,7 +37,7 @@ class Observable extends BlueberryObject {
             let old = copy(this._observable);
             this._observable[key] = value;
             for (let k in this._observable) {
-                if (this._observable[k] != old[k]) {
+                if (this._observable[k] != old[k] || !this._init) {
                     if (typeof this._component['change'] == 'function') {
                         this._component['change'](k, this._observable[k], old[k]);
                     }

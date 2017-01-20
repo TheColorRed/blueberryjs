@@ -10,12 +10,18 @@ class BlueberryObject {
 
     protected _toDelete: boolean = false;
 
+    private _props: Properties = new Properties();
+
     public get attrs(): Object {
         let attrs = {};
         for (let i = 0, l = this.element.attributes.length; i < l; i++) {
             attrs[this.element.attributes[i].name] = this.element.attributes[i].value;
         }
         return attrs;
+    }
+
+    public get props(): Properties {
+        return this.object._props;
     }
 
     public get parent(): DomElement {
@@ -28,6 +34,37 @@ class BlueberryObject {
         let de = new DomElement(<HTMLElement>pNode);
         Blueberry.addElement(de);
         return de;
+    }
+
+    public findClosestComponent<T extends Component>(type: ComponentType<T>): Component {
+        let component: Component = null;
+        let item = this.element.closest(`[component*=${type.prototype.constructor.name}]`) as HTMLElement;
+        Blueberry.elements.forEach(el => {
+            if (component != null) { return; }
+            el.components.forEach(comp => {
+                if (component != null) { return; }
+                if (comp instanceof type && comp.element == item) {
+                    component = comp;
+                }
+            });
+        });
+        return component;
+    }
+
+    public findChildComponents<T extends Component>(type: ComponentType<T>): Component[] {
+        let components: Component[] = [];
+        let items = this.element.querySelectorAll('[component]') as NodeListOf<HTMLElement>;
+        Blueberry.elements.forEach(el => {
+            el.components.forEach(comp => {
+                for (let i = 0, l = items.length; i < l; i++) {
+                    let item = items[i];
+                    if (comp instanceof type && comp.element == item) {
+                        components.push(comp);
+                    }
+                }
+            });
+        });
+        return components;
     }
 
     public init() {
@@ -68,8 +105,8 @@ class BlueberryObject {
         let name = (<any>c).constructor.name;
         for (let i = 0, l = this.object.components.length; i < l; i++) {
             let comp = this.object.components[i];
-            if (name == (<any>comp).constructor.name && comp.unique) {
-                return null;
+            if (type instanceof Component && name == (<any>comp).constructor.name && comp.unique) {
+                return <T>comp;
             }
         }
 
@@ -81,6 +118,19 @@ class BlueberryObject {
         c.init();
         this.object['_components'].push(c);
         return c;
+    }
+
+    public removeComponent<T extends Component>(type: ComponentType<T>): this {
+        let i = this.object.components.length;
+        let name = (<any>type).constructor.name;
+        while (i--) {
+            let comp = this.object.components[i];
+            if (comp instanceof Component && name == (<any>comp).constructor.name) {
+                this.object.components.splice(i, 1);
+                delete this.object.components[i];
+            }
+        }
+        return this;
     }
 
     protected createElement(html: string): HTMLElement {

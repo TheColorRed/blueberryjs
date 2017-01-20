@@ -20,6 +20,7 @@
         "./src/core/dom/Style.ts",
         "./src/core/http/Ajax.ts",
         "./src/core/http/Watch.ts",
+        "./src/core/helpers/Properties.ts",
         "./src/main.ts"
     ]
 }

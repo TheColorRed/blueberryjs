@@ -21,6 +21,7 @@ class Dom {
         if (data instanceof HTMLElement) {
             this.element.innerHTML = data.outerHTML;
         } else if (data instanceof HTMLCollection) {
+            this.element.innerHTML = '';
             while (data.length > 0) {
                 this.element.appendChild(data[0]);
             }
@@ -33,36 +34,48 @@ class Dom {
         return this;
     }
 
-    public fromTemplate(template: string, data: any): this {
-        if (typeof data == 'object') {
-            let finalTemp = document.createElement('div');
-            for (let key in data) {
-                let newTemp = this.getTemplate(template);
-                let items = newTemp.querySelectorAll('*') as NodeListOf<HTMLElement>;
-                let value = data[key];
-                for (let i = 0, l = items.length; i < l; i++) {
-                    let item = items[i];
-                    let observed = item.getAttribute('observe');
-                    if (observed) {
-                        item.innerText = Blueberry.query(observed, value);
-                    }
-                    for (let a = 0, len = item.attributes.length; a < len; a++) {
-                        let attrValue = item.attributes[a].value;
-                        let attrName = item.attributes[a].name;
-                        const regex = /\{\{(.+?)\}\}/g;
-                        let m;
-                        let v = attrValue;
-                        while ((m = regex.exec(attrValue)) != null) {
-                            if (m.index === regex.lastIndex) { regex.lastIndex++; }
-                            v = v.replace(`{{${m[1]}}}`, Blueberry.query(m[1], value));
+    public fromTemplate(templateUrl: string, data: any): this {
+        Ajax.request(templateUrl).success(response => {
+            if (typeof data == 'object') {
+                let finalTemp = document.createElement('div');
+                for (let key in data) {
+                    let newTemp = this.getTemplate(<string>response.data);
+                    let items = newTemp.querySelectorAll('*') as NodeListOf<HTMLElement>;
+                    let value = data[key];
+                    for (let i = 0, l = items.length; i < l; i++) {
+                        let item = items[i];
+                        let observed = item.getAttribute('observe');
+                        if (observed) {
+                            item.innerText = Blueberry.query(observed, value);
                         }
-                        item.setAttribute(attrName, v);
+                        for (let a = 0, len = item.attributes.length; a < len; a++) {
+                            let attrValue = item.attributes[a].value;
+                            let attrName = item.attributes[a].name;
+                            const regex = /\{\{(.+?)\}\}/g;
+                            let m;
+                            let v = attrValue;
+                            while ((m = regex.exec(attrValue)) != null) {
+                                if (m.index === regex.lastIndex) { regex.lastIndex++; }
+                                v = v.replace(`{{${m[1]}}}`, Blueberry.query(m[1], value));
+                            }
+                            item.setAttribute(attrName, v);
+                        }
                     }
+                    finalTemp.appendChild(newTemp.firstChild);
                 }
-                finalTemp.appendChild(newTemp.firstChild);
+                this.content(finalTemp.children as HTMLCollectionOf<HTMLElement>);
             }
-            this.content(finalTemp.children as HTMLCollectionOf<HTMLElement>);
-        }
+        });
+        return this;
+    }
+
+    public disable(): this {
+        (<any>this.element).disabled = true;
+        return this;
+    }
+
+    public enable(): this {
+        (<any>this.element).disabled = false;
         return this;
     }
 

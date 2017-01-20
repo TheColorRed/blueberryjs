@@ -4,6 +4,11 @@ abstract class Component extends BlueberryObject {
     public unique: boolean = true;
     private _started: boolean = false;
 
+    public abstract click(event?: Event): void;
+    public abstract created(): void;
+    public abstract update(): void;
+    public abstract deleted(): void;
+
     public set(key: string | Object, value?: any): this {
         this.observable.set(key, value);
         return this;
@@ -22,6 +27,12 @@ abstract class Component extends BlueberryObject {
             let observeVal = this.observable.get(observeKey);
             this.observable.set(observeKey, observeVal);
         }
+        if (this.element.hasAttribute('observe')) {
+            let observeKey = this.element.getAttribute('observe');
+            let observeVal = this.observable.get(observeKey);
+            this.observable.set(observeKey, observeVal);
+        }
+        this['_init'] = true;
     }
 
     public getModels() {

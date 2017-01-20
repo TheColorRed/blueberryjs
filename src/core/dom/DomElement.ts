@@ -56,13 +56,17 @@ class DomElement extends BlueberryObject {
         for (let i = 0, l = comps.length; i < l; i++) {
             let name = comps[i];
             if (name.length > 0) {
-                let c: Component = new Blueberry.registered[name]();
-                c.element = this.element;
-                c.object = this;
-                c.id = Blueberry.uniqId();
-                this.setProperties(c, this.element);
-                c.init();
-                this._components.push(c);
+                try {
+                    let c: Component = new Blueberry.registered[name]();
+                    c.element = this.element;
+                    c.object = this;
+                    c.id = Blueberry.uniqId();
+                    this.setProperties(c, this.element);
+                    c.init();
+                    this._components.push(c);
+                } catch (e) {
+                    console.error(`Could not find Component '${name}'. Did you forget to import it?`);
+                }
             }
         }
     }

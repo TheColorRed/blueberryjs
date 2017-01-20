@@ -3,7 +3,7 @@ class Blueberry {
     private static _elements: DomElement[] = [];
     private static _observable: Observable[] = [];
 
-    private static _registeredComponents: Component[] = []
+    private static _registeredComponents: Component[] = [];
 
     public static get registered(): Component[] {
         return this._registeredComponents;
@@ -13,9 +13,13 @@ class Blueberry {
         return this._elements;
     }
 
-    public static register(c): Blueberry {
-        this._registeredComponents[c.name] = c;
-        window[c.name] = c;
+    public static register(item, value): Blueberry {
+        if (arguments.length == 1 && item.prototype instanceof Component) {
+            this._registeredComponents[(<any>item).name] = item;
+            window[item.name] = item;
+        } else if (arguments.length == 2 && typeof item == 'string') {
+            window[item] = new value();
+        }
         return this;
     }
 
@@ -37,8 +41,12 @@ class Blueberry {
         this.createClickHandlers();
     }
 
-    public static addElement(element: DomElement) {
-        this._elements.push(element);
+    public static addElement(domElement: DomElement) {
+        this._elements.push(domElement);
+        let attrs = domElement.attrs;
+        for (let key in attrs) {
+            domElement.props.set(key, attrs[key]);
+        }
     }
 
     public static uniqId(length: number = 6): string {
@@ -57,6 +65,40 @@ class Blueberry {
         return obj;
     }
 
+    public static find(selector: string): DomElement {
+        let item = document.querySelector(selector) as HTMLElement;
+        for (let i = 0, l = Blueberry.elements.length; i < l; i++) {
+            if (Blueberry.elements[i].element == item) {
+                return Blueberry.elements[i];
+            }
+        }
+        let de = new DomElement(item);
+        Blueberry.addElement(de);
+        return de;
+    }
+
+    public static findAll(selector: string): DomElement[] {
+        let elements: DomElement[] = [];
+        let items = document.querySelectorAll(selector) as NodeListOf<HTMLElement>;
+        for (let i = 0, l = items.length; i < l; i++) {
+            let item = items[i];
+            let found: boolean = false;
+            for (let j = 0, len = Blueberry.elements.length; j < len; j++) {
+                if (Blueberry.elements[j].element == item) {
+                    elements.push(Blueberry.elements[i]);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                let de = new DomElement(item);
+                Blueberry.addElement(de);
+                elements.push(de)
+            }
+        }
+        return elements;
+    }
+
     public static findWithComponent<T extends Component>(type: ComponentType<T>): DomElement[] {
         let elements: DomElement[] = [];
         this._elements.forEach(el => {
@@ -67,6 +109,18 @@ class Blueberry {
             });
         });
         return elements;
+    }
+
+    public static findComponents<T extends Component>(type: ComponentType<T>): T[] {
+        let components: T[] = [];
+        this.elements.forEach(el => {
+            el.components.forEach(comp => {
+                if (comp instanceof type) {
+                    components.push(<T>comp);
+                }
+            });
+        });
+        return components;
     }
 
     private static findAllComponents() {
@@ -95,7 +149,7 @@ class Blueberry {
                 e.preventDefault();
                 element.components.forEach(component => {
                     if (typeof component['click'] == 'function') {
-                        component['click'].bind(component).call();
+                        component['click'].bind(component).call(component, e);
                     }
                 });
             };
