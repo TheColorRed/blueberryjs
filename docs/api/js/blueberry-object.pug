@@ -6,15 +6,18 @@ block content
         h2.header BlueberryObject
         p.flow-text.card-panel BlueberryObject is a helper class that Component and other classes extend for functionality.
     //- The component
-    .scrollspy.section#registered-components
-        h4 registered
-        p This field is mostly for internal use, but can be used in your project if needed to get a list of all the registered components.
-        +returnVal('Component[]', 'Returns a list of registered components.')
+    .scrollspy.section#attrs
+        h4 attrs
+        p We can grab any attribute on the HTMLElement by calling this property. Any attribute containing dashes will be converted to camelCase.
+        +returnVal('Object', 'Returns an object containing attribute key value pairs.')
         pre: code.language-javascript.
-            console.log(Blueberry.registered);
-    .scrollspy.section#register
-        h4 register()
-        p This method is used to register a component to Blueberry for usage.
+            // &lt;div id="example-div" age="123" gender="male" favorite-color="red"&gt;&lt;/div&gt;
+            console.log(this.attrs.age);            // Prints: 123
+            console.log(this.attrs.gender);         // Prints: male
+            console.log(this.attrs.favoriteColor);  // Prints: red
+    .scrollspy.section#props
+        h4 props
+        p Properties can be added, set or retrieved on DomElements, these allow for additional values to be saved so you don't clutter the dom with attrs.
         ul.properties
             +property('component', 'Component', 'The component to register with Blueberry.')
         pre: code.language-javascript.

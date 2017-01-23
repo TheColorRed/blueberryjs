@@ -1,0 +1,34 @@
+extends ../../partials/head.pug
+block title
+    title Api &ndash; Services
+block content
+    .scrollspy#intro
+        h2.header Services
+        p.flow-text.card-panel Services are classes that allow you to share data between components.
+    //- The component
+    .scrollspy.section#service
+        +def('Service', 'A service is registred using the same method that a component is registred. One difference though, is that you need to define the name of the service as the first parameter and the service as the second parameter, as seen here.')
+        pre: code.language-javascript.
+            Blueberry.register('myService',
+                class MyService {
+                    constructor() {
+                        this.number = 123;
+                    }
+                }
+            ).register(
+                class MyComponent extends Component {
+                    created() {
+                        myService.number = 456;
+                    }
+                }
+            ).register(
+                class MyOtherComponent extends Component {
+                    click() {
+                        console.log(myService.number);
+                    }
+                }
+            );
+block sideContent
+    ul.section.table-of-contents.pinned
+        li: a(href='#intro') Introduction
+        li: a(href='#service') Service

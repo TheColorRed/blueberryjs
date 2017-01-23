@@ -17,6 +17,14 @@ class DomElement extends BlueberryObject {
         this.getComponents();
     }
 
+    /**
+     * Sends a message to the elements components
+     *
+     * @param {string} message
+     * @param {...any[]} options
+     *
+     * @memberOf DomElement
+     */
     public sendMessage(message: string, ...options: any[]) {
         this._components.forEach(comp => {
             if (message == 'created') {
@@ -40,6 +48,13 @@ class DomElement extends BlueberryObject {
         });
     }
 
+    /**
+     * Gets the elements attached component from the dom
+     *
+     * @private
+     *
+     * @memberOf DomElement
+     */
     private getComponents() {
         let comp = this.element.getAttribute('component');
         if (!comp) {
@@ -65,12 +80,21 @@ class DomElement extends BlueberryObject {
                     c.init();
                     this._components.push(c);
                 } catch (e) {
-                    console.error(`Could not find Component '${name}'. Did you forget to import it?`);
+                    console.warn(`Could not find Component '${name}'. Did you forget to import it?`);
                 }
             }
         }
     }
 
+    /**
+     * Sets properties on the element
+     *
+     * @private
+     * @param {Component} component
+     * @param {HTMLElement} element
+     *
+     * @memberOf DomElement
+     */
     private setProperties(component: Component, element: HTMLElement) {
         for (let i = 0, l = element.attributes.length; i < l; i++) {
             let attr = this.element.attributes[i];
@@ -85,6 +109,15 @@ class DomElement extends BlueberryObject {
         }
     }
 
+    /**
+     * Checks to see if the dom element has a component attribute
+     *
+     * @private
+     * @param {HTMLElement} element
+     * @returns {boolean}
+     *
+     * @memberOf DomElement
+     */
     private hasComponents(element: HTMLElement): boolean {
         let has = element.hasAttribute('component');
         if (!has) {

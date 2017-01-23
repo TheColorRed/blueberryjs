@@ -13,6 +13,14 @@ class Observable extends BlueberryObject {
         this.id = Blueberry.uniqId();
     }
 
+    /**
+     * Gets a value from the observable
+     *
+     * @param {string} key
+     * @returns
+     *
+     * @memberOf Observable
+     */
     public get(key: string) {
         for (let i in this._observable) {
             if (i == key) {
@@ -22,6 +30,14 @@ class Observable extends BlueberryObject {
         return null;
     }
 
+    /**
+     * Sets and a value in the observable and updates the dom
+     *
+     * @param {(string | Object)} key
+     * @param {*} value
+     *
+     * @memberOf Observable
+     */
     public set(key: string | Object, value: any) {
         if (typeof key == 'string') {
             this.setItem(key, value);
@@ -32,6 +48,15 @@ class Observable extends BlueberryObject {
         }
     }
 
+    /**
+     * Apply the update to the observable and update the dom
+     *
+     * @private
+     * @param {string} key
+     * @param {*} value
+     *
+     * @memberOf Observable
+     */
     private setItem(key: string, value: any) {
         if (this._observable && key in this._observable) {
             let old = copy(this._observable);
@@ -53,6 +78,15 @@ class Observable extends BlueberryObject {
         }
     }
 
+    /**
+     * Sets the dom value or text
+     *
+     * @private
+     * @param {any} element
+     * @param {any} key
+     *
+     * @memberOf Observable
+     */
     private setVal(element, key) {
         if (element instanceof HTMLInputElement) {
             element.value = this._observable[key];

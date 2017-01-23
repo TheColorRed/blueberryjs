@@ -2,8 +2,13 @@ class Blueberry {
 
     private static _elements: DomElement[] = [];
     private static _observable: Observable[] = [];
+    private static _version: string = '0.0.1';
 
     private static _registeredComponents: Component[] = [];
+
+    public static get version() {
+        return this._version;
+    }
 
     public static get registered(): Component[] {
         return this._registeredComponents;
@@ -37,22 +42,50 @@ class Blueberry {
     }
 
     public static init() {
-        this.findAllComponents();
+        this.initElementsWithComponent();
         this.createClickHandlers();
     }
 
+    /**
+     * Adds an element to the the list of DomElements
+     *
+     * @static
+     * @param {DomElement} domElement
+     *
+     * @memberOf Blueberry
+     */
     public static addElement(domElement: DomElement) {
         this._elements.push(domElement);
         let attrs = domElement.attrs;
         for (let key in attrs) {
-            domElement.props.set(key, attrs[key]);
+            domElement.props.set(new Property(key, attrs[key]));
         }
     }
 
+    /**
+     * Generates a unique alpha-numeric string
+     *
+     * @static
+     * @param {number} [length=6]
+     * @returns {string}
+     *
+     * @memberOf Blueberry
+     */
     public static uniqId(length: number = 6): string {
         return (Math.random().toString(36) + Math.random().toString(36)).substr(2, length);
     }
 
+    /**
+     * Searches an object for a value based on a query string:
+     * key1.key2[0].key3
+     *
+     * @static
+     * @param {string} path
+     * @param {any} [obj=null]
+     * @returns
+     *
+     * @memberOf Blueberry
+     */
     public static query(path: string, obj = null) {
         let previous = null;
         obj = !obj ? this : obj;
@@ -65,6 +98,15 @@ class Blueberry {
         return obj;
     }
 
+    /**
+     * Finds an element in the dom based on the selector and converts it to a Blueberry DomElement
+     *
+     * @static
+     * @param {string} selector
+     * @returns {DomElement}
+     *
+     * @memberOf Blueberry
+     */
     public static find(selector: string): DomElement {
         let item = document.querySelector(selector) as HTMLElement;
         for (let i = 0, l = Blueberry.elements.length; i < l; i++) {
@@ -77,6 +119,15 @@ class Blueberry {
         return de;
     }
 
+    /**
+     * Finds all elements in the dom based on the selector and converts them to Blueberry DomElements
+     *
+     * @static
+     * @param {string} selector
+     * @returns {DomElement[]}
+     *
+     * @memberOf Blueberry
+     */
     public static findAll(selector: string): DomElement[] {
         let elements: DomElement[] = [];
         let items = document.querySelectorAll(selector) as NodeListOf<HTMLElement>;
@@ -99,6 +150,16 @@ class Blueberry {
         return elements;
     }
 
+    /**
+     * Finds all elements that contain a particular component
+     *
+     * @static
+     * @template T
+     * @param {ComponentType<T>} type
+     * @returns {DomElement[]}
+     *
+     * @memberOf Blueberry
+     */
     public static findWithComponent<T extends Component>(type: ComponentType<T>): DomElement[] {
         let elements: DomElement[] = [];
         this._elements.forEach(el => {
@@ -111,6 +172,16 @@ class Blueberry {
         return elements;
     }
 
+    /**
+     * Finds all components of a particular type
+     *
+     * @static
+     * @template T
+     * @param {ComponentType<T>} type
+     * @returns {T[]}
+     *
+     * @memberOf Blueberry
+     */
     public static findComponents<T extends Component>(type: ComponentType<T>): T[] {
         let components: T[] = [];
         this.elements.forEach(el => {
@@ -123,7 +194,15 @@ class Blueberry {
         return components;
     }
 
-    private static findAllComponents() {
+    /**
+     * Initializes components that have not yet been initialized
+     *
+     * @private
+     * @static
+     *
+     * @memberOf Blueberry
+     */
+    private static initElementsWithComponent() {
         let e = document.querySelectorAll('[component], [data-component]') as NodeListOf<HTMLElement>;
         let elen = this._elements.length;
         loop:
@@ -135,20 +214,22 @@ class Blueberry {
             }
             this.addElement(new DomElement(e[i]));
         }
-        let nodesSnapshot = document.evaluate('//*/@*[starts-with(name(), "comp-")]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-        let attr: Attr;
-        for (let i = 0; i < nodesSnapshot.snapshotLength; i++) {
-            attr = <Attr>nodesSnapshot.snapshotItem(i);
-            this.addElement(new DomElement(<HTMLElement>attr.ownerElement));
-        }
     }
 
+    /**
+     * Creates click event handlers for components that support it
+     *
+     * @private
+     * @static
+     *
+     * @memberOf Blueberry
+     */
     private static createClickHandlers() {
         this._elements.forEach(element => {
             element.element.onclick = function (e) {
-                e.preventDefault();
                 element.components.forEach(component => {
                     if (typeof component['click'] == 'function') {
+                        e.preventDefault();
                         component['click'].bind(component).call(component, e);
                     }
                 });
@@ -156,12 +237,28 @@ class Blueberry {
         });
     }
 
+    /**
+     * Sends a created message to all components
+     *
+     * @private
+     * @static
+     *
+     * @memberOf Blueberry
+     */
     private static created() {
         this._elements.forEach(element => {
             element.sendMessage('created');
         });
     }
 
+    /**
+     * Sends a deleted message to all components
+     *
+     * @private
+     * @static
+     *
+     * @memberOf Blueberry
+     */
     private static deleted() {
         let i = this._elements.length;
         while (i--) {
@@ -173,12 +270,28 @@ class Blueberry {
         }
     }
 
+    /**
+     * Sends an update message to all components
+     *
+     * @private
+     * @static
+     *
+     * @memberOf Blueberry
+     */
     private static update() {
         this._elements.forEach(element => {
             element.sendMessage('update');
         });
     }
 
+    /**
+     * Sends a lateUpdate message to all components
+     *
+     * @private
+     * @static
+     *
+     * @memberOf Blueberry
+     */
     private static lateUpdate() {
         this._elements.forEach(element => {
             element.sendMessage('lateUpdate');

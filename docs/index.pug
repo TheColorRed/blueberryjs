@@ -1,5 +1,66 @@
 extends partials/head.pug
 block title
     title Blueberry.js
-block content
-    h1 Hello!
+block index
+    style.
+        .github-component { padding: 14px 0; height: 64px; line-height: 36px; }
+        .github-component .commit { margin: 0 10px; }
+        .github-btn { display: inline-block; }
+        .container { width: 80%; }
+        h1,h4.row { margin-bottom: 40px; }
+    script.
+        Blueberry.register(
+            class GitHub extends Component {
+                observe() {
+                    return {
+                        hash: '',
+                        ago: ''
+                    };
+                }
+                created() {
+                    Ajax.request('https://api.github.com/repos/TheColorRed/blueberryjs/commits').success(response => {
+                        let r = response.data[0];
+                        this.set({
+                            hash: r.sha,
+                            ago: this.timeSince(new Date(r.commit.author.date))
+                        });
+                        this.findChild('.commit').element.href = r.html_url;
+                        console.log(r);
+                    });
+                }
+                timeSince(date) {
+                    var seconds = Math.floor((new Date() - date) / 1000);
+                    var interval = Math.floor(seconds / 31536000);
+                    if (interval > 1) {
+                        return interval + " years";
+                    }
+                    interval = Math.floor(seconds / 2592000);
+                    if (interval > 1) {
+                        return interval + " months";
+                    }
+                    interval = Math.floor(seconds / 86400);
+                    if (interval > 1) {
+                        return interval + " days";
+                    }
+                    interval = Math.floor(seconds / 3600);
+                    if (interval > 1) {
+                        return interval + " hours";
+                    }
+                    interval = Math.floor(seconds / 60);
+                    if (interval > 1) {
+                        return interval + " minutes";
+                    }
+                    return Math.floor(seconds) + " seconds";
+                }
+            }
+        );
+    .section.blue.white-text.no-pad-bot
+        .container
+            h1.thin Blueberry
+            .center
+                h4.row.light A modern JavaScript framework without boundaries
+                .row: a(href='/getting-started.html').btn-large.blue.lighten-2.waves-effect.waves-light Get Started
+                .row: p Blueberry v#[script document.write(Blueberry.version)]
+        .grey.darken-2.github-component.hide-on-med-and-down(component='GitHub')
+            .container(style='font-size:.9rem;') Last commit on Github: #[a.commit.grey-text.text-lighten-1(href='' observe='hash')] #[span(observe='ago')] ago
+                a.github-btn.btn.right.grey.light-2.waves-effect.waves-light(href='https://github.com/TheColorRed/blueberryjs') GitHub

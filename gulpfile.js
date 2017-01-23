@@ -4,6 +4,8 @@ const uglify = require('gulp-uglify');
 const pug = require('pug');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
+const glob = require('glob');
+const rimraf = require('rimraf');
 
 const paths = {
     tswatch: ['src/**/*.ts', 'tsconfig.json'],
@@ -14,6 +16,7 @@ const pugFiles = [
     'index',
     'examples/clock',
     'examples/timer',
+    'examples/stopwatch',
     'examples/observe',
     'examples/ajax',
     'api/js/ajax',
@@ -42,18 +45,27 @@ gulp.task('typescript', () => {
 });
 
 gulp.task('docs', () => {
-    pugFiles.forEach(file => {
-        let lastSlash = file.lastIndexOf('/');
-        mkdirp('public/' + file.substr(0, lastSlash), (err) => {
-            try {
-                let html = pug.renderFile('docs/' + file + '.pug', {
-                    file: file,
-                    rootdir: file.substr(0, lastSlash)
+    rimraf('public/api', err => {
+        rimraf('public/examples', err => {
+            glob('docs/+(api|examples)/**/*.pug', (err, files) => {
+                files.push('docs/index.pug');
+                files.push('docs/getting-started.pug');
+                files.forEach(file => {
+                    file = file.replace(/^docs\//, '').replace(/\.pug$/, '');
+                    let lastSlash = file.lastIndexOf('/');
+                    mkdirp('public/' + file.substr(0, lastSlash), (err) => {
+                        try {
+                            let html = pug.renderFile('docs/' + file + '.pug', {
+                                file: file,
+                                rootdir: file.substr(0, lastSlash)
+                            });
+                            fs.writeFileSync('public/' + file + '.html', html);
+                        } catch (e) {
+                            console.log(e.message);
+                        }
+                    });
                 });
-                fs.writeFileSync('public/' + file + '.html', html);
-            } catch (e) {
-                console.log(e.message);
-            }
+            });
         });
     });
     fs.createReadStream('./dist/blueberry.js').pipe(fs.createWriteStream('./public/assets/js/blueberry.js'));

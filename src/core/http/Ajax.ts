@@ -77,7 +77,11 @@ class Ajax {
                 if (this._response.getHeaderValue('Content-Type').match(/\/json$/i)) {
                     this._response['_data'] = JSON.parse(xhttp.responseText);
                 } else {
-                    this._response['_data'] = xhttp.responseText;
+                    try {
+                        this._response['_data'] = JSON.parse(xhttp.responseText);
+                    } catch (e) {
+                        this._response['_data'] = xhttp.responseText;
+                    }
                 }
             }
             if (xhttp.readyState == 4 && xhttp.status == 200 && typeof this._success == 'function') {

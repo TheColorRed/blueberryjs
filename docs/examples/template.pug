@@ -1,0 +1,51 @@
+extends ../partials/head.pug
+block title
+    title Template Example
+block content
+    h2.header Template Example
+    p.flow-text.card-panel If you have a list of data, you can load it in through a template.
+    h2.header Final Result
+    script.
+        Blueberry.register(
+            class BuildFromTemplate extends Component {
+                created() {
+                    let data = [
+                        {first: 'Billy', last: 'Bob', color: 'red'},
+                        {first: 'Foo', last: 'Bar', color: 'teal'},
+                        {first: 'Forest', last: 'Gump', color: 'forestGreen'},
+                    ];
+                    this.dom.fromTemplate('/assets/examples/names.html', data);
+                }
+            }
+        );
+    div(component='BuildFromTemplate')
+    h2.header The Source Code
+    h4 template.js
+    pre: code.language-js.
+        Blueberry.register(
+            class BuildFromTemplate extends Component {
+                created() {
+                    let data = [
+                        { first: 'Billy',  last: 'Bob',  color: 'red'   },
+                        { first: 'Foo',    last: 'Bar',  color: 'teal'  },
+                        { first: 'Forest', last: 'Gump', color: 'green' },
+                    ];
+                    this.dom.fromTemplate('names.html', data);
+                }
+            }
+        );
+    h4 names.html
+    pre: code.language-markup
+        ='<p style="color: {{color}};">\n'
+        ='    Hello <span observe="first"></span> <span observe="last"></span>\n'
+        ='</p>'
+    h4 index.html
+    pre: code.language-markup
+        ='<head>\n'
+        ='    <title>Template Example</title>\n'
+        ='    <script src="/dist/blueberry.js"></script>\n'
+        ='    <script src="./template.js"></script>\n'
+        ='</head>\n'
+        ='<body>\n'
+        ='    <div component="BuildFromTemplate"></div>\n'
+        ='</body>'

@@ -6,17 +6,41 @@ class Dom {
         this.element = element;
     }
 
+    /**
+     * Sets the text value for an HTMLElement
+     *
+     * @param {string} text
+     * @returns {this}
+     *
+     * @memberOf Dom
+     */
     public text(text: string): this {
         this.element.innerHTML = text;
         return this;
     }
 
+    /**
+     * Sets the html value for an HTMLElement
+     *
+     * @param {string} html
+     * @returns {this}
+     *
+     * @memberOf Dom
+     */
     public html(html: string): this {
         this.element.innerHTML = html;
         Blueberry.init();
         return this;
     }
 
+    /**
+     * Sets the content of an HTMLElement. If the element is an input element then the value will be set otherwise the text will be set.
+     *
+     * @param {(string | HTMLElement | HTMLCollectionOf<HTMLElement>)} data
+     * @returns {this}
+     *
+     * @memberOf Dom
+     */
     public content(data: string | HTMLElement | HTMLCollectionOf<HTMLElement>): this {
         if (data instanceof HTMLElement) {
             this.element.innerHTML = data.outerHTML;
@@ -34,6 +58,15 @@ class Dom {
         return this;
     }
 
+    /**
+     * Sets the content of an element based on a template and data
+     *
+     * @param {string} templateUrl
+     * @param {*} data
+     * @returns {this}
+     *
+     * @memberOf Dom
+     */
     public fromTemplate(templateUrl: string, data: any): this {
         Ajax.request(templateUrl).success(response => {
             if (typeof data == 'object') {
@@ -69,16 +102,39 @@ class Dom {
         return this;
     }
 
+    /**
+     * Disables an HTMLElement
+     *
+     * @returns {this}
+     *
+     * @memberOf Dom
+     */
     public disable(): this {
         (<any>this.element).disabled = true;
         return this;
     }
 
+    /**
+     * Enables an HTMLElement
+     *
+     * @returns {this}
+     *
+     * @memberOf Dom
+     */
     public enable(): this {
         (<any>this.element).disabled = false;
         return this;
     }
 
+    /**
+     * Creates a wrapper for usage
+     *
+     * @private
+     * @param {string} template
+     * @returns {HTMLElement}
+     *
+     * @memberOf Dom
+     */
     private getTemplate(template: string): HTMLElement {
         let root = document.createElement('div');
         root.innerHTML = template;

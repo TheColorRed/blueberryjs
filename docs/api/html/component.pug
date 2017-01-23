@@ -7,25 +7,13 @@ block content
         p.flow-text.card-panel Html components are used to attach a defined JavaScript component to the current DOM element.
     //- The component
     .scrollspy.section#component
-        +def('Component', 'There are three different ways to attach a component to an element, <code>component="MyComponent"</code>, <code>data-component="MyComponent"</code> and <code>comp-my-component=""</code>.')
-        p The frist two ways allow you to pass multiple components as values of the attribute in the same way that the #[code class=""] attribute works.
-        P The thrid way allows you to pass default parameters for properties within the component. These items are separated in the same way that the #[code style=""] attribute works.
+        +def('Component', 'There are two different ways to attach a component to an element, <code>component="MyComponent"</code> and <code>data-component="MyComponent"</code>.')
+        p These allow you to pass multiple components as values to the attribute in the same way that the #[code class=""] attribute works by separating each one with a space.
         pre: code.language-markup
             = '<div component="Component1 Component2"></div>\n'
             = '<div data-component="Component1 Component2"></div>\n'
-            = '\n'
-            = '<!-- Converts to \'MyComponent\' -->\n'
-            = '<div comp-my-component="first:Billy;last:Bob"></div>\n'
 
 block sideContent
     ul.section.table-of-contents.pinned
         li: a(href='#intro') Introduction
-        li Component
         li: a(href='#component') Component
-        li Messages
-        li: a(href='#message-observe') Observe
-        li: a(href='#message-created') Created
-        li: a(href='#message-deleted') Deleted
-        li: a(href='#message-update') Update
-        li: a(href='#message-lateupdate') Late Update
-        li: a(href='#message-click') Click

@@ -1,0 +1,114 @@
+extends ../partials/head.pug
+block title
+    title Component Color Changer Example
+block content
+    h2.header Component Color Changer Example
+    p.flow-text.card-panel If you have a list of data, you can load it in through a template.
+    h2.header Final Result
+    style.
+        .col > .btn {
+            width: 100%;
+        }
+    script.
+        Blueberry.register(
+            class ComponentSwitcher extends Component {
+                click() {
+                    let example = Blueberry.find('#example');
+                    switch(this.attrs.action){
+                        case 'pink-bg':  example.removeComponent(Tealbg).addComponent(Pinkbg);break;
+                        case 'teal-bg':   example.removeComponent(Pinkbg).addComponent(Tealbg);break;
+                        case 'white-fg': example.removeComponent(Blackfg).addComponent(Whitefg);break;
+                        case 'black-fg': example.removeComponent(Whitefg).addComponent(Blackfg);break;
+                    }
+                }
+            }
+        ).register(
+            class Pinkbg extends Component {
+                created() { this.style.set('background-color', 'deeppink'); }
+            }
+        ).register(
+            class Tealbg extends Component {
+                created() { this.style.set('background-color', 'teal'); }
+            }
+        ).register(
+            class Whitefg extends Component {
+                created() { this.style.set('color', 'white'); }
+            }
+        ).register(
+            class Blackfg extends Component {
+                created() { this.style.set('color', 'black'); }
+            }
+        );
+    .row
+        .col.s12
+            .flow-text.card-panel#example(component='Whitefg Tealbg') This is some test text
+    .row
+        .col.m3.s12
+            button.btn.waves-effect(component='ComponentSwitcher' action='white-fg') White Text
+        .col.m3.s12
+            button.btn.waves-effect(component='ComponentSwitcher' action='black-fg') Black Text
+        .col.m3.s12
+            button.btn.waves-effect(component='ComponentSwitcher' action='pink-bg') Pink Background
+        .col.m3.s12
+            button.btn.waves-effect(component='ComponentSwitcher' action='teal-bg') Teal Background
+    h2.header The Source Code
+    h4 component-toggle.js
+    pre: code.language-js.
+        Blueberry.register(
+            class ComponentSwitcher extends Component {
+                click() {
+                    let example = Blueberry.find('#example');
+                    switch(this.attrs.action){
+                        case 'pink-bg':  example.removeComponent(Tealbg).addComponent(Pinkbg);   break;
+                        case 'teal-bg':  example.removeComponent(Pinkbg).addComponent(Tealbg);   break;
+                        case 'white-fg': example.removeComponent(Blackfg).addComponent(Whitefg); break;
+                        case 'black-fg': example.removeComponent(Whitefg).addComponent(Blackfg); break;
+                    }
+                }
+            }
+        ).register(
+            class Pinkbg extends Component {
+                created() { this.style.set('background-color', 'pink'); }
+            }
+        ).register(
+            class Tealbg extends Component {
+                created() { this.style.set('background-color', 'teal'); }
+            }
+        ).register(
+            class Whitefg extends Component {
+                created() { this.style.set('color', 'white'); }
+            }
+        ).register(
+            class Blackfg extends Component {
+                created() { this.style.set('color', 'black'); }
+            }
+        );
+    p #[b Note:] This is a very complex way of changing colors on an object, but it demonstrates the usage of adding/removing components on an item. To change colors using a smarter approach, take a look at using #[a(href='./attributes.html') attributes].
+    h4 index.html
+    pre: code.language-markup
+        ='<head>\n'
+        ='    <title>Component Toggle Example</title>\n'
+        ='    <script src="/dist/blueberry.js"></script>\n'
+        ='    <script src="./component-toggle.js"></script>\n'
+        ='</head>\n'
+        ='<body>\n'
+        ='    <div class="row">\n'
+        ='        <div class="col s12">\n'
+        ='            <div id="example" component="Whitefg Tealbg" class="flow-text card-panel">This is some test text</div>\n'
+        ='        </div>\n'
+        ='    </div>\n'
+        ='    <div class="row">\n'
+        ='        <div class="col s3">\n'
+        ='            <button component="ComponentSwitcher" action="white-fg" class="btn waves-effect">White Text</button>\n'
+        ='        </div>\n'
+        ='        <div class="col s3">\n'
+        ='            <button component="ComponentSwitcher" action="black-fg" class="btn waves-effect">Black Text</button>\n'
+        ='        </div>\n'
+        ='        <div class="col s3">\n'
+        ='            <button component="ComponentSwitcher" action="pink-bg" class="btn waves-effect">Pink Background</button>\n'
+        ='        </div>\n'
+        ='        <div class="col s3">\n'
+        ='            <button component="ComponentSwitcher" action="teal-bg" class="btn waves-effect">Teal Background</button>\n'
+        ='        </div>\n'
+        ='    </div>\n'
+        ='</body>'

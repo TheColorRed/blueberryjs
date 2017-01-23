@@ -12,18 +12,40 @@ class BlueberryObject {
 
     private _props: Properties = new Properties();
 
+    /**
+     * Gets all attributes attached to the HTMLElement
+     *
+     * @readonly
+     * @type {Object}
+     * @memberOf BlueberryObject
+     */
     public get attrs(): Object {
         let attrs = {};
         for (let i = 0, l = this.element.attributes.length; i < l; i++) {
-            attrs[this.element.attributes[i].name] = this.element.attributes[i].value;
+            let name = this.element.attributes[i].name.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+            attrs[name] = this.element.attributes[i].value;
         }
         return attrs;
     }
 
+    /**
+     * Gets properties that have been added to this object
+     *
+     * @readonly
+     * @type {Properties}
+     * @memberOf BlueberryObject
+     */
     public get props(): Properties {
         return this.object._props;
     }
 
+    /**
+     * Gets the parent HTMLElement and converts it to a Blueberry DomElement if it has not yet been converted
+     *
+     * @readonly
+     * @type {DomElement}
+     * @memberOf BlueberryObject
+     */
     public get parent(): DomElement {
         let pNode = this.element.parentNode;
         for (let i = 0, l = Blueberry.elements.length; i < l; i++) {
@@ -36,6 +58,15 @@ class BlueberryObject {
         return de;
     }
 
+    /**
+     * Looks up the tree for the closest element with the defined component
+     *
+     * @template T
+     * @param {ComponentType<T>} type
+     * @returns {Component}
+     *
+     * @memberOf BlueberryObject
+     */
     public findClosestComponent<T extends Component>(type: ComponentType<T>): Component {
         let component: Component = null;
         let item = this.element.closest(`[component*=${type.prototype.constructor.name}]`) as HTMLElement;
@@ -51,6 +82,15 @@ class BlueberryObject {
         return component;
     }
 
+    /**
+     * Finds all components that are children of the current Blueberry DomElement
+     *
+     * @template T
+     * @param {ComponentType<T>} type
+     * @returns {Component[]}
+     *
+     * @memberOf BlueberryObject
+     */
     public findChildComponents<T extends Component>(type: ComponentType<T>): Component[] {
         let components: Component[] = [];
         let items = this.element.querySelectorAll('[component]') as NodeListOf<HTMLElement>;
@@ -67,12 +107,40 @@ class BlueberryObject {
         return components;
     }
 
+    public findChild(selector: string) {
+        let item = this.element.querySelector(selector) as HTMLElement;
+        for (let i = 0, l = Blueberry.elements.length; i < l; i++) {
+            if (Blueberry.elements[i].element == item) {
+                return Blueberry.elements[i];
+            }
+        }
+        let de = new DomElement(item);
+        Blueberry.addElement(de);
+        return de;
+    }
+
+    /**
+     * Initializes some internal classes
+     *
+     *
+     * @memberOf BlueberryObject
+     */
     public init() {
         this.dom = new Dom(this.element);
         this.class = new Class(this.element);
         this.style = new Style(this.element);
     }
 
+    /**
+     * Creates a new Blueberry DomElement and places it in the dom
+     *
+     * @param {Insert} insert
+     * @param {HTMLElement} element
+     * @param {(HTMLElement | string)} output
+     * @returns {DomElement}
+     *
+     * @memberOf BlueberryObject
+     */
     public instantiate(insert: Insert, element: HTMLElement, output: HTMLElement | string): DomElement {
         let insertType: string = '';
         switch (insert) {
@@ -94,12 +162,28 @@ class BlueberryObject {
         return de;
     }
 
+    /**
+     * Destorys a DomElement and removes it from the dom
+     *
+     * @param {number} [delay=0]
+     *
+     * @memberOf BlueberryObject
+     */
     public destroy(delay: number = 0): void {
         setTimeout(() => {
             this.object._toDelete = true;
         }, delay * 1000);
     }
 
+    /**
+     * Adds a component to the current DomElement
+     *
+     * @template T
+     * @param {ComponentType<T>} type
+     * @returns {T}
+     *
+     * @memberOf BlueberryObject
+     */
     public addComponent<T extends Component>(type: ComponentType<T>): T {
         let c = new type() as T;
         let name = (<any>c).constructor.name;
@@ -112,7 +196,7 @@ class BlueberryObject {
 
         c.element = this.element;
         c.object = this.object;
-        let compAttr = c.element.getAttribute('component').split(' ');
+        let compAttr = (c.element.getAttribute('component') || '').split(' ');
         compAttr.push(name);
         c.element.setAttribute('component', compAttr.join(' '));
         c.init();
@@ -120,6 +204,15 @@ class BlueberryObject {
         return c;
     }
 
+    /**
+     * Removes a component from the current DomElement
+     *
+     * @template T
+     * @param {ComponentType<T>} type
+     * @returns {this}
+     *
+     * @memberOf BlueberryObject
+     */
     public removeComponent<T extends Component>(type: ComponentType<T>): this {
         let i = this.object.components.length;
         let name = (<any>type).constructor.name;
@@ -133,6 +226,15 @@ class BlueberryObject {
         return this;
     }
 
+    /**
+     * Creates a element reference
+     *
+     * @protected
+     * @param {string} html
+     * @returns {HTMLElement}
+     *
+     * @memberOf BlueberryObject
+     */
     protected createElement(html: string): HTMLElement {
         var div = document.createElement('div');
         div.innerHTML = html;

@@ -25,8 +25,10 @@ html
     head
         block title
             title Blueberry.js
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
         link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css')
         link(rel='stylesheet' href='/assets/css/prism.css')
+        link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
         script(src='https://code.jquery.com/jquery-2.2.4.js')
         script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js')
         script(src='/assets/js/prism.js')
@@ -36,26 +38,37 @@ html
         style.
             body{font-size:16px;display:flex;min-height:100vh;flex-direction: column;}
             main{flex: 1 0 auto;}
-            code{background-color:rgb(245, 242, 240);padding:2px 5px;color:#E57373;}
+            //- nav {background: #064fba;}
+            code{background-color:rgb(245, 242, 240);padding:2px 5px;color:#064fba;}
             code>code{color:#66bb6a;}
-            h2.header{font-weight:200;color:#E57373}
+            h2.header{font-weight:200;color:#ee6e73}
             .container li>ul{padding-left: 30px !important;}
             ul.properties>li{color: #66bb6a;font-size: 20px;margin-bottom:30px;}
             ul.properties>li>ul>li{font-size: 16px;color:rgba(0,0,0,0.87);}
-            .class{color: #e57373;border-bottom: solid 1px #e57373;padding-bottom: 5px;}
+            .class{color: #064fba;border-bottom: solid 1px #064fba;padding-bottom: 5px;}
             ul.return>li{font-size: 20px;}
             ul.return>li>ul>li{font-size: 16px;color:rgba(0,0,0,0.87);}
+            .side-nav a { padding: 0 16px; }
         script.
             $(document).ready(function(){
                 $('.scrollspy').scrollSpy({scrollOffset: 100});
             });
     body
-        main
+        header
             include ./nav.pug
-            .container
-                .row.section
-                    .col.offset-s1.s9
-                        block content
-                    .col.s2
-                        block sideContent
+        main
+            - if(file == 'index')
+                style.
+                    main { padding-left: 300px; }
+                    @media only screen and (max-width: 992px){
+                        main { padding-left: 0; }
+                    }
+                block index
+            - else
+                .container
+                    .row.section
+                        .col.offset-m1.s12.m9
+                            block content
+                        .col.m2.hide-on-med-and-down
+                            block sideContent
         include ./footer.pug
