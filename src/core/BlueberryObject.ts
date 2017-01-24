@@ -107,7 +107,15 @@ class BlueberryObject {
         return components;
     }
 
-    public findChild(selector: string) {
+    /**
+     * Finds the first child from a query selector and returns it's DomElement
+     *
+     * @param {string} selector
+     * @returns {DomElement}
+     *
+     * @memberOf BlueberryObject
+     */
+    public findChild(selector: string): DomElement {
         let item = this.element.querySelector(selector) as HTMLElement;
         for (let i = 0, l = Blueberry.elements.length; i < l; i++) {
             if (Blueberry.elements[i].element == item) {
@@ -117,6 +125,33 @@ class BlueberryObject {
         let de = new DomElement(item);
         Blueberry.addElement(de);
         return de;
+    }
+
+    /**
+     * Finds all children from a query selector and returns it's DomElement
+     *
+     * @param {string} selector
+     * @returns {DomElement[]}
+     *
+     * @memberOf BlueberryObject
+     */
+    public findChildren(selector: string): DomElement[] {
+        let items = this.element.querySelectorAll(selector) as NodeListOf<HTMLElement>;
+        let elements: DomElement[] = []
+        itemLoop:
+        for (let i = 0, l = items.length; i < l; i++) {
+            let item = items[i];
+            for (let j = 0, len = Blueberry.elements.length; j < len; j++) {
+                if (Blueberry.elements[j].element == item) {
+                    elements.push(Blueberry.elements[j]);
+                    continue itemLoop;
+                }
+            }
+            let de = new DomElement(item);
+            Blueberry.addElement(de);
+            elements.push(de);
+        }
+        return elements;
     }
 
     /**
@@ -158,7 +193,7 @@ class BlueberryObject {
             element.insertAdjacentElement(insertType, e);
             de = new DomElement(e);
         }
-        Blueberry.init();
+        Blueberry.upgrade();
         return de;
     }
 

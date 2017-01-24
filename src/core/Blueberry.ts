@@ -5,6 +5,7 @@ class Blueberry {
     private static _version: string = '0.0.1';
 
     private static _registeredComponents: Component[] = [];
+    private static _registeredAddons: Addon[] = [];
 
     public static get version() {
         return this._version;
@@ -21,11 +22,16 @@ class Blueberry {
     public static register(item, value): Blueberry {
         if (arguments.length == 1 && item.prototype instanceof Component) {
             this._registeredComponents[(<any>item).name] = item;
-            window[item.name] = item;
+            window[(<any>item).name] = item;
         } else if (arguments.length == 2 && typeof item == 'string') {
             window[item] = new value();
         }
-        return this;
+        return Blueberry;
+    }
+
+    public static addon<T extends Addon>(item: AddonType<T>): Blueberry {
+        this._registeredAddons.push(new item());
+        return Blueberry;
     }
 
     public static tick() {
@@ -42,6 +48,13 @@ class Blueberry {
     }
 
     public static init() {
+        this.initAddon();
+        this.initElementsWithComponent();
+        this.createClickHandlers();
+        this.loadedAddon();
+    }
+
+    public static upgrade() {
         this.initElementsWithComponent();
         this.createClickHandlers();
     }
@@ -192,6 +205,22 @@ class Blueberry {
             });
         });
         return components;
+    }
+
+    private static initAddon() {
+        this._registeredAddons.forEach(addon => {
+            if (typeof addon['init'] == 'function') {
+                addon['init']();
+            }
+        });
+    }
+
+    private static loadedAddon() {
+        this._registeredAddons.forEach(addon => {
+            if (typeof addon['loaded'] == 'function') {
+                addon['loaded']();
+            }
+        })
     }
 
     /**

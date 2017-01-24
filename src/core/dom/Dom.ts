@@ -29,7 +29,7 @@ class Dom {
      */
     public html(html: string): this {
         this.element.innerHTML = html;
-        Blueberry.init();
+        Blueberry.upgrade();
         return this;
     }
 
@@ -54,7 +54,7 @@ class Dom {
         } else if (this.element instanceof HTMLElement) {
             this.element.innerText = data;
         }
-        Blueberry.init();
+        Blueberry.upgrade();
         return this;
     }
 
