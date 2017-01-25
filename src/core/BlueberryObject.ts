@@ -12,6 +12,10 @@ class BlueberryObject {
 
     private _props: Properties = new Properties();
 
+    public get elementId(): string {
+        return this.object.id;
+    }
+
     /**
      * Gets all attributes attached to the HTMLElement
      *

@@ -6,6 +6,8 @@ class Blueberry {
 
     private static _registeredComponents: Component[] = [];
     private static _registeredAddons: Addon[] = [];
+    private static _registeredServices: any[] = [];
+    private static _hasInit: boolean = false;
 
     public static get version() {
         return this._version;
@@ -24,12 +26,13 @@ class Blueberry {
             this._registeredComponents[(<any>item).name] = item;
             window[(<any>item).name] = item;
         } else if (arguments.length == 2 && typeof item == 'string') {
-            window[item] = new value();
+            this._registeredServices[item] = value;
+            // window[(<any>item).name] = value;
         }
         return Blueberry;
     }
 
-    public static addon<T extends Addon>(item: AddonType<T>): Blueberry {
+    public static registerAddon<T extends Addon>(item: AddonType<T>): Blueberry {
         this._registeredAddons.push(new item());
         return Blueberry;
     }
@@ -47,13 +50,32 @@ class Blueberry {
         requestAnimationFrame(Blueberry.tick);
     }
 
+    /**
+     * Initializes the framework for the first time. This can and should only be run once.
+     *
+     * @static
+     *
+     * @memberOf Blueberry
+     */
     public static init() {
-        this.initAddon();
-        this.initElementsWithComponent();
-        this.createClickHandlers();
-        this.loadedAddon();
+        if (!this._hasInit) {
+            this.addonInit();
+            this.initServices();
+            this.initElementsWithComponent();
+            this.createClickHandlers();
+            this.createInputHandlers();
+            this.addonReady();
+            this._hasInit = true;
+        }
     }
 
+    /**
+     * Initializes elements that have not been initialized. This can run as many times as desired, as elements that have been upgraded won't be upgraded again.
+     *
+     * @static
+     *
+     * @memberOf Blueberry
+     */
     public static upgrade() {
         this.initElementsWithComponent();
         this.createClickHandlers();
@@ -112,6 +134,24 @@ class Blueberry {
     }
 
     /**
+     * Finds a Blueberry DomElement based on it's id.
+     *
+     * @static
+     * @param {string} id
+     * @returns {DomElement}
+     *
+     * @memberOf Blueberry
+     */
+    public static findById(id: string): DomElement {
+        for (let i = 0, l = this._elements.length; i < l; i++) {
+            if (this._elements[i].elementId == id) {
+                return this._elements[i];
+            }
+        }
+        return null;
+    }
+
+    /**
      * Finds an element in the dom based on the selector and converts it to a Blueberry DomElement
      *
      * @static
@@ -122,14 +162,17 @@ class Blueberry {
      */
     public static find(selector: string): DomElement {
         let item = document.querySelector(selector) as HTMLElement;
-        for (let i = 0, l = Blueberry.elements.length; i < l; i++) {
-            if (Blueberry.elements[i].element == item) {
-                return Blueberry.elements[i];
+        if (item) {
+            for (let i = 0, l = Blueberry.elements.length; i < l; i++) {
+                if (Blueberry.elements[i].element == item) {
+                    return Blueberry.elements[i];
+                }
             }
+            let de = new DomElement(item);
+            Blueberry.addElement(de);
+            return de;
         }
-        let de = new DomElement(item);
-        Blueberry.addElement(de);
-        return de;
+        return null;
     }
 
     /**
@@ -207,7 +250,15 @@ class Blueberry {
         return components;
     }
 
-    private static initAddon() {
+    /**
+     * Runs the init method in the addon. This is the first thing to run after the dom loads.
+     *
+     * @private
+     * @static
+     *
+     * @memberOf Blueberry
+     */
+    private static addonInit() {
         this._registeredAddons.forEach(addon => {
             if (typeof addon['init'] == 'function') {
                 addon['init']();
@@ -215,12 +266,34 @@ class Blueberry {
         });
     }
 
-    private static loadedAddon() {
+    /**
+     * Runs the ready method in the addon. This happens after all the components have initialized.
+     *
+     * @private
+     * @static
+     *
+     * @memberOf Blueberry
+     */
+    private static addonReady() {
         this._registeredAddons.forEach(addon => {
-            if (typeof addon['loaded'] == 'function') {
-                addon['loaded']();
+            if (typeof addon['ready'] == 'function') {
+                addon['ready']();
             }
         })
+    }
+
+    /**
+     * Initializes all the services that have been registered.
+     *
+     * @private
+     * @static
+     *
+     * @memberOf Blueberry
+     */
+    private static initServices() {
+        for (let i in this._registeredServices) {
+            window[i] = new this._registeredServices[i]();
+        }
     }
 
     /**
@@ -232,7 +305,7 @@ class Blueberry {
      * @memberOf Blueberry
      */
     private static initElementsWithComponent() {
-        let e = document.querySelectorAll('[component], [data-component]') as NodeListOf<HTMLElement>;
+        let e = document.querySelectorAll('[component]') as NodeListOf<HTMLElement>;
         let elen = this._elements.length;
         loop:
         for (let i = 0, l = e.length; i < l; i++) {
@@ -260,6 +333,19 @@ class Blueberry {
                     if (typeof component['click'] == 'function') {
                         e.preventDefault();
                         component['click'].bind(component).call(component, e);
+                    }
+                });
+            };
+        });
+    }
+
+    private static createInputHandlers() {
+        this._elements.forEach(element => {
+            element.element.oninput = function (e) {
+                element.components.forEach(component => {
+                    if (typeof component['input'] == 'function' && e.currentTarget instanceof HTMLInputElement) {
+                        e.preventDefault();
+                        component['input'].bind(component).call(component, e.currentTarget.value, e);
                     }
                 });
             };

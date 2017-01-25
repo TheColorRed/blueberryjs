@@ -4,7 +4,7 @@
  * @enum {number}
  */
 enum Insert {
-    Before, After, Append, Prepend
+    Before, After, Append, Prepend, Overwrite
 }
 
 /**

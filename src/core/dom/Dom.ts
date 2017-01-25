@@ -33,6 +33,11 @@ class Dom {
         return this;
     }
 
+    public attr(key, value): this {
+        this.element.setAttribute(key, value);
+        return this;
+    }
+
     /**
      * Sets the content of an HTMLElement. If the element is an input element then the value will be set otherwise the text will be set.
      *
@@ -41,11 +46,16 @@ class Dom {
      *
      * @memberOf Dom
      */
-    public content(data: string | HTMLElement | HTMLCollectionOf<HTMLElement>): this {
+    public content(data: string | HTMLElement | HTMLCollectionOf<HTMLElement>, insertType?: Insert): this {
+        insertType = !insertType ? Insert.Overwrite : insertType;
         if (data instanceof HTMLElement) {
-            this.element.innerHTML = data.outerHTML;
+            if (insertType == Insert.Overwrite) {
+                this.element.innerHTML = data.outerHTML;
+            }
         } else if (data instanceof HTMLCollection) {
-            this.element.innerHTML = '';
+            if (insertType == Insert.Overwrite) {
+                this.element.innerHTML = '';
+            }
             while (data.length > 0) {
                 this.element.appendChild(data[0]);
             }
@@ -67,7 +77,7 @@ class Dom {
      *
      * @memberOf Dom
      */
-    public fromTemplate(templateUrl: string, data: any): this {
+    public fromTemplate(templateUrl: string, data: any, insertType: Insert): this {
         Ajax.request(templateUrl).success(response => {
             if (typeof data == 'object') {
                 let finalTemp = document.createElement('div');
@@ -96,7 +106,7 @@ class Dom {
                     }
                     finalTemp.appendChild(newTemp.firstChild);
                 }
-                this.content(finalTemp.children as HTMLCollectionOf<HTMLElement>);
+                this.content(finalTemp.children as HTMLCollectionOf<HTMLElement>, insertType);
             }
         });
         return this;
