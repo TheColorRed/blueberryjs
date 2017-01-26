@@ -1,7 +1,7 @@
-class DomElement extends BlueberryObject {
+class DOMObject extends BlueberryObject {
 
     private _components: Component[] = [];
-    private _parent: DomElement = null;
+    private _parent: DOMObject = null;
 
     public get components(): Component[] {
         return this._components;

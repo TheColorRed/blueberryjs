@@ -1,6 +1,6 @@
 class Blueberry {
 
-    private static _elements: DomElement[] = [];
+    private static _objects: DOMObject[] = [];
     private static _observable: Observable[] = [];
     private static _version: string = '0.0.1';
 
@@ -17,8 +17,8 @@ class Blueberry {
         return this._registeredComponents;
     }
 
-    public static get elements(): DomElement[] {
-        return this._elements;
+    public static get objects(): DOMObject[] {
+        return this._objects;
     }
 
     public static register(item, value): Blueberry {
@@ -62,11 +62,24 @@ class Blueberry {
             this.addonInit();
             this.initServices();
             this.initElementsWithComponent();
-            this.createClickHandlers();
-            this.createInputHandlers();
+            this.initHandlers();
             this.addonReady();
             this._hasInit = true;
         }
+    }
+
+    private static initHandlers() {
+        this.initMouse();
+        this.initKeyboard();
+    }
+
+    private static initMouse() {
+        Mouse.clickHandler();
+        Mouse.dblClickHandler();
+    }
+
+    private static initKeyboard() {
+        Keyboard.inputHandler();
     }
 
     /**
@@ -78,7 +91,7 @@ class Blueberry {
      */
     public static upgrade() {
         this.initElementsWithComponent();
-        this.createClickHandlers();
+        this.initHandlers();
     }
 
     /**
@@ -89,8 +102,8 @@ class Blueberry {
      *
      * @memberOf Blueberry
      */
-    public static addElement(domElement: DomElement) {
-        this._elements.push(domElement);
+    public static addElement(domElement: DOMObject) {
+        this._objects.push(domElement);
         let attrs = domElement.attrs;
         for (let key in attrs) {
             domElement.props.set(new Property(key, attrs[key]));
@@ -142,10 +155,10 @@ class Blueberry {
      *
      * @memberOf Blueberry
      */
-    public static findById(id: string): DomElement {
-        for (let i = 0, l = this._elements.length; i < l; i++) {
-            if (this._elements[i].elementId == id) {
-                return this._elements[i];
+    public static findById(id: string): DOMObject {
+        for (let i = 0, l = this._objects.length; i < l; i++) {
+            if (this._objects[i].elementId == id) {
+                return this._objects[i];
             }
         }
         return null;
@@ -160,15 +173,15 @@ class Blueberry {
      *
      * @memberOf Blueberry
      */
-    public static find(selector: string): DomElement {
+    public static find(selector: string): DOMObject {
         let item = document.querySelector(selector) as HTMLElement;
         if (item) {
-            for (let i = 0, l = Blueberry.elements.length; i < l; i++) {
-                if (Blueberry.elements[i].element == item) {
-                    return Blueberry.elements[i];
+            for (let i = 0, l = Blueberry.objects.length; i < l; i++) {
+                if (Blueberry.objects[i].element == item) {
+                    return Blueberry.objects[i];
                 }
             }
-            let de = new DomElement(item);
+            let de = new DOMObject(item);
             Blueberry.addElement(de);
             return de;
         }
@@ -184,23 +197,23 @@ class Blueberry {
      *
      * @memberOf Blueberry
      */
-    public static findAll(selector: string): DomElement[] {
-        let elements: DomElement[] = [];
+    public static findAll(selector: string): DOMObjectList {
+        let elements = new DOMObjectList();
         let items = document.querySelectorAll(selector) as NodeListOf<HTMLElement>;
         for (let i = 0, l = items.length; i < l; i++) {
             let item = items[i];
             let found: boolean = false;
-            for (let j = 0, len = Blueberry.elements.length; j < len; j++) {
-                if (Blueberry.elements[j].element == item) {
-                    elements.push(Blueberry.elements[i]);
+            for (let j = 0, len = Blueberry.objects.length; j < len; j++) {
+                if (Blueberry.objects[j].element == item) {
+                    elements.add(Blueberry.objects[i]);
                     found = true;
                     break;
                 }
             }
             if (!found) {
-                let de = new DomElement(item);
+                let de = new DOMObject(item);
                 Blueberry.addElement(de);
-                elements.push(de)
+                elements.add(de)
             }
         }
         return elements;
@@ -216,12 +229,12 @@ class Blueberry {
      *
      * @memberOf Blueberry
      */
-    public static findWithComponent<T extends Component>(type: ComponentType<T>): DomElement[] {
-        let elements: DomElement[] = [];
-        this._elements.forEach(el => {
+    public static findWithComponent<T extends Component>(type: ComponentType<T>): DOMObjectList {
+        let elements = new DOMObjectList();
+        this._objects.forEach(el => {
             el.components.forEach(comp => {
                 if (comp instanceof type) {
-                    elements.push(el);
+                    elements.add(el);
                 }
             });
         });
@@ -238,16 +251,16 @@ class Blueberry {
      *
      * @memberOf Blueberry
      */
-    public static findComponents<T extends Component>(type: ComponentType<T>): T[] {
-        let components: T[] = [];
-        this.elements.forEach(el => {
+    public static findComponents<T extends Component>(type: ComponentType<T>): ComponentList {
+        let list = new ComponentList();
+        this.objects.forEach(el => {
             el.components.forEach(comp => {
                 if (comp instanceof type) {
-                    components.push(<T>comp);
+                    list.add(<T>comp);
                 }
             });
         });
-        return components;
+        return list;
     }
 
     /**
@@ -306,50 +319,16 @@ class Blueberry {
      */
     private static initElementsWithComponent() {
         let e = document.querySelectorAll('[component]') as NodeListOf<HTMLElement>;
-        let elen = this._elements.length;
+        let elen = this._objects.length;
         loop:
         for (let i = 0, l = e.length; i < l; i++) {
             for (let j = 0; j < elen; j++) {
-                if (e[i] == this._elements[j].element) {
+                if (e[i] == this._objects[j].element) {
                     continue loop;
                 }
             }
-            this.addElement(new DomElement(e[i]));
+            this.addElement(new DOMObject(e[i]));
         }
-    }
-
-    /**
-     * Creates click event handlers for components that support it
-     *
-     * @private
-     * @static
-     *
-     * @memberOf Blueberry
-     */
-    private static createClickHandlers() {
-        this._elements.forEach(element => {
-            element.element.onclick = function (e) {
-                element.components.forEach(component => {
-                    if (typeof component['click'] == 'function') {
-                        e.preventDefault();
-                        component['click'].bind(component).call(component, e);
-                    }
-                });
-            };
-        });
-    }
-
-    private static createInputHandlers() {
-        this._elements.forEach(element => {
-            element.element.oninput = function (e) {
-                element.components.forEach(component => {
-                    if (typeof component['input'] == 'function' && e.currentTarget instanceof HTMLInputElement) {
-                        e.preventDefault();
-                        component['input'].bind(component).call(component, e.currentTarget.value, e);
-                    }
-                });
-            };
-        });
     }
 
     /**
@@ -361,7 +340,7 @@ class Blueberry {
      * @memberOf Blueberry
      */
     private static created() {
-        this._elements.forEach(element => {
+        this._objects.forEach(element => {
             element.sendMessage('created');
         });
     }
@@ -375,12 +354,12 @@ class Blueberry {
      * @memberOf Blueberry
      */
     private static deleted() {
-        let i = this._elements.length;
+        let i = this._objects.length;
         while (i--) {
-            let element = this._elements[i];
+            let element = this._objects[i];
             element.sendMessage('deleted');
             if (element['_toDelete']) {
-                this._elements.splice(i, 1);
+                this._objects.splice(i, 1);
             }
         }
     }
@@ -394,7 +373,7 @@ class Blueberry {
      * @memberOf Blueberry
      */
     private static update() {
-        this._elements.forEach(element => {
+        this._objects.forEach(element => {
             element.sendMessage('update');
         });
     }
@@ -408,7 +387,7 @@ class Blueberry {
      * @memberOf Blueberry
      */
     private static lateUpdate() {
-        this._elements.forEach(element => {
+        this._objects.forEach(element => {
             element.sendMessage('lateUpdate');
         });
     }

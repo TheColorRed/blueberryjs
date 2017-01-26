@@ -4,7 +4,7 @@ class Observable extends BlueberryObject {
     private _component: Component;
     private _init: boolean = false;
 
-    public constructor(component: Component, observable: any, element: DomElement) {
+    public constructor(component: Component, observable: any, element: DOMObject) {
         super();
         this._component = component;
         this._observable = observable;

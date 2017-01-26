@@ -2,7 +2,7 @@ class BlueberryObject {
 
     public id: string = '';
     public element: HTMLElement = null;
-    public object: DomElement = null;
+    public object: DOMObject = null;
 
     public dom: Dom = null;
     public class: Class = null;
@@ -50,14 +50,14 @@ class BlueberryObject {
      * @type {DomElement}
      * @memberOf BlueberryObject
      */
-    public get parent(): DomElement {
+    public get parent(): DOMObject {
         let pNode = this.element.parentNode;
-        for (let i = 0, l = Blueberry.elements.length; i < l; i++) {
-            if (Blueberry.elements[i].element == pNode) {
-                return Blueberry.elements[i];
+        for (let i = 0, l = Blueberry.objects.length; i < l; i++) {
+            if (Blueberry.objects[i].element == pNode) {
+                return Blueberry.objects[i];
             }
         }
-        let de = new DomElement(<HTMLElement>pNode);
+        let de = new DOMObject(<HTMLElement>pNode);
         Blueberry.addElement(de);
         return de;
     }
@@ -74,7 +74,7 @@ class BlueberryObject {
     public findClosestComponent<T extends Component>(type: ComponentType<T>): Component {
         let component: Component = null;
         let item = this.element.closest(`[component*=${type.prototype.constructor.name}]`) as HTMLElement;
-        Blueberry.elements.forEach(el => {
+        Blueberry.objects.forEach(el => {
             if (component != null) { return; }
             el.components.forEach(comp => {
                 if (component != null) { return; }
@@ -95,20 +95,20 @@ class BlueberryObject {
      *
      * @memberOf BlueberryObject
      */
-    public findChildComponents<T extends Component>(type: ComponentType<T>): Component[] {
-        let components: Component[] = [];
+    public findChildComponents<T extends Component>(type: ComponentType<T>): ComponentList {
+        let list = new ComponentList();
         let items = this.element.querySelectorAll('[component]') as NodeListOf<HTMLElement>;
-        Blueberry.elements.forEach(el => {
+        Blueberry.objects.forEach(el => {
             el.components.forEach(comp => {
                 for (let i = 0, l = items.length; i < l; i++) {
                     let item = items[i];
                     if (comp instanceof type && comp.element == item) {
-                        components.push(comp);
+                        list.add(comp);
                     }
                 }
             });
         });
-        return components;
+        return list;
     }
 
     /**
@@ -119,14 +119,14 @@ class BlueberryObject {
      *
      * @memberOf BlueberryObject
      */
-    public findChild(selector: string): DomElement {
+    public findChild(selector: string): DOMObject {
         let item = this.element.querySelector(selector) as HTMLElement;
-        for (let i = 0, l = Blueberry.elements.length; i < l; i++) {
-            if (Blueberry.elements[i].element == item) {
-                return Blueberry.elements[i];
+        for (let i = 0, l = Blueberry.objects.length; i < l; i++) {
+            if (Blueberry.objects[i].element == item) {
+                return Blueberry.objects[i];
             }
         }
-        let de = new DomElement(item);
+        let de = new DOMObject(item);
         Blueberry.addElement(de);
         return de;
     }
@@ -139,21 +139,21 @@ class BlueberryObject {
      *
      * @memberOf BlueberryObject
      */
-    public findChildren(selector: string): DomElement[] {
+    public findChildren(selector: string): DOMObjectList {
         let items = this.element.querySelectorAll(selector) as NodeListOf<HTMLElement>;
-        let elements: DomElement[] = []
+        let elements = new DOMObjectList();
         itemLoop:
         for (let i = 0, l = items.length; i < l; i++) {
             let item = items[i];
-            for (let j = 0, len = Blueberry.elements.length; j < len; j++) {
-                if (Blueberry.elements[j].element == item) {
-                    elements.push(Blueberry.elements[j]);
+            for (let j = 0, len = Blueberry.objects.length; j < len; j++) {
+                if (Blueberry.objects[j].element == item) {
+                    elements.add(Blueberry.objects[j]);
                     continue itemLoop;
                 }
             }
-            let de = new DomElement(item);
+            let de = new DOMObject(item);
             Blueberry.addElement(de);
-            elements.push(de);
+            elements.add(de);
         }
         return elements;
     }
@@ -180,7 +180,7 @@ class BlueberryObject {
      *
      * @memberOf BlueberryObject
      */
-    public instantiate(insert: Insert, element: HTMLElement, output: HTMLElement | string): DomElement {
+    public instantiate(insert: Insert, element: HTMLElement, output: HTMLElement | string): DOMObject {
         let insertType: string = '';
         switch (insert) {
             case Insert.Before: insertType = 'beforebegin'; break;
@@ -188,14 +188,14 @@ class BlueberryObject {
             case Insert.Prepend: insertType = 'afterbegin'; break;
             case Insert.Append: insertType = 'beforeend'; break;
         }
-        let de: DomElement;
+        let de: DOMObject;
         if (output instanceof HTMLElement) {
             element.insertAdjacentElement(insertType, output);
-            de = new DomElement(output);
+            de = new DOMObject(output);
         } else if (typeof output == 'string') {
             let e = this.createElement(output);
             element.insertAdjacentElement(insertType, e);
-            de = new DomElement(e);
+            de = new DOMObject(e);
         }
         Blueberry.upgrade();
         return de;
@@ -279,7 +279,5 @@ class BlueberryObject {
         div.innerHTML = html;
         return <HTMLElement>div.firstChild;
     }
-
-
 
 }
