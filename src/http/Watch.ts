@@ -1,6 +1,6 @@
 class Watch {
     private _items: Ajax[] = [];
-    private _done: (response: AjaxResponse[]) => void;
+    private _done: (response: AjaxResponseList) => void;
     private _watcher = null;
 
     public static all(...toWatch: Ajax[]): Watch {
@@ -11,18 +11,18 @@ class Watch {
     }
 
     private testStatus() {
-        let responses: AjaxResponse[] = [];
+        let responses: AjaxResponseList = new AjaxResponseList();
         for (let i = 0, l = this._items.length; i < l; i++) {
             if (!this._items[i].done) {
                 return false;
             }
-            responses.push(this._items[i].response);
+            responses.add(this._items[i].response);
         }
         clearInterval(this._watcher);
         this._done(responses);
     }
 
-    public done(callback: (responses: AjaxResponse[]) => void): this {
+    public done(callback: (responses: AjaxResponseList) => void): this {
         this._done = callback;
         return this;
     }

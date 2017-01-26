@@ -2,6 +2,14 @@ class Dom {
 
     public element: HTMLElement = null;
 
+    public get value(): string {
+        if (this.element instanceof HTMLInputElement) {
+            return this.element.value;
+        } else {
+            return this.element.innerText;
+        }
+    }
+
     public constructor(element: HTMLElement) {
         this.element = element;
     }
@@ -33,8 +41,14 @@ class Dom {
         return this;
     }
 
-    public attr(key, value): this {
-        this.element.setAttribute(key, value);
+    public attr(key: string | Object, value: string): this {
+        if (arguments.length == 1 && typeof key == 'object') {
+            for (let i in key) {
+                this.element.setAttribute(i, key[i]);
+            }
+        } else if (arguments.length == 2 && typeof key == 'string') {
+            this.element.setAttribute(key, value);
+        }
         return this;
     }
 

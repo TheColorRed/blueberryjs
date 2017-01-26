@@ -1,6 +1,6 @@
 abstract class BlueberryList<T> {
 
-    protected _items: T[] = [];
+    private _items: T[] = [];
 
     public get list(): T[] {
         return this._items;

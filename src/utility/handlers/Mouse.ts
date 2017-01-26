@@ -9,14 +9,16 @@ class Mouse {
      */
     public static clickHandler() {
         Blueberry.objects.forEach(object => {
-            object.element.onclick = function (e) {
-                object.components.forEach(component => {
-                    if (typeof component['click'] == 'function') {
-                        e.preventDefault();
-                        component['click'].bind(component).call(component, e);
-                    }
-                });
-            };
+            if (!object.element.onclick) {
+                object.element.onclick = function (e) {
+                    object.components.forEach(component => {
+                        if (typeof component['click'] == 'function') {
+                            e.preventDefault();
+                            component['click'].bind(component).call(component, e);
+                        }
+                    });
+                }
+            }
         });
     }
 
@@ -30,14 +32,16 @@ class Mouse {
      */
     public static dblClickHandler() {
         Blueberry.objects.forEach(object => {
-            object.element.onclick = function (e) {
-                object.components.forEach(component => {
-                    if (typeof component['doubleClick'] == 'function') {
-                        e.preventDefault();
-                        component['doubleClick'].bind(component).call(component, e);
-                    }
-                });
-            };
+            if (!object.element.onclick) {
+                object.element.ondblclick = function (e) {
+                    object.components.forEach(component => {
+                        if (typeof component['doubleClick'] == 'function') {
+                            e.preventDefault();
+                            component['doubleClick'].bind(component).call(component, e);
+                        }
+                    });
+                }
+            }
         });
     }
 }

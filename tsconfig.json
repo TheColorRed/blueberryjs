@@ -25,6 +25,7 @@
         "./src/utility/list/BlueberryList.ts",
         "./src/utility/list/BlueberryObjectList.ts",
         "./src/utility/list/ComponentList.ts",
+        "./src/utility/list/AjaxResponseList.ts",
         "./src/utility/list/DOMObjectList.ts",
         "./src/utility/handlers/Keyboard.ts",
         "./src/utility/handlers/Mouse.ts",

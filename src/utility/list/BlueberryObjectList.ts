@@ -19,6 +19,10 @@ abstract class BlueberryObjectList<T extends BlueberryObject> extends BlueberryL
         return this.each(item => item.dom.html(html));
     }
 
+    public attr(key: string | Object, value: string) {
+        return this.each(item => item.dom.attr(key, value));
+    }
+
     public text(html: string): this {
         return this.each(item => item.dom.text(html));
     }
@@ -33,5 +37,9 @@ abstract class BlueberryObjectList<T extends BlueberryObject> extends BlueberryL
 
     public toggleClass(className: string): this {
         return this.each(item => item.class.toggle(className));
+    }
+
+    public setProp(property: Property | Property[]) {
+        return this.each(item => item.props.set(property));
     }
 }

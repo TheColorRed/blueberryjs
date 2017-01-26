@@ -74,7 +74,8 @@ class Ajax {
                         }
                     }
                 });
-                if (this._response.getHeaderValue('Content-Type').match(/\/json$/i)) {
+                let header = this._response.getHeaderValue('Content-Type');
+                if (header && header.match(/\/json$/i)) {
                     this._response['_data'] = JSON.parse(xhttp.responseText);
                 } else {
                     try {
