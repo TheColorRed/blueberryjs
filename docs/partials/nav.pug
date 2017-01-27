@@ -1,5 +1,5 @@
 mixin listItem(text, filename)
-    li(class=`${file == filename ? 'active' : ''}`): a.waves-effect(href=`/${filename}.html`) #{text}
+    li(class=`${file == filename ? 'active blue' : ''}`): a.waves-effect(href=`/${filename}.html`) #{text}
 mixin collapsible(text, root)
     a(class=`${'collapsible-header waves-effect ' + (rootdir == root ? 'active' : '')}`) #{text}
 - if(file != 'index')
@@ -15,7 +15,7 @@ mixin collapsible(text, root)
 ul.side-nav.fixed#main-menu
     li
         ul
-            +listItem('Getting Started', 'api/getting-started')
+            +listItem('Getting Started', 'getting-started')
         ul.collapsible.collapsible-accordion
             li
                 //- JavaScript Api

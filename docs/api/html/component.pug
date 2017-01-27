@@ -1,18 +1,30 @@
 extends ../../partials/head.pug
 block title
-    title Api &ndash; Components
+    title HTML Api &ndash; Components
 block content
     .scrollspy#intro
         h2.header Components
         p.flow-text.card-panel Html components are used to attach a defined JavaScript component to the current DOM element.
     //- The component
     .scrollspy.section#component
-        +def('Component', 'There are two different ways to attach a component to an element, <code>component="MyComponent"</code> and <code>data-component="MyComponent"</code>.')
-        p These allow you to pass multiple components as values to the attribute in the same way that the #[code class=""] attribute works by separating each one with a space.
+        +def('Component', 'A component can be attached to an element using <code>component="MyComponent"</code>.')
+        p This will allow you to pass multiple components as values to the attribute in the same way that the #[code class=""] attribute works by separating each one with a space.
+        p An example of this could look something like this:
         pre: code.language-markup
-            = '<div component="Component1 Component2"></div>\n'
-            = '<div data-component="Component1 Component2"></div>\n'
-
+            = '<div component="Component1 Component2"></div>'
+        p An element with a component can have child elements that have components as well, as each component works independently of other components.
+        pre: code.language-markup
+            = '<div component="Nav">\n'
+            = '    <a href="/home" component="NavItem">Home</a>\n'
+            = '    <a href="/about" component="NavItem">About</a>\n'
+            = '    <a href="" component="NavItem NavToggleItem">Genres</a>\n'
+            = '    <div component="NavToggleGroup">\n'
+            = '        <a href="/genre/action" component="NavItem">Action</a>\n'
+            = '        <a href="/genre/adventure" component="NavItem">Adventure</a>\n'
+            = '        <a href="/genre/sports" component="NavItem">Sports</a>\n'
+            = '    </div>\n'
+            = '</div>'
+        p When creating a component, the component should be very specific to what it does. When making a component really robust, it starts losing its ability to be reusable.
 block sideContent
     ul.section.table-of-contents.pinned
         li: a(href='#intro') Introduction
