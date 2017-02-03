@@ -97,35 +97,57 @@ class Observable extends BlueberryObject {
         } else if (element instanceof HTMLElement) {
             element.innerText = this._observable[key];
         } else if (element instanceof DOMObject) {
+            // If the observable key is an array
             if (this._observable[key] instanceof Array) {
-                let vals = [];
-                if (this._component.templates && this._component.templates[key]) {
-                    let rootTemplate: string = this._component.templates[key];
-                    let items = Blueberry.findTemplateItems(rootTemplate);
-                    this._observable[key].forEach((o, k, v) => {
-                        let template = rootTemplate;
-                        items.forEach(item => {
-                            if (item.value == 'value') {
-                                template = template.replace(new RegExp(item.placeholder, 'g'), v);
-                            } else if (item.value == 'key') {
-                                template = template.replace(new RegExp(item.placeholder, 'g'), k);
-                            } else {
-                                template = template.replace(new RegExp(item.placeholder, 'g'), this.get(`names[${k}].${item.value}`));
-                            }
-                        });
-                        vals.push(template)
-                    });
-                } else {
-                    this._observable[key].forEach(item => {
-                        if (element instanceof DOMObject) {
-                            vals.push(`<span>${item}</span>`);
-                        }
-                    });
-                }
-                element.dom.html(vals.join(''))
+                let finalTemplates = this.getFinalTemplates(element, key);
+                element.dom.html(finalTemplates.join(''))
             } else {
+                element.dom.content(this._observable[key]);
             }
         }
+    }
+
+    private getFinalTemplates(element, key): string[] {
+        let finalTemplates = [];
+        // If the component has a template lets use it
+        if (this._component.templates && this._component.templates[key]) {
+            // Set the base template so we can reuse it
+            let rootTemplate: string = this._component.templates[key];
+            // Find the replaceable items in the template
+            let items = Blueberry.findTemplateItems(rootTemplate);
+            // Loop over each observable item
+            this._observable[key].forEach((o, k, v) => {
+                // Create a duplicate template from the root template for the current observable item
+                let template = rootTemplate;
+                // Replace each item in the template
+                items.forEach(item => {
+                    // If the value is 'value' use the value of the array
+                    if (item.value == 'value') {
+                        template = template.replace(new RegExp(item.placeholder, 'g'), o);
+                    }
+                    // If the value is 'key' use the key from the array
+                    else if (item.value == 'key') {
+                        template = template.replace(new RegExp(item.placeholder, 'g'), k);
+                    }
+                    // Otherwise use what was defined in the teplate
+                    else {
+                        template = template.replace(new RegExp(item.placeholder, 'g'), this.get(`${key}[${k}].${item.value}`));
+                    }
+                });
+                // Push the template to the output template array
+                finalTemplates.push(template)
+            });
+        }
+        // The component doesn't have a template
+        // Just push the item
+        else {
+            this._observable[key].forEach(item => {
+                if (element instanceof DOMObject) {
+                    finalTemplates.push(item);
+                }
+            });
+        }
+        return finalTemplates;
     }
 
 }

@@ -21,7 +21,7 @@ class Blueberry {
         return this._objects;
     }
 
-    public static register(item, value): Blueberry {
+    public static register(item, value?): Blueberry {
         if (arguments.length == 1 && item.prototype instanceof Component) {
             this._registeredComponents[(<any>item).name] = item;
             window[(<any>item).name] = item;
@@ -75,8 +75,7 @@ class Blueberry {
     }
 
     private static initMouse() {
-        Mouse.clickHandler();
-        Mouse.dblClickHandler();
+        Mouse.clickHandlers();
     }
 
     private static initKeyboard() {
@@ -109,6 +108,17 @@ class Blueberry {
         for (let key in attrs) {
             domElement.props.set(new Property(key, attrs[key]));
         }
+    }
+
+    public static toObject(element: HTMLElement): DOMObject {
+        for (let i = 0, l = this._objects.length; i < l; i++) {
+            if (this._objects[i].element == element) {
+                return this._objects[i];
+            }
+        }
+        let domObject = new DOMObject(element);
+        this.addElement(domObject);
+        return domObject;
     }
 
     /**

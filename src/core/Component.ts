@@ -4,10 +4,10 @@ abstract class Component extends BlueberryObject {
     public unique: boolean = true;
     public templates: Object = {};
 
-    public abstract click(event?: Event): void;
-    public abstract created(): void;
-    public abstract update(): void;
-    public abstract deleted(): void;
+    // public abstract click(event?: Event): void;
+    // public abstract created(): void;
+    // public abstract update(): void;
+    // public abstract deleted(): void;
 
     private _started: boolean = false;
 

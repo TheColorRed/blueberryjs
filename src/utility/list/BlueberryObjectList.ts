@@ -1,4 +1,4 @@
-abstract class BlueberryObjectList<T extends BlueberryObject> extends BlueberryList<T>{
+abstract class BlueberryObjectList<T extends BlueberryObject> extends List<T>{
     public setStyle(key: string | {}, value: string): this {
         return this.each(item => item.style.set(key, value));
     }

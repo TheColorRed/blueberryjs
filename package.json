@@ -8,16 +8,29 @@
   },
   "author": "Ryan Naddy",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
+    "@types/glob": "^5.0.30",
+    "@types/gulp": "^3.8.32",
+    "@types/gulp-typescript": "0.0.32",
+    "@types/gulp-uglify": "0.0.29",
+    "@types/materialize-css": "^0.97.34",
+    "@types/mkdirp": "^0.3.29",
+    "@types/ncp": "^2.0.0",
+    "@types/pug": "^2.0.4",
+    "@types/rimraf": "0.0.28",
+    "@types/typescript": "^2.0.0",
+    "@types/webpack-stream": "^3.2.5",
     "glob": "^7.1.1",
     "gulp": "^3.9.1",
     "gulp-typescript": "^3.1.4",
     "gulp-uglify": "^2.0.0",
     "materialize-css": "^0.97.8",
     "mkdirp": "^0.5.1",
+    "ncp": "^2.0.0",
     "pug": "^2.0.0-beta6",
     "rimraf": "^2.5.4",
     "typescript": "^2.1.5",
     "webpack-stream": "^3.2.0"
-  }
+  },
+  "dependencies": {}
 }

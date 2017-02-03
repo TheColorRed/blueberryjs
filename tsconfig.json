@@ -22,7 +22,7 @@
         "./src/utility/Types.ts",
         "./src/utility/Enums.ts",
         "./src/utility/Properties.ts",
-        "./src/utility/list/BlueberryList.ts",
+        "./src/utility/list/List.ts",
         "./src/utility/list/BlueberryObjectList.ts",
         "./src/utility/list/ComponentList.ts",
         "./src/utility/list/AjaxResponseList.ts",

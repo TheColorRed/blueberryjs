@@ -1,4 +1,4 @@
-class AjaxResponseList extends BlueberryList<AjaxResponse> {
+class AjaxResponseList extends List<AjaxResponse> {
 
     public allData(key?: string): Object[] {
         let data: Object[] = [];
