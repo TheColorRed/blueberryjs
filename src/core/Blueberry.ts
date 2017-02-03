@@ -62,6 +62,7 @@ class Blueberry {
             this.addonInit();
             this.initServices();
             this.initElementsWithComponent();
+            // this.initComponentInteravls();
             this.initHandlers();
             this.addonReady();
             this._hasInit = true;
@@ -121,6 +122,26 @@ class Blueberry {
      */
     public static uniqId(length: number = 6): string {
         return (Math.random().toString(36) + Math.random().toString(36)).substr(2, length);
+    }
+
+    public static findTemplateItems(template): { placeholder: string, value: string }[] {
+        let regex = /\{\{(.+?)\}\}/g
+        let m: RegExpExecArray;
+        let matches = [];
+        while ((m = regex.exec(template))) {
+            if (m.index === regex.lastIndex) { regex.lastIndex++; }
+            let tmp = { placeholder: '', value: '' };
+            m.forEach((match, idx) => {
+                if (idx == 0) {
+                    tmp.placeholder = match;
+                } else if (idx == 1) {
+                    tmp.value = match;
+                    matches.push(tmp);
+                    tmp = { placeholder: '', value: '' };
+                }
+            });
+        }
+        return matches;
     }
 
     /**

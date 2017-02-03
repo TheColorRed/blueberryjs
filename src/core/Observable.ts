@@ -6,6 +6,9 @@ class Observable extends BlueberryObject {
 
     public constructor(component: Component, observable: any, element: DOMObject) {
         super();
+        if (typeof observable == 'function') {
+            observable = observable();
+        }
         this._component = component;
         this._observable = observable;
         this.object = element;
@@ -22,12 +25,13 @@ class Observable extends BlueberryObject {
      * @memberOf Observable
      */
     public get(key: string) {
-        for (let i in this._observable) {
-            if (i == key) {
-                return this._observable[i];
-            }
-        }
-        return null;
+        return Blueberry.query(key, this._observable);
+        // for (let i in this._observable) {
+        //     if (i == key) {
+        //         return this._observable[i];
+        //     }
+        // }
+        // return null;
     }
 
     /**
@@ -67,7 +71,7 @@ class Observable extends BlueberryObject {
                         this._component['change'](k, this._observable[k], old[k]);
                     }
                     if (this.element.hasAttribute('observe') && this.element.getAttribute('observe') == k) {
-                        this.setVal(this.element, k);
+                        this.setVal(this.object, k);
                     }
                     let elem = this.element.querySelectorAll(`[observe=${k}]`) as NodeListOf<HTMLElement>;
                     for (let i = 0, l = elem.length; i < l; i++) {
@@ -92,6 +96,35 @@ class Observable extends BlueberryObject {
             element.value = this._observable[key];
         } else if (element instanceof HTMLElement) {
             element.innerText = this._observable[key];
+        } else if (element instanceof DOMObject) {
+            if (this._observable[key] instanceof Array) {
+                let vals = [];
+                if (this._component.templates && this._component.templates[key]) {
+                    let rootTemplate: string = this._component.templates[key];
+                    let items = Blueberry.findTemplateItems(rootTemplate);
+                    this._observable[key].forEach((o, k, v) => {
+                        let template = rootTemplate;
+                        items.forEach(item => {
+                            if (item.value == 'value') {
+                                template = template.replace(new RegExp(item.placeholder, 'g'), v);
+                            } else if (item.value == 'key') {
+                                template = template.replace(new RegExp(item.placeholder, 'g'), k);
+                            } else {
+                                template = template.replace(new RegExp(item.placeholder, 'g'), this.get(`names[${k}].${item.value}`));
+                            }
+                        });
+                        vals.push(template)
+                    });
+                } else {
+                    this._observable[key].forEach(item => {
+                        if (element instanceof DOMObject) {
+                            vals.push(`<span>${item}</span>`);
+                        }
+                    });
+                }
+                element.dom.html(vals.join(''))
+            } else {
+            }
         }
     }
 

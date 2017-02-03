@@ -10,9 +10,9 @@
     "files": [
         "./src/core/Blueberry.ts",
         "./src/core/BlueberryObject.ts",
-        "./src/core/Component.ts",
         "./src/core/DOMObject.ts",
         "./src/core/Observable.ts",
+        "./src/core/Component.ts",
         "./src/dom/Dom.ts",
         "./src/dom/Class.ts",
         "./src/dom/Style.ts",

@@ -2,6 +2,7 @@ class DOMObject extends BlueberryObject {
 
     private _components: Component[] = [];
     private _parent: DOMObject = null;
+    private _intervals: number[] = [];
 
     public get components(): Component[] {
         return this._components;
@@ -17,6 +18,19 @@ class DOMObject extends BlueberryObject {
         this.getComponents();
     }
 
+    public initComponentInteravls() {
+        this._components.forEach(comp => {
+            if (typeof comp['interval'] == 'function') {
+                let delay = comp['interval']();
+                this._intervals[(<any>comp).constructor.name] = setInterval(() => {
+                    let itmdelay = comp['interval']();
+                    if (!itmdelay) {
+                        clearInterval(this._intervals[(<any>comp).constructor.name]);
+                    }
+                }, delay);
+            }
+        });
+    }
     /**
      * Sends a message to the elements components
      *
@@ -30,10 +44,14 @@ class DOMObject extends BlueberryObject {
             if (message == 'created') {
                 if (comp['_started']) { return; }
                 comp['_started'] = true;
+                if (typeof comp['template'] == 'function') {
+                    comp.setTemplates();
+                }
                 if (typeof comp['observe'] == 'function') {
                     comp.getObservables();
                     comp.getModels();
                 }
+                this.initComponentInteravls();
             }
             if (message == 'deleted') {
                 if (!this._toDelete) { return; }

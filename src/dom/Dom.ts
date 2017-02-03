@@ -41,6 +41,12 @@ class Dom {
         return this;
     }
 
+    public append(html: string) {
+        this.element.insertAdjacentHTML('beforeend', html);
+        Blueberry.upgrade();
+        return this;
+    }
+
     public attr(key: string | Object, value: string): this {
         if (arguments.length == 1 && typeof key == 'object') {
             for (let i in key) {
