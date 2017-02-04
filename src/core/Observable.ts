@@ -1,4 +1,4 @@
-class Observable extends BlueberryObject {
+class Observable extends Obj {
 
     private _observable: {} = null;
     private _component: Component;

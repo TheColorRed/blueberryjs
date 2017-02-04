@@ -9,7 +9,7 @@
     },
     "files": [
         "./src/core/Blueberry.ts",
-        "./src/core/BlueberryObject.ts",
+        "./src/core/Obj.ts",
         "./src/core/Component.ts",
         "./src/core/DOMObject.ts",
         "./src/core/Observable.ts",
@@ -23,7 +23,7 @@
         "./src/utility/Enums.ts",
         "./src/utility/Properties.ts",
         "./src/utility/list/BlueberryList.ts",
-        "./src/utility/list/BlueberryObjectList.ts",
+        "./src/utility/list/ObjList.ts",
         "./src/utility/list/ComponentList.ts",
         "./src/utility/list/AjaxResponseList.ts",
         "./src/utility/list/DOMObjectList.ts",

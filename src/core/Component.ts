@@ -1,4 +1,4 @@
-abstract class Component extends BlueberryObject {
+abstract class Component extends Obj {
 
     public observable: Observable = null;
     public unique: boolean = true;

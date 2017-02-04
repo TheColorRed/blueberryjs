@@ -1,4 +1,4 @@
-class DOMObject extends BlueberryObject {
+class DOMObject extends Obj {
 
     private _components: Component[] = [];
     private _parent: DOMObject = null;

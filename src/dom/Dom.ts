@@ -165,4 +165,59 @@ class Dom {
         return <HTMLElement>root;
     }
 
+    /**
+     * Finds an element in the dom based on the selector and converts it to a Blueberry DomElement
+     *
+     * @static
+     * @param {string} selector
+     * @returns {DomElement}
+     *
+     * @memberOf Blueberry
+     */
+    public static find(selector: string): DOMObject {
+        let item = document.querySelector(selector) as HTMLElement;
+        if (item) {
+            for (let i = 0, l = Blueberry.objects.length; i < l; i++) {
+                if (Blueberry.objects[i].element == item) {
+                    return Blueberry.objects[i];
+                }
+            }
+            let de = new DOMObject(item);
+            Blueberry.addElement(de);
+            return de;
+        }
+        return null;
+    }
+
+    /**
+     * Finds all elements in the dom based on the selector and converts them to Blueberry DomElements
+     *
+     * @static
+     * @param {string} selector
+     * @returns {DomElement[]}
+     *
+     * @memberOf Blueberry
+     */
+    public static findAll(selector: string): DOMObjectList {
+        let elements = new DOMObjectList();
+        let items = document.querySelectorAll(selector) as NodeListOf<HTMLElement>;
+        for (let i = 0, l = items.length; i < l; i++) {
+            let item = items[i];
+            let found: boolean = false;
+            for (let j = 0, len = Blueberry.objects.length; j < len; j++) {
+                if (Blueberry.objects[j].element == item) {
+                    elements.add(Blueberry.objects[i]);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                let de = new DOMObject(item);
+                Blueberry.addElement(de);
+                elements.add(de)
+            }
+        }
+        return elements;
+    }
+
 }

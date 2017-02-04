@@ -32,7 +32,7 @@ class Mouse {
      */
     public static dblClickHandler() {
         Blueberry.objects.forEach(object => {
-            if (!object.element.onclick) {
+            if (!object.element.ondblclick) {
                 object.element.ondblclick = function (e) {
                     object.components.forEach(component => {
                         if (typeof component['doubleClick'] == 'function') {
