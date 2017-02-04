@@ -6,10 +6,12 @@ const fs = require('fs');
 const mkdirp = require('mkdirp');
 const glob = require('glob');
 const rimraf = require('rimraf');
+const ncp = require('ncp');
 
 const paths = {
     tswatch: ['src/**/*.ts', 'tsconfig.json'],
-    docwatch: ['docs/**/*.pug']
+    docwatch: ['docs/**/*.pug'],
+    componentWatch: ['src/components/**/*.js']
 };
 
 const pugFiles = [
@@ -69,9 +71,16 @@ gulp.task('docs', () => {
         });
     });
     fs.createReadStream('./dist/blueberry.js').pipe(fs.createWriteStream('./public/assets/js/blueberry.js'));
+    ncp('./src/components', './dist/components');
+});
+
+
+gulp.task('moveComponents', () => {
+    ncp('./src/components', './dist/components');
 });
 
 gulp.task('build', ['typescript', 'docs'], () => {
     gulp.watch(paths.tswatch, ['typescript']);
     gulp.watch(paths.docwatch, ['docs']);
+    gulp.watch(paths.componentWatch, ['moveComponents']);
 });

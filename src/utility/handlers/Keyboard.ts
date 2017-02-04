@@ -9,14 +9,24 @@ class Keyboard {
      */
     public static inputHandler() {
         Blueberry.objects.forEach(object => {
-            object.element.oninput = function (e) {
-                object.components.forEach(component => {
-                    if (typeof component['input'] == 'function' && e.currentTarget instanceof HTMLInputElement) {
-                        e.preventDefault();
-                        component['input'].bind(component).call(component, e.currentTarget.value, e);
-                    }
-                });
-            };
+            if (!object.element.oninput) {
+                object.element.oninput = function (e) {
+                    object.components.forEach(component => {
+                        if (typeof component['input'] == 'function' && e.currentTarget instanceof HTMLInputElement) {
+                            component['input'].bind(component).call(component, e.currentTarget.value, e);
+                        }
+                    });
+                };
+            }
+            if (!object.element.onkeydown) {
+                object.element.onkeydown = function (e) {
+                    object.components.forEach(component => {
+                        if (typeof component['keyDown'] == 'function' && e.currentTarget instanceof HTMLInputElement) {
+                            component['keyDown'].bind(component).call(component, e);
+                        }
+                    });
+                };
+            }
         });
     }
 }

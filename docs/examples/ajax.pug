@@ -15,10 +15,9 @@ block content
                         colors: []
                     };
                 }
-                click(e) {
-                    e.preventDefault();
-                    let url = e.target.getAttribute('href');
-                    if(url && url.length > 0){
+                click(target) {
+                    let url = target.attrs.href || null;
+                    if (url && url.length > 0) {
                         Ajax.request({url: url, data:{one:'one',two:'two'}}).success(response => {
                             this.set({
                                 title: response.data.title,
@@ -52,10 +51,9 @@ block content
                         colors: []
                     };
                 }
-                click(e) {
-                    e.preventDefault();
-                    let url = e.target.getAttribute('href');
-                    if(url && url.length > 0){
+                click(target) {
+                    let url = target.attrs.href || null;
+                    if (url && url.length > 0) {
                         Ajax.request({url: url, data:{one:'one',two:'two'}}).success(response => {
                             this.set({
                                 title: response.data.title,

@@ -1,0 +1,60 @@
+extends ../partials/head.pug
+block title
+    title Timer Example
+block content
+    h2.header Timer Example
+    p.flow-text.card-panel In this example, you will see a timer that shows how long you have been on the page.
+    h2.header Final Result
+    script.
+        Blueberry.register(
+            class Interval extends Component {
+                observe() {
+                    return { c: 0, numbers: [] };
+                }
+                template() {
+                    return { numbers: '<li>{{value}}</li>' }
+                }
+                interval() {
+                    let numbers = [];
+                    let c = this.get('c');
+                    if (c < 10) {
+                        for(let i = 0; i < c; i++) { numbers.push(i); }
+                        this.set({ numbers: numbers, c: c + 1 });
+                        return 100;
+                    }
+                }
+            }
+        );
+    ul(component='Interval' observe='numbers')
+    h2.header The Source Code
+    h4 interval.js
+    pre: code.language-javascript.
+        Blueberry.register(
+            class Interval extends Component {
+                observe() {
+                    return { c: 0, numbers: [] };
+                }
+                template() {
+                    return { numbers: '&lt;li>{{value}}&lt;/li>' }
+                }
+                interval() {
+                    let numbers = [];
+                    let c = this.get('c');
+                    if (c < 10) {
+                        for(let i = 0; i < c; i++) { numbers.push(i); }
+                        this.set({ numbers: numbers, c: c + 1 });
+                        return 100;
+                    }
+                }
+            }
+        );
+    h4 timer.html
+    pre: code.language-markup
+        ='<head>\n'
+        ='    <title>Interval Example</title>\n'
+        ='    <script src="/dist/blueberry.js"></script>\n'
+        ='    <script src="./interval.js"></script>\n'
+        ='</head>\n'
+        ='<body>\n'
+        ='    <ul component="Interval" observe="numbers"></ul>\n'
+        ='</body>'

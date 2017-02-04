@@ -2,13 +2,14 @@ abstract class Component extends Obj {
 
     public observable: Observable = null;
     public unique: boolean = true;
+    public templates: Object = {};
+
+    // public abstract click(event?: Event): void;
+    // public abstract created(): void;
+    // public abstract update(): void;
+    // public abstract deleted(): void;
+
     private _started: boolean = false;
-
-    public abstract click(event?: Event): void;
-    public abstract created(): void;
-    public abstract update(): void;
-    public abstract deleted(): void;
-
 
     /**
      * Sets a value for an observable
@@ -34,6 +35,10 @@ abstract class Component extends Obj {
      */
     public get(key: string) {
         return this.observable.get(key);
+    }
+
+    public setTemplates() {
+        this.templates = this['template']();
     }
 
     /**

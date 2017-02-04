@@ -49,3 +49,54 @@ block content
         ='<body>\n'
         ='    <div component="BuildFromTemplate"></div>\n'
         ='</body>'
+
+    h2.header Template Example 2
+    p.flow-text.card-panel If you have a list of data, you can load it in through a template.
+    h2.header Final Result
+    script.
+        Blueberry.register(
+            class BuildFromTemplate2 extends Component {
+                observe() {
+                    return {
+                        names: [
+                            { first: 'Billy',  last: 'Bob',  color: 'red' },
+                            { first: 'Foo',    last: 'Bar',  color: 'teal' },
+                            { first: 'Forest', last: 'Gump', color: 'forestGreen' }
+                        ]
+                    };
+                }
+                template() {
+                    return { names: '<p style="color: {{color}}">{{first}} {{last}}</p>' }
+                }
+            }
+        );
+    div(component='BuildFromTemplate2' observe='names')
+    h2.header The Source Code
+    h4 template2.js
+    pre: code.language-js.
+        Blueberry.register(
+            class BuildFromTemplate2 extends Component {
+                observe() {
+                    return {
+                        names: [
+                            { first: 'Billy',  last: 'Bob',  color: 'red' },
+                            { first: 'Foo',    last: 'Bar',  color: 'teal' },
+                            { first: 'Forest', last: 'Gump', color: 'forestGreen' }
+                        ]
+                    };
+                }
+                template() {
+                    return { names: '&lt;p style="color: {{color}}">{{first}} {{last}}&lt;/p>' }
+                }
+            }
+        );
+    h4 index2.html
+    pre: code.language-markup
+        ='<head>\n'
+        ='    <title>Template Example</title>\n'
+        ='    <script src="/dist/blueberry.js"></script>\n'
+        ='    <script src="./template2.js"></script>\n'
+        ='</head>\n'
+        ='<body>\n'
+        ='    <div component="BuildFromTemplate2"></div>\n'
+        ='</body>'

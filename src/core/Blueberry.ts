@@ -21,7 +21,7 @@ class Blueberry {
         return this._objects;
     }
 
-    public static register(item, value): Blueberry {
+    public static register(item, value?): Blueberry {
         if (arguments.length == 1 && item.prototype instanceof Component) {
             this._registeredComponents[(<any>item).name] = item;
             window[(<any>item).name] = item;
@@ -62,6 +62,7 @@ class Blueberry {
             this.addonInit();
             this.initServices();
             this.initElementsWithComponent();
+            // this.initComponentInteravls();
             this.initHandlers();
             this.addonReady();
             this._hasInit = true;
@@ -74,8 +75,7 @@ class Blueberry {
     }
 
     private static initMouse() {
-        Mouse.clickHandler();
-        Mouse.dblClickHandler();
+        Mouse.clickHandlers();
     }
 
     private static initKeyboard() {
@@ -110,6 +110,17 @@ class Blueberry {
         }
     }
 
+    public static toObject(element: HTMLElement): DOMObject {
+        for (let i = 0, l = this._objects.length; i < l; i++) {
+            if (this._objects[i].element == element) {
+                return this._objects[i];
+            }
+        }
+        let domObject = new DOMObject(element);
+        this.addElement(domObject);
+        return domObject;
+    }
+
     /**
      * Generates a unique alpha-numeric string
      *
@@ -121,6 +132,26 @@ class Blueberry {
      */
     public static uniqId(length: number = 6): string {
         return (Math.random().toString(36) + Math.random().toString(36)).substr(2, length);
+    }
+
+    public static findTemplateItems(template): { placeholder: string, value: string }[] {
+        let regex = /\{\{(.+?)\}\}/g
+        let m: RegExpExecArray;
+        let matches = [];
+        while ((m = regex.exec(template))) {
+            if (m.index === regex.lastIndex) { regex.lastIndex++; }
+            let tmp = { placeholder: '', value: '' };
+            m.forEach((match, idx) => {
+                if (idx == 0) {
+                    tmp.placeholder = match;
+                } else if (idx == 1) {
+                    tmp.value = match;
+                    matches.push(tmp);
+                    tmp = { placeholder: '', value: '' };
+                }
+            });
+        }
+        return matches;
     }
 
     /**
