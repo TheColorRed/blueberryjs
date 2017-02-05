@@ -10,6 +10,7 @@ abstract class Component extends Obj {
     // public abstract deleted(): void;
 
     private _started: boolean = false;
+    private _ready: boolean = false;
 
     /**
      * Sets a value for an observable

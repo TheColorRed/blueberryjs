@@ -1,0 +1,1 @@
+class DOMObjectList extends ObjList<DOMObject> { }

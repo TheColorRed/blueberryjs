@@ -9,9 +9,9 @@ const rimraf = require('rimraf');
 const ncp = require('ncp');
 
 const paths = {
-    tswatch: ['src/**/*.ts', 'tsconfig.json'],
-    docwatch: ['docs/**/*.pug'],
-    componentWatch: ['src/components/**/*.js']
+    blueberrywatch: ['src/blueberry/**/*.ts', './tsconfig.json'],
+    componentwatch: ['src/components/**/*.ts', './src/components/tsconfig.json'],
+    docwatch: ['docs/**/*.pug']
 };
 
 const pugFiles = [
@@ -28,16 +28,34 @@ const pugFiles = [
     'api/html/component',
 ];
 
-gulp.task('typescript', () => {
+gulp.task('blueberry', () => {
     // Create typescript project
-    let tsProject = ts.createProject('tsconfig.json');
+    let tsProject = ts.createProject('./src/blueberry/tsconfig.json');
     let tsResult = tsProject.src().pipe(tsProject());
     // Save typescript to javascript
     // Compile non es6 project
     tsResult.dts.pipe(gulp.dest('./'));
-    if (require('./tsconfig.json').compilerOptions.target != 'es6') {
+    if (require('./src/blueberry/tsconfig.json').compilerOptions.target != 'es6') {
         return tsResult.js.pipe(uglify({ mangle: true })).pipe(gulp.dest('./')).on('finish', function () {
             fs.createReadStream('./dist/blueberry.js').pipe(fs.createWriteStream('./public/assets/js/blueberry.js'));
+        });
+    }
+    // Compile es6 project
+    else {
+        return tsResult.js.pipe(gulp.dest('./'));
+    }
+});
+
+gulp.task('components', () => {
+    // Create typescript project
+    let tsProject = ts.createProject('./src/components/tsconfig.json');
+    let tsResult = tsProject.src().pipe(tsProject());
+    // Save typescript to javascript
+    // Compile non es6 project
+    tsResult.dts.pipe(gulp.dest('./'));
+    if (require('./src/components/tsconfig.json').compilerOptions.target != 'es6') {
+        return tsResult.js.pipe(uglify({ mangle: true })).pipe(gulp.dest('./')).on('finish', function () {
+            fs.createReadStream('./dist/components.js').pipe(fs.createWriteStream('./public/assets/js/components.js'));
         });
     }
     // Compile es6 project
@@ -70,17 +88,13 @@ gulp.task('docs', () => {
             });
         });
     });
-    fs.createReadStream('./dist/blueberry.js').pipe(fs.createWriteStream('./public/assets/js/blueberry.js'));
-    ncp('./src/components', './dist/components');
+    // fs.createReadStream('./dist/blueberry.js').pipe(fs.createWriteStream('./public/assets/js/blueberry.js'));
 });
 
+gulp.task('init', ['blueberry'], () => { gulp.start('components'); })
 
-gulp.task('moveComponents', () => {
-    ncp('./src/components', './dist/components');
-});
-
-gulp.task('build', ['typescript', 'docs'], () => {
-    gulp.watch(paths.tswatch, ['typescript']);
+gulp.task('build', ['init', 'docs'], () => {
+    gulp.watch(paths.blueberrywatch, ['blueberry']);
+    gulp.watch(paths.componentwatch, ['components']);
     gulp.watch(paths.docwatch, ['docs']);
-    gulp.watch(paths.componentWatch, ['moveComponents']);
 });

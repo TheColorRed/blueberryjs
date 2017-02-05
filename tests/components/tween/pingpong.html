@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tween Compoonent &ndash; ping pong</title>
+    <script src="../../../dist/blueberry.js"></script>
+    <script src="../../../dist/components/animation/Tween.js"></script>
+    <style>
+        #test-container {
+            height: 500px;
+        }
+        #test-container > .square {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+        }
+    </style>
+    <script>
+        Blueberry.register(
+            class Start extends Component {
+                ready() {
+                    Blueberry.find('.square', Tween).start();
+                }
+                click() {
+                    Blueberry.find('.square', Tween).toggle();
+                }
+            }
+        );
+    </script>
+</head>
+<body>
+    <a href="" component="Start">Start</a>
+    <div id="test-container">
+        <div class="square" component="Tween" settings="{
+            duration: 2,
+            endx: 1000,
+            tweenType: TweenType.Move,
+            loopType: LoopType.PingPong
+        }"></div>
+    </div>
+</body>
+</html>

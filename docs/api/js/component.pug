@@ -36,10 +36,20 @@ block content
     //- The created message
     .scrollspy.section#message-created
         +def('created()', 'When a Blueberry element is created this message will get fired. This message is only fired one time for the life of the element.')
+        p If you would like to access another component don't do it here as this message is only for initialization of the component. If you would like to access another component in the creation process, use the #[a(href='#message-ready') ready] message.
         pre: code.language-javascript.
             class MyClass extends Component {
                 created() {
                     console.log('I was created!');
+                }
+            }
+    //- The ready message
+    .scrollspy.section#message-ready
+        +def('ready()', 'Once all the items have been created the ready state is then triggered. Here you can then access all elements.')
+        pre: code.language-javascript.
+            class MyClass extends Component {
+                ready() {
+                    Blueberry.find('.tween', Tween).start();
                 }
             }
     //- The deleted message
@@ -94,6 +104,7 @@ block sideContent
         li Messages
         li: a(href='#message-observe') Observe
         li: a(href='#message-created') Created
+        li: a(href='#message-ready') Ready
         li: a(href='#message-deleted') Deleted
         li: a(href='#message-update') Update
         li: a(href='#message-lateupdate') Late Update

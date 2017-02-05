@@ -7,6 +7,7 @@ class Blueberry {
     private static _registeredComponents: Component[] = [];
     private static _registeredAddons: Addon[] = [];
     private static _registeredServices: any[] = [];
+    private static _registeredEvents: BlueberryEvent[] = [];
     private static _hasInit: boolean = false;
 
     public static get version() {
@@ -38,8 +39,10 @@ class Blueberry {
     }
 
     public static tick() {
+        Time.frameTime();
         // Start Events
         Blueberry.created();
+        Blueberry.ready();
 
         // Update Events
         Blueberry.update();
@@ -65,6 +68,11 @@ class Blueberry {
             // this.initComponentInteravls();
             this.initHandlers();
             this.addonReady();
+            this._registeredEvents.forEach(evt => {
+                if (evt.name == 'ready') {
+                    evt.event(evt);
+                }
+            });
             this._hasInit = true;
         }
     }
@@ -92,6 +100,11 @@ class Blueberry {
     public static upgrade() {
         this.initElementsWithComponent();
         this.initHandlers();
+    }
+
+    public static on(name: string, event: (event: BlueberryEvent) => void): Blueberry {
+        this._registeredEvents.push(new BlueberryEvent(name, event));
+        return Blueberry;
     }
 
     /**
@@ -190,6 +203,24 @@ class Blueberry {
         for (let i = 0, l = this._objects.length; i < l; i++) {
             if (this._objects[i].elementId == id) {
                 return this._objects[i];
+            }
+        }
+        return null;
+    }
+
+    public static find<T extends Component>(query: string, type: ComponentType<T>): T {
+        let elements = document.querySelectorAll(query) as NodeListOf<HTMLElement>;
+        for (let i = 0, l = elements.length; i < l; i++) {
+            let element = elements[i];
+            for (let e = 0, len = this._objects.length; e < len; e++) {
+                let el = this._objects[e];
+                if (element == el.element) {
+                    for (let c = 0, len2 = el.components.length; c < len2; c++) {
+                        if (el.components[c] instanceof type) {
+                            return <T>el.components[c];
+                        }
+                    }
+                }
             }
         }
         return null;
@@ -318,6 +349,20 @@ class Blueberry {
     private static created() {
         this._objects.forEach(element => {
             element.sendMessage('created');
+        });
+    }
+
+    /**
+     * Sends a created message to all components
+     *
+     * @private
+     * @static
+     *
+     * @memberOf Blueberry
+     */
+    private static ready() {
+        this._objects.forEach(element => {
+            element.sendMessage('ready');
         });
     }
 

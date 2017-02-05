@@ -9,11 +9,11 @@ class Keyboard {
      */
     public static inputHandler() {
         Blueberry.objects.forEach(object => {
-            if (!object.element.oninput) {
+            if (!object.element.oninput && object.element instanceof HTMLInputElement) {
                 object.element.oninput = function (e) {
                     object.components.forEach(component => {
-                        if (typeof component['input'] == 'function' && e.currentTarget instanceof HTMLInputElement) {
-                            component['input'].bind(component).call(component, e.currentTarget.value, e);
+                        if (typeof component['input'] == 'function') {
+                            component['input'].bind(component).call(component, (<HTMLInputElement>e.currentTarget).value, e);
                         }
                     });
                 };

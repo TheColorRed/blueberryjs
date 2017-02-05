@@ -53,6 +53,10 @@ class DOMObject extends Obj {
                 }
                 this.initComponentInteravls();
             }
+            if (message == 'ready') {
+                if (comp['_ready']) { return; }
+                comp['_ready'] = true;
+            }
             if (message == 'deleted') {
                 if (!this._toDelete) { return; }
             }

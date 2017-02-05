@@ -1,0 +1,6 @@
+{
+    "include": [
+        "./**/*.js",
+        "../../dist/blueberry.d.ts"
+    ]
+}

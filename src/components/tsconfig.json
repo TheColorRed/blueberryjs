@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "removeComments": true,
+        "target": "es5",
+        "module": "system",
+        "declaration": true,
+        "outFile": "./dist/components.js"
+    },
+    "include": [
+        "../blueberry/dist/blueberry.d.ts"
+    ],
+    "files": [
+        "./animation/TweenFx.ts",
+        "./animation/Tween.ts",
+        "./strings/Number.ts",
+        "./strings/Letter.ts"
+    ]
+}

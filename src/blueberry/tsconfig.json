@@ -1,0 +1,42 @@
+{
+    "compilerOptions": {
+        "removeComments": true,
+        "target": "es5",
+        "module": "system",
+        "declaration": true,
+        "declarationDir": "./dist",
+        "outFile": "./dist/blueberry.js"
+    },
+    "files": [
+        "./core/Blueberry.ts",
+        "./core/Obj.ts",
+        "./core/Component.ts",
+        "./core/BlueberryObject.ts",
+        "./core/DOMObject.ts",
+        "./core/Observable.ts",
+        "./core/Component.ts",
+        "./core/BlueberryEvent.ts",
+        "./dom/Dom.ts",
+        "./dom/Class.ts",
+        "./dom/Style.ts",
+        "./http/Ajax.ts",
+        "./http/Watch.ts",
+        "./plugin/Addon.ts",
+        "./utility/Types.ts",
+        "./utility/Enums.ts",
+        "./utility/Time.ts",
+        "./utility/Mathf.ts",
+        "./utility/Properties.ts",
+        "./utility/Vector2.ts",
+        "./utility/list/List.ts",
+        "./utility/list/ObjList.ts",
+        "./utility/list/ComponentList.ts",
+        "./utility/list/AjaxResponseList.ts",
+        "./utility/list/DOMObjectList.ts",
+        "./utility/handlers/Keyboard.ts",
+        "./utility/handlers/Mouse.ts",
+        "./utility/color/ColorBlend.ts",
+        "./utility/color/Color.ts",
+        "./main.ts"
+    ]
+}

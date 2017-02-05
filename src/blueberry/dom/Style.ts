@@ -9,7 +9,7 @@ class Style extends Dom {
      *
      * @memberOf Style
      */
-    public set(key: string | {}, value: string): this {
+    public set(key: string | Object, value?: string): this {
         if (typeof key == 'string') {
             this.element.style[key] = value;
         } else {
