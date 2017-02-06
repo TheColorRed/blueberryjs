@@ -4,14 +4,12 @@
         "target": "es5",
         "module": "system",
         "declaration": true,
-        "declarationDir": "./dist",
-        "outFile": "./dist/blueberry.js"
+        "outFile": "../../dist/blueberry.js"
     },
     "files": [
         "./core/Blueberry.ts",
         "./core/Obj.ts",
         "./core/Component.ts",
-        "./core/BlueberryObject.ts",
         "./core/DOMObject.ts",
         "./core/Observable.ts",
         "./core/Component.ts",

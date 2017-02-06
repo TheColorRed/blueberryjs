@@ -4,10 +4,10 @@
         "target": "es5",
         "module": "system",
         "declaration": true,
-        "outFile": "./dist/components.js"
+        "outFile": "../../dist/components.js"
     },
     "include": [
-        "../blueberry/dist/blueberry.d.ts"
+        "../../dist/blueberry.d.ts"
     ],
     "files": [
         "./animation/TweenFx.ts",
