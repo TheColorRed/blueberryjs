@@ -60,19 +60,19 @@ class TweenFx {
     private static easeInBack(start: number, end: number, value: number): number {
         end -= start;
         value /= 1;
-        var s: number = 1.70158;
+        let s: number = 1.70158;
         return end * (value) * value * ((s + 1) * value - s) + start;
     }
 
     private static easeOutBack(start: number, end: number, value: number): number {
-        var s: number = 1.70158;
+        let s: number = 1.70158;
         end -= start;
         value = (value / 1) - 1;
         return end * ((value) * value * ((s + 1) * value + s) + 1) + start;
     }
 
     private static easeInOutBack(start: number, end: number, value: number): number {
-        var s: number = 1.70158;
+        let s: number = 1.70158;
         end -= start;
         value /= .5;
         if ((value) < 1) {
@@ -90,9 +90,9 @@ class TweenFx {
     private static easeInElastic(start: number, end: number, value: number): number {
         end -= start;
 
-        var p: number = 1 * .3;
-        var s: number = 0;
-        var a: number = 0;
+        let p: number = 1 * .3;
+        let s: number = 0;
+        let a: number = 0;
 
         if (value == 0) return start;
         if ((value /= 1) == 1) return start + end;
@@ -109,9 +109,9 @@ class TweenFx {
     private static easeOutElastic(start: number, end: number, value: number): number {
         end -= start;
 
-        var p: number = 1 * .3;
-        var s: number = 0;
-        var a: number = 0;
+        let p: number = 1 * .3;
+        let s: number = 0;
+        let a: number = 0;
 
         if (value == 0) return start;
         if ((value /= 1) == 1) return start + end;
@@ -129,9 +129,9 @@ class TweenFx {
     private static easeInOutElastic(start: number, end: number, value: number): number {
         end -= start;
 
-        var p: number = 1 * .3;
-        var s: number = 0;
-        var a: number = 0;
+        let p: number = 1 * .3;
+        let s: number = 0;
+        let a: number = 0;
 
         if (value == 0) return start;
 
@@ -300,11 +300,11 @@ class TweenFx {
     /// Clerp
     ////////////////////////////////////////////////////////////////////////////
     private static clerp(start: number, end: number, value: number): number {
-        var min: number = 0.0;
-        var max: number = 360.0;
-        var half: number = Math.abs((max - min) / 2.0);
-        var retval: number = 0.0;
-        var diff: number = 0.0;
+        let min: number = 0.0;
+        let max: number = 360.0;
+        let half: number = Math.abs((max - min) / 2.0);
+        let retval: number = 0.0;
+        let diff: number = 0.0;
         if ((end - start) < -half) {
             diff = ((max - start) + end) * value;
             retval = start + diff;

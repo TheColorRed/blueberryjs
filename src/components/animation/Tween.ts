@@ -31,7 +31,7 @@ Blueberry.register(
         private units = this.settings.units || 'px';
         private endPos = new Vector2(this.settings.endx || 0, this.settings.endy || 0);
 
-        created() {
+        public created() {
             this.isRunning = false;
             this.percentage = 0;
             this.time = 0;
@@ -53,7 +53,8 @@ Blueberry.register(
                 this.endVector = this.settings.endPos || Vector2.one;
             }
         }
-        update() {
+
+        public update() {
             if (this.isRunning) {
                 if (!this.reverse) {
                     if (this.percentage < 1) {
@@ -70,7 +71,7 @@ Blueberry.register(
                 }
             }
         }
-        updatePercentage() {
+        public updatePercentage() {
             this.runningTime += Time.deltaTime;
             if (this.reverse) {
                 this.percentage = 1 - this.runningTime / this.duration;
@@ -80,7 +81,7 @@ Blueberry.register(
                 this.time += Time.deltaTime / this.duration;
             }
         }
-        tweenUpdate() {
+        public tweenUpdate() {
             switch (this.settings.tweenType) {
                 case TweenType.Move: this.moveTarget(); break;
                 case TweenType.Scale: this.scaleTarget(); break;
@@ -88,7 +89,7 @@ Blueberry.register(
             }
             this.updatePercentage();
         }
-        tweenComplete() {
+        public tweenComplete() {
             if (this.loopType == LoopType.None) {
                 this.isRunning = false;
             } else {
@@ -110,7 +111,7 @@ Blueberry.register(
             }
         }
 
-        moveTarget() {
+        public moveTarget() {
             let start = this.settings.startPos || Vector2.zero;
             let end = this.endPos || Vector2.zero;
             this.style.set({
@@ -119,7 +120,7 @@ Blueberry.register(
             });
         }
 
-        scaleTarget() {
+        public scaleTarget() {
             let end = this.settings.endScale || Vector2.one;
             this.style.set({
                 width: TweenFx.animate(this.initScale.x, end.x, this.time, this.easeType).toString() + this.units,
@@ -136,13 +137,13 @@ Blueberry.register(
         //     );
         //     this.style.set('background-color', '#' + color.hex());
         // }
-        start() {
+        public start() {
             this.isRunning = true;
         }
-        stop() {
+        public stop() {
             this.isRunning = false;
         }
-        toggle() {
+        public toggle() {
             this.isRunning = !this.isRunning;
         }
     }

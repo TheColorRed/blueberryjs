@@ -1,0 +1,28 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.1.0",
+    "isShellCommand": true,
+    "showOutput": "silent",
+    "problemMatcher": "$tsc-watch",
+    "tasks": [
+        {
+            "taskName": "Build Blueberry",
+            "command": "tsc",
+            "isBuildCommand": true,
+            "args": [
+                "-p",
+                "src/blueberry"
+            ]
+        },
+        {
+            "taskName": "Build Components",
+            "command": "tsc",
+            "isBuildCommand": true,
+            "args": [
+                "-p",
+                "src/components"
+            ]
+        }
+    ]
+}

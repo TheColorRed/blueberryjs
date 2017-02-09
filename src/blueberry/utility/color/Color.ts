@@ -21,27 +21,33 @@ class Color {
     }
 
     public hex(): string {
-        var hexr = this.r.toString(16);
-        var hexg = this.g.toString(16);
-        var hexb = this.b.toString(16);
-        var r = hexr.length == 1 ? "0" + hexr : hexr;
-        var g = hexg.length == 1 ? "0" + hexg : hexg;
-        var b = hexb.length == 1 ? "0" + hexb : hexb;
+        let hexr = this.r.toString(16);
+        let hexg = this.g.toString(16);
+        let hexb = this.b.toString(16);
+        let r = hexr.length == 1 ? "0" + hexr : hexr;
+        let g = hexg.length == 1 ? "0" + hexg : hexg;
+        let b = hexb.length == 1 ? "0" + hexb : hexb;
         return r + g + b;
     }
 
     public static rgb(hex: string): Color {
-        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
         hex = hex.replace(shorthandRegex, function (m, r, g, b) {
             return r + r + g + g + b + b;
         });
-        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         return new Color(
             parseInt(result[1], 16),
             parseInt(result[2], 16),
             parseInt(result[3], 16)
         );
+    }
 
+    public static create(r: number | string = 255, g: number = 255, b: number = 255, a: number = 255): Color {
+        if (arguments.length == 1 && typeof r == 'string' && r.match(/^#/)) {
+            return Color.rgb(r);
+        }
+        return new Color(r, g, b, a);
     }
 
     public blend(color: Color, blendType: BlendType) {
@@ -49,7 +55,7 @@ class Color {
     }
 
     public static blend(color1: Color, color2: Color, blendType: BlendType): Color {
-        var r: number, g: number, b: number, a: number;
+        let r: number, g: number, b: number, a: number;
         switch (blendType) {
             case BlendType.Normal:
                 r = ColorBlend.normal(color1.r, color2.r);
@@ -206,9 +212,9 @@ class Color {
     }
 
     public get invert(): Color {
-        var r: number = Math.abs(this.r - 255);
-        var g: number = Math.abs(this.g - 255);
-        var b: number = Math.abs(this.b - 255);
+        let r: number = Math.abs(this.r - 255);
+        let g: number = Math.abs(this.g - 255);
+        let b: number = Math.abs(this.b - 255);
         return new Color(r, g, b);
     }
 

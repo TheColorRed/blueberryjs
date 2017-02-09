@@ -22,18 +22,18 @@ String.prototype.capitalizeFirstLetter = function () {
 
 function copy(obj) {
     if (null == obj || 'object' != typeof obj) return obj;
-    var copy = obj.constructor();
-    for (var attr in obj) {
+    let copy = obj.constructor();
+    for (let attr in obj) {
         if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
     }
     return copy;
 }
 
 function serialize(obj, prefix?) {
-    var str = [], p;
+    let str = [], p;
     for (p in obj) {
         if (obj.hasOwnProperty(p)) {
-            var k = prefix ? prefix + "[" + p + "]" : p, v = obj[p];
+            let k = prefix ? prefix + "[" + p + "]" : p, v = obj[p];
             str.push((v !== null && typeof v === "object") ?
                 serialize(v, k) :
                 encodeURIComponent(k) + "=" + encodeURIComponent(v));

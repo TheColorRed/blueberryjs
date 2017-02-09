@@ -1,12 +1,12 @@
 Blueberry.register(
     class Number extends Component {
-        created() {
+        public created() {
             this.dom.content(this.toNumber(this.dom.value));
         }
-        input(value) {
+        public input(value) {
             this.dom.content(this.toNumber(value));
         }
-        toNumber(value) {
+        public toNumber(value) {
             return value
                 // Remove anything that isn't valid in a number
                 .replace(/[^0-9-.]/g, '')

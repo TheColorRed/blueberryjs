@@ -4,7 +4,7 @@
         "target": "es5",
         "module": "system",
         "declaration": true,
-        "outFile": "../../dist/blueberry.js"
+        "outFile": "./dist/blueberry.js"
     },
     "files": [
         "./core/Blueberry.ts",

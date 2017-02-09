@@ -42,7 +42,7 @@ class Ajax {
     }
 
     private options(options) {
-        var opts: { url: string, method?: AjaxMethod, data?: any, query?: any } = {
+        let opts: { url: string, method?: AjaxMethod, data?: any, query?: any } = {
             url: '',
             method: AjaxMethod.Get
         };

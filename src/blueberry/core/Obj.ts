@@ -275,7 +275,7 @@ class Obj {
      * @memberOf BlueberryObject
      */
     protected createElement(html: string): HTMLElement {
-        var div = document.createElement('div');
+        let div = document.createElement('div');
         div.innerHTML = html;
         return <HTMLElement>div.firstChild;
     }
