@@ -1,5 +1,7 @@
 class Blueberry {
 
+    public static isActive: boolean = true;
+
     private static _objects: DOMObject[] = [];
     private static _observable: Observable[] = [];
     private static _version: string = '0.0.1';
@@ -50,7 +52,12 @@ class Blueberry {
 
         Blueberry.deleted();
 
-        requestAnimationFrame(Blueberry.tick);
+        // if (Blueberry.isActive) {
+        //     requestAnimationFrame(Blueberry.tick);
+        // } else {
+        let next = Time.nextCalc();
+        setTimeout(Blueberry.tick, next);
+        // }
     }
 
     /**
@@ -413,6 +420,17 @@ class Blueberry {
         });
     }
 
+    private static windowFocus() {
+        this._objects.forEach(element => {
+            element.sendMessage('windowFocus');
+        });
+    }
+
+    private static windowBlur() {
+        this._objects.forEach(element => {
+            element.sendMessage('windowBlur');
+        });
+    }
 }
 
 window.bb = Blueberry;

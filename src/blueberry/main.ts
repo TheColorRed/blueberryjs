@@ -2,6 +2,13 @@ window.addEventListener('DOMContentLoaded', event => {
     Blueberry.init();
     Blueberry.tick();
 });
+window.addEventListener('blur', function () {
+    Blueberry['windowBlur']();
+}, false);
+
+window.addEventListener('focus', function () {
+    Blueberry['windowFocus']();
+}, false);
 
 interface String {
     capitalizeFirstLetter();

@@ -43,8 +43,10 @@ class Color {
         );
     }
 
-    public static create(r: number | string = 255, g: number = 255, b: number = 255, a: number = 255): Color {
-        if (arguments.length == 1 && typeof r == 'string' && r.match(/^#/)) {
+    public static create(r: number | Color | string = 255, g: number = 255, b: number = 255, a: number = 255): Color {
+        if (r instanceof Color) {
+            return r;
+        } else if (arguments.length == 1 && typeof r == 'string' && r.match(/^#/)) {
             return Color.rgb(r);
         }
         return new Color(r, g, b, a);

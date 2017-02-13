@@ -1,69 +1,80 @@
+interface ColorSettings {
+    duration?: number,
+    easeType?: EaseType,
+    loopType?: LoopType,
+    tweenType?: TweenType,
+    units?: number,
+    endx?: number,
+    endy?: number,
+    endScale?: Vector2,
+    initPos?: Vector2,
+    endPos?: Vector2,
+    startPos?: Vector2,
+    initColor?: Color,
+    endColor?: Color
+}
+
 Blueberry.register(
     class Tween extends Component {
-        private isRunning: boolean = false;
-        private reverse: boolean = false;
-        private percentage = 0;
-        private time = 0;
-        private initPos = Vector2.zero;
-        private initScale = Vector2.zero;
-        private runningTime = 0;
-        private settings: {
-            duration?: number,
-            easeType?: EaseType,
-            loopType?: LoopType,
-            tweenType?: TweenType,
-            units?: number,
-            endx?: number,
-            endy?: number,
-            endScale?: Vector2,
-            initPos?: Vector2,
-            endPos?: Vector2,
-            startPos?: Vector2
-        } = {};
+        private _isRunning: boolean = false;
+        private _reverse: boolean = false;
+        private _percentage = 0;
+        private _time = 0;
 
-        private tweenType: TweenType;
-        private endVector: Vector2;
-        private endScale: Vector2;
+        private _initPos = Vector2.zero;
+        private _initScale = Vector2.zero;
+        private _initColor = Color.black;
 
-        private duration = this.settings.duration || 2;
-        private easeType = this.settings.easeType || EaseType.Linear;
-        private loopType = this.settings.loopType || LoopType.None;
-        private units = this.settings.units || 'px';
-        private endPos = new Vector2(this.settings.endx || 0, this.settings.endy || 0);
+        private _runningTime = 0;
+        private _isComplete = false;
+        private _isEnabled = true;
+        private _settings: ColorSettings = {};
+
+        private _tweenType: TweenType;
+        private _endVector: Vector2;
+        private _endScale: Vector2;
+
+        private _duration = this._settings.duration || 2;
+        private _easeType = this._settings.easeType || EaseType.Linear;
+        private _loopType = this._settings.loopType || LoopType.None;
+        private _units = this._settings.units || 'px';
+        private _endPos = new Vector2(this._settings.endx || 0, this._settings.endy || 0);
+
+        private _evtTweenComplete: () => void;
 
         public created() {
-            this.isRunning = false;
-            this.percentage = 0;
-            this.time = 0;
-            this.initPos = Vector2.zero;
-            this.runningTime = 0;
+            this._isRunning = false;
+            this._percentage = 0;
+            this._time = 0;
+            this._initPos = Vector2.zero;
+            this._runningTime = 0;
             this.parent.style.set({ position: 'relative' });
             this.style.set({ position: 'absolute' });
-            this.settings = eval(`(${this.attrs.settings})`);
+            this._settings = eval(`(${this.attrs.settings})`);
 
-            this.duration = this.settings.duration || 2;
-            this.easeType = this.settings.easeType || EaseType.Linear;
-            this.loopType = this.settings.loopType || LoopType.None;
-            this.units = this.settings.units || 'px';
-            this.endPos = new Vector2(this.settings.endx || 0, this.settings.endy || 0);
+            this._duration = this._settings.duration || 2;
+            this._easeType = this._settings.easeType || EaseType.Linear;
+            this._loopType = this._settings.loopType || LoopType.None;
+            this._units = this._settings.units || 'px';
+            this._endPos = new Vector2(this._settings.endx || 0, this._settings.endy || 0);
 
-            if (this.tweenType == TweenType.Scale) {
-                this.endVector = this.settings.endScale || Vector2.one;
-            } else if (this.tweenType == TweenType.Move) {
-                this.endVector = this.settings.endPos || Vector2.one;
+            if (this._tweenType == TweenType.Scale) {
+                this._endVector = this._settings.endScale || Vector2.one;
+            } else if (this._tweenType == TweenType.Move) {
+                this._endVector = this._settings.endPos || Vector2.one;
             }
         }
 
         public update() {
-            if (this.isRunning) {
-                if (!this.reverse) {
-                    if (this.percentage < 1) {
+            if (this._isRunning && this._isEnabled && !this._isComplete) {
+                if (!this._reverse) {
+                    if (this._percentage < 1) {
                         this.tweenUpdate();
                     } else {
                         this.tweenComplete();
                     }
                 } else {
-                    if (this.percentage > 0) {
+                    if (this._percentage > 0) {
                         this.tweenUpdate();
                     } else {
                         this.tweenComplete();
@@ -72,79 +83,107 @@ Blueberry.register(
             }
         }
         public updatePercentage() {
-            this.runningTime += Time.deltaTime;
-            if (this.reverse) {
-                this.percentage = 1 - this.runningTime / this.duration;
-                this.time -= Time.deltaTime / this.duration;
+            this._runningTime += Time.deltaTime;
+            if (this._reverse) {
+                this._percentage = 1 - this._runningTime / this._duration;
+                this._time -= Time.deltaTime / this._duration;
             } else {
-                this.percentage = this.runningTime / this.duration;
-                this.time += Time.deltaTime / this.duration;
+                this._percentage = this._runningTime / this._duration;
+                this._time += Time.deltaTime / this._duration;
             }
         }
         public tweenUpdate() {
-            switch (this.settings.tweenType) {
+            switch (this._settings.tweenType) {
                 case TweenType.Move: this.moveTarget(); break;
                 case TweenType.Scale: this.scaleTarget(); break;
-                // case TweenType.Color: this.colorTarget(); break;
+                case TweenType.Color: this.colorTarget(); break;
             }
             this.updatePercentage();
         }
         public tweenComplete() {
-            if (this.loopType == LoopType.None) {
-                this.isRunning = false;
+            if (this._loopType == LoopType.None) {
+                this._isRunning = false;
+                this._isComplete = true;
+                this._evtTweenComplete();
             } else {
-                switch (this.loopType) {
+                switch (this._loopType) {
                     case LoopType.Repeat:
-                        this.percentage = 0;
-                        this.runningTime = 0;
-                        this.time = 0;
+                        this._percentage = 0;
+                        this._runningTime = 0;
+                        this._time = 0;
                         this.style.set({
-                            left: this.initPos.x.toString() + this.units,
-                            top: this.initPos.y.toString() + this.units
+                            left: this._initPos.x.toString() + this._units,
+                            top: this._initPos.y.toString() + this._units
                         });
                         break;
                     case LoopType.PingPong:
-                        this.reverse = !this.reverse;
-                        this.runningTime = 0;
+                        this._reverse = !this._reverse;
+                        this._runningTime = 0;
                         break;
                 }
             }
         }
 
         public moveTarget() {
-            let start = this.settings.startPos || Vector2.zero;
-            let end = this.endPos || Vector2.zero;
+            let start = this._settings.startPos || Vector2.zero;
+            let end = this._endPos || Vector2.zero;
             this.style.set({
-                left: TweenFx.animate(this.initPos.x, end.x, this.time, this.easeType).toString() + this.units,
-                top: TweenFx.animate(this.initPos.y, end.y, this.time, this.easeType).toString() + this.units
+                left: TweenFx.animate(this._initPos.x, end.x, this._time, this._easeType).toString() + this._units,
+                top: TweenFx.animate(this._initPos.y, end.y, this._time, this._easeType).toString() + this._units
             });
         }
 
         public scaleTarget() {
-            let end = this.settings.endScale || Vector2.one;
+            let end = this._settings.endScale || Vector2.one;
             this.style.set({
-                width: TweenFx.animate(this.initScale.x, end.x, this.time, this.easeType).toString() + this.units,
-                height: TweenFx.animate(this.initScale.y, end.y, this.time, this.easeType).toString() + this.units
+                width: TweenFx.animate(this._initScale.x, end.x, this._time, this._easeType).toString() + this._units,
+                height: TweenFx.animate(this._initScale.y, end.y, this._time, this._easeType).toString() + this._units
             });
         }
 
-        // colorTarget() {
-        //     let end = this.settings.endColor || Color.white;
-        //     let color = new Color(
-        //         Math.round(TweenFx.animate(this.initColor.r, end.r, this.time, this.easeType)),
-        //         Math.round(TweenFx.animate(this.initColor.g, end.g, this.time, this.easeType)),
-        //         Math.round(TweenFx.animate(this.initColor.b, end.b, this.time, this.easeType))
-        //     );
-        //     this.style.set('background-color', '#' + color.hex());
-        // }
-        public start() {
-            this.isRunning = true;
+        colorTarget() {
+            let end = this._settings.endColor || Color.white;
+            let color = new Color(
+                Math.round(TweenFx.animate(this._initColor.r, end.r, this._time, this._easeType)),
+                Math.round(TweenFx.animate(this._initColor.g, end.g, this._time, this._easeType)),
+                Math.round(TweenFx.animate(this._initColor.b, end.b, this._time, this._easeType))
+            );
+            this.style.set('background-color', '#' + color.hex());
         }
-        public stop() {
-            this.isRunning = false;
+
+        public setSetting(key: string | Object, value?: string) {
+            if (typeof key == 'string') {
+                this._settings[key] = value;
+            } else if (key instanceof Object) {
+                for (let k in key) {
+                    this._settings[k] = key[k];
+                }
+            }
         }
-        public toggle() {
-            this.isRunning = !this.isRunning;
+
+        public complete(callback: () => void): this {
+            this._evtTweenComplete = callback;
+            return this;
+        }
+        public start(): this {
+            this._isRunning = true;
+            return this;
+        }
+        public stop(): this {
+            this._isRunning = false;
+            return this;
+        }
+        public toggle(): this {
+            this._isRunning = !this._isRunning;
+            return this;
+        }
+
+        public windowFocus() {
+            this._isEnabled = true;
+        }
+
+        public windowBlur() {
+            this._isEnabled = false;
         }
     }
 );

@@ -3,10 +3,11 @@ class Time {
     private static _time: number = 0;
 
     private static _lastLoopTime: number = Time.getNanoSeconds;
-    private static _targetFps: number = 30;
+    private static _targetFps: number = 120;
     private static _startTime: number = new Date().getTime();
     private static _optimalTime: number = 1000000000 / Time._targetFps;
     private static _lastFpsTime: number = 0;
+    private static _nanoSeconds: number = 0;
 
     public static get deltaTime(): number {
         return this._deltaTime;
@@ -30,8 +31,8 @@ class Time {
 
     public static frameTime() {
         let d = new Date().getTime();
-        let nanoSeconds = Time.getNanoSeconds;
-        let now = nanoSeconds;
+        this._nanoSeconds = Time.getNanoSeconds;
+        let now = this._nanoSeconds;
         let updateLength = now - Time._lastLoopTime;
         Time._lastLoopTime = now;
         let delta = updateLength / Time._optimalTime;
@@ -41,5 +42,10 @@ class Time {
         }
         Time.setFrameTime((d - Time._startTime) / 1000);
         Time.setDeltaTime(delta / Time._targetFps);
+
+    }
+
+    public static nextCalc() {
+        return (this._lastLoopTime - this._nanoSeconds + this._optimalTime) / 1000000;
     }
 }

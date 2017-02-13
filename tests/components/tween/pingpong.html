@@ -19,23 +19,43 @@
         Blueberry.register(
             class Start extends Component {
                 ready() {
-                    Blueberry.find('.square', Tween).start();
+                    Blueberry.find('.square', Tween).complete(()=>{
+                        Blueberry.findComponents(Timer).setProp({running: false});
+                    }).start();
                 }
                 click() {
                     Blueberry.find('.square', Tween).toggle();
+                }
+            }
+        ).register(
+            class Timer extends Component {
+                observe() {
+                    return { elapsed: 0 };
+                }
+                created() {
+                    this.started = new Date();
+                    this.running = true;
+                }
+                update() {
+                    if(this.running){
+                        this.set({ elapsed: this.time });
+                    }
+                }
+                get time() {
+                    return ((new Date().getTime() - this.started.getTime()) / 1000).toFixed(1);
                 }
             }
         );
     </script>
 </head>
 <body>
-    <a href="" component="Start">Start</a>
+    <a href="" component="Start">Start</a> | Elapsed Time <span component="Timer" observe="elapsed"></span>
     <div id="test-container">
         <div class="square" component="Tween" settings="{
-            duration: 2,
-            endx: 1000,
+            duration: 5,
+            endy: 600,
             tweenType: TweenType.Move,
-            loopType: LoopType.PingPong
+            easeType: EaseType.EaseOutBounce
         }"></div>
     </div>
 </body>
