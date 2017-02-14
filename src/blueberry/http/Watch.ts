@@ -1,7 +1,7 @@
 class Watch {
     private _items: Ajax[] = [];
     private _done: (response: AjaxResponseList) => void;
-    private _watcher = null;
+    private _watcher: number = -1;
 
     public static all(...toWatch: Ajax[]): Watch {
         let all = new Watch();

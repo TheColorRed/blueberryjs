@@ -122,8 +122,8 @@ class Ajax {
 
 class AjaxResponse {
     private _headers: AjaxHeader[] = [];
-    private _data: Object = null;
-    private _code: number = null;
+    private _data: Object = {};
+    private _code: number = 0;
 
     public get data(): Object {
         return this._data;

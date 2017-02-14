@@ -19,7 +19,14 @@
         Blueberry.register(
             class Start extends Component {
                 ready() {
-                    Blueberry.find('.square', Tween).complete(()=>{
+                    Blueberry.find('.square', Tween).prop({
+                        settings: {
+                            duration: 5,
+                            endVec: new Vector2(0,600),
+                            tweenType: TweenType.Move,
+                            easeType: EaseType.EaseOutBounce
+                        }
+                    }).complete(()=>{
                         Blueberry.findComponents(Timer).setProp({running: false});
                     }).start();
                 }
@@ -51,12 +58,7 @@
 <body>
     <a href="" component="Start">Start</a> | Elapsed Time <span component="Timer" observe="elapsed"></span>
     <div id="test-container">
-        <div class="square" component="Tween" settings="{
-            duration: 5,
-            endy: 600,
-            tweenType: TweenType.Move,
-            easeType: EaseType.EaseOutBounce
-        }"></div>
+        <div class="square" component="Tween"></div>
     </div>
 </body>
 </html>

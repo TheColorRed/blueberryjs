@@ -1,6 +1,6 @@
 class Observable extends Obj {
 
-    private _observable: {} = null;
+    private _observable: {} = {};
     private _component: Component;
     private _init: boolean = false;
 
@@ -42,10 +42,10 @@ class Observable extends Obj {
      *
      * @memberOf Observable
      */
-    public set(key: string | Object, value: any) {
+    public set(key: string | Object | null, value: any) {
         if (typeof key == 'string') {
             this.setItem(key, value);
-        } else if (typeof key == 'object') {
+        } else if (typeof key == 'object' && key) {
             for (let i in key) {
                 this.setItem(i, key[i]);
             }
@@ -63,7 +63,7 @@ class Observable extends Obj {
      */
     private setItem(key: string, value: any) {
         if (this._observable && key in this._observable) {
-            let old = copy(this._observable);
+            let old = Obj.clone(this._observable);
             this._observable[key] = value;
             for (let k in this._observable) {
                 if (this._observable[k] != old[k] || !this._init) {
@@ -108,7 +108,7 @@ class Observable extends Obj {
     }
 
     private getFinalTemplates(element, key): string[] {
-        let finalTemplates = [];
+        let finalTemplates: string[] = [];
         // If the component has a template lets use it
         if (this._component.templates && this._component.templates[key]) {
             // Set the base template so we can reuse it
@@ -135,7 +135,7 @@ class Observable extends Obj {
                     }
                 });
                 // Push the template to the output template array
-                finalTemplates.push(template)
+                finalTemplates.push(template);
             });
         }
         // The component doesn't have a template

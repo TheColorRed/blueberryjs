@@ -39,7 +39,7 @@ abstract class ObjList<T extends Obj> extends List<T>{
         return this.each(item => item.class.toggle(className));
     }
 
-    public setProp(property: Property | Property[]) {
-        return this.each(item => item.props.set(property));
-    }
+    // public setProp(property: Property | Property[]) {
+    //     return this.each(item => item.props.set(property));
+    // }
 }

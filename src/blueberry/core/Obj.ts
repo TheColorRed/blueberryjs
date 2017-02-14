@@ -1,12 +1,12 @@
 class Obj {
 
     public id: string = '';
-    public element: HTMLElement = null;
-    public object: DOMObject = null;
+    public element: HTMLElement;
+    public object: DOMObject;
 
-    public dom: Dom = null;
-    public class: Class = null;
-    public style: Style = null;
+    public dom: Dom;
+    public class: Class;
+    public style: Style;
 
     protected _toDelete: boolean = false;
 
@@ -39,9 +39,9 @@ class Obj {
      * @type {Properties}
      * @memberOf BlueberryObject
      */
-    public get props(): Properties {
-        return this.object._props;
-    }
+    // public get props(): Properties {
+    //     return this.object._props;
+    // }
 
     /**
      * Gets the parent HTMLElement and converts it to a Blueberry DomElement if it has not yet been converted
@@ -62,6 +62,15 @@ class Obj {
         return de;
     }
 
+    public static clone(obj) {
+        if (null == obj || 'object' != typeof obj) return obj;
+        let copy = obj.constructor();
+        for (let attr in obj) {
+            if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+        }
+        return copy;
+    }
+
     /**
      * Looks up the tree for the closest element with the defined component
      *
@@ -71,8 +80,8 @@ class Obj {
      *
      * @memberOf BlueberryObject
      */
-    public findClosestComponent<T extends Component>(type: ComponentType<T>): Component {
-        let component: Component = null;
+    public findClosestComponent<T extends Component>(type: ComponentType<T>): Component | null {
+        let component: Component | null = null;
         let item = this.element.closest(`[component*=${type.prototype.constructor.name}]`) as HTMLElement;
         Blueberry.objects.forEach(el => {
             if (component != null) { return; }
@@ -180,7 +189,7 @@ class Obj {
      *
      * @memberOf BlueberryObject
      */
-    public instantiate(insert: Insert, element: HTMLElement, output: HTMLElement | string): DOMObject {
+    public instantiate(insert: Insert, element: HTMLElement, output: HTMLElement | string): DOMObject | null {
         let insertType: string = '';
         switch (insert) {
             case Insert.Before: insertType = 'beforebegin'; break;
@@ -188,7 +197,7 @@ class Obj {
             case Insert.Prepend: insertType = 'afterbegin'; break;
             case Insert.Append: insertType = 'beforeend'; break;
         }
-        let de: DOMObject;
+        let de: DOMObject | null = null;
         if (output instanceof HTMLElement) {
             element.insertAdjacentElement(insertType, output);
             de = new DOMObject(output);

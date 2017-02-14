@@ -1,6 +1,6 @@
 class Dom {
 
-    public element: HTMLElement = null;
+    public element: HTMLElement;
 
     public get value(): string {
         if (this.element instanceof HTMLInputElement) {
@@ -124,7 +124,9 @@ class Dom {
                             item.setAttribute(attrName, v);
                         }
                     }
-                    finalTemp.appendChild(newTemp.firstChild);
+                    if (newTemp.firstChild) {
+                        finalTemp.appendChild(newTemp.firstChild);
+                    }
                 }
                 this.content(finalTemp.children as HTMLCollectionOf<HTMLElement>, insertType);
             }
@@ -180,7 +182,7 @@ class Dom {
      *
      * @memberOf Blueberry
      */
-    public static find(selector: string): DOMObject {
+    public static find(selector: string): DOMObject | null {
         let item = document.querySelector(selector) as HTMLElement;
         if (item) {
             for (let i = 0, l = Blueberry.objects.length; i < l; i++) {

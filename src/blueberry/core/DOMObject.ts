@@ -1,7 +1,7 @@
 class DOMObject extends Obj {
 
     private _components: Component[] = [];
-    private _parent: DOMObject = null;
+    private _parent: DOMObject;
     private _intervals: number[] = [];
 
     public get components(): Component[] {
@@ -64,7 +64,7 @@ class DOMObject extends Obj {
                 comp[message].apply(comp, options);
             }
             // Delete the object if requested
-            if (message == 'deleted' && this._toDelete) {
+            if (message == 'deleted' && this._toDelete && this.element.parentNode) {
                 this.element.parentNode.removeChild(this.element);
             }
         });
@@ -85,7 +85,7 @@ class DOMObject extends Obj {
         comp = !comp ? '' : comp;
         for (let i = 0, l = this.element.attributes.length; i < l; i++) {
             let attr = this.element.attributes[i];
-            if (attr.name.match(/^comp-/)) {
+            if (attr.localName && attr.name.match(/^comp-/)) {
                 comp += ' ' + attr.localName.replace(/comp-/, '').replace(/-/g, ' ').capitalizeFirstLetter().replace(/ /g, '');
             }
         }

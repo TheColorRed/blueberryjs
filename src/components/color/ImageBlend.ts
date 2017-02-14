@@ -1,9 +1,16 @@
+interface ImageBlendSettings {
+    url: string,
+    x?: number,
+    y?: number,
+    blendType?: BlendType
+}
+
 Blueberry.register(
     class ImageBlend extends Component {
 
-        private _settings: { url: string, x?: number, y?: number, blendType: BlendType }[] = [];
-        private _master: { canvas: HTMLCanvasElement, context: CanvasRenderingContext2D } = { canvas: null, context: null };
-        private _canvases: { canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, settings: { url: string, x?: number, y?: number, blendType: BlendType } }[] = [];
+        private _settings: ImageBlendSettings[] = [];
+        private _master: { canvas: HTMLCanvasElement | null, context: CanvasRenderingContext2D | null } = { canvas: null, context: null };
+        private _canvases: { canvas: HTMLCanvasElement, context: CanvasRenderingContext2D | null, settings: ImageBlendSettings }[];
 
         /**
          * Create the base canvas and load the settings
@@ -28,19 +35,20 @@ Blueberry.register(
                 let img = await this.loadImage(item.settings.url);
                 item.canvas.width = img.width;
                 item.canvas.height = img.height;
+                if (!item.context) { continue; }
                 item.context.drawImage(img, 0, 0);
-                if (i == 0) {
+                if (this._master.canvas && this._master.context && i == 0) {
                     this._master.canvas.width = img.width;
                     this._master.canvas.height = img.height;
                     this._master.context.drawImage(item.canvas, 0, 0);
-                } else {
-                    let canvas = this.blend(this._master.canvas, item.canvas, item.settings.blendType);
+                } else if (this._master.canvas && this._master.context) {
+                    let canvas = this.blend(this._master.canvas, item.canvas, (item.settings.blendType || BlendType.Normal));
                     this._master.context.drawImage(canvas, 0, 0);
                 }
             }
-            if (this.element instanceof HTMLImageElement) {
+            if (this.element instanceof HTMLImageElement && this._master.canvas) {
                 this.dom.attr('src', this._master.canvas.toDataURL());
-            } else {
+            } else if (this._master.canvas) {
                 this.dom.html(`<img alt="Image Blend" src="${this._master.canvas.toDataURL()}">`);
             }
         }
@@ -76,8 +84,13 @@ Blueberry.register(
             can.width = a.width > b.width ? a.width : b.width;
             can.height = a.height > b.height ? a.height : b.height;
             let ctx = can.getContext('2d');
-            let ad = a.getContext('2d').getImageData(0, 0, a.width, a.height).data;
-            let bd = b.getContext('2d').getImageData(0, 0, b.width, b.height).data;
+            if (!ctx) { return b; }
+            let actx = a.getContext('2d');
+            if (!actx) { return a; }
+            let ad = actx.getImageData(0, 0, a.width, a.height).data;
+            let bctx = b.getContext('2d');
+            if (!bctx) { return b; }
+            let bd = ctx.getImageData(0, 0, b.width, b.height).data;
             let d = ctx.createImageData(a.width, a.height);
             for (let i = 0, l = ad.length; i < l; i += 4) {
                 let col: Color = Color.blend(

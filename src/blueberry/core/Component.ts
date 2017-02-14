@@ -1,13 +1,8 @@
 abstract class Component extends Obj {
 
-    public observable: Observable = null;
+    public observable: Observable;
     public unique: boolean = true;
     public templates: Object = {};
-
-    // public abstract click(event?: Event): void;
-    // public abstract created(): void;
-    // public abstract update(): void;
-    // public abstract deleted(): void;
 
     private _started: boolean = false;
     private _ready: boolean = false;
@@ -38,6 +33,18 @@ abstract class Component extends Obj {
         return this.observable.get(key);
     }
 
+    public prop(data: Object): this {
+        // this = (<any>Object).assign(this, data);
+        // let item = obj ? obj : this;
+        for (let key in data) {
+            if (this[key]) {
+                let setting = (<any>Object).assign(this[key], data[key]);
+                this[key] = setting;
+            }
+        }
+        return this;
+    }
+
     public setTemplates() {
         this.templates = this['template']();
     }
@@ -54,11 +61,13 @@ abstract class Component extends Obj {
         for (let i = 0, l = observables.length; i < l; i++) {
             let element = observables[i];
             let observeKey = element.getAttribute('observe');
+            if (!observeKey) { continue; }
             let observeVal = this.observable.get(observeKey);
             this.observable.set(observeKey, observeVal);
         }
         if (this.element.hasAttribute('observe')) {
             let observeKey = this.element.getAttribute('observe');
+            if (!observeKey) { return; }
             let observeVal = this.observable.get(observeKey);
             this.observable.set(observeKey, observeVal);
         }
@@ -76,6 +85,7 @@ abstract class Component extends Obj {
         for (let i = 0, l = models.length; i < l; i++) {
             let element = models[i];
             let observeKey = element.getAttribute('model');
+            if (!observeKey) { continue; }
             let observeVal = this.observable.get(observeKey);
             if (element instanceof HTMLInputElement) {
                 element.addEventListener('input', e => {

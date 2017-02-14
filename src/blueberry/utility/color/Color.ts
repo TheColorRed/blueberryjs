@@ -36,11 +36,15 @@ class Color {
             return r + r + g + g + b + b;
         });
         let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return new Color(
-            parseInt(result[1], 16),
-            parseInt(result[2], 16),
-            parseInt(result[3], 16)
-        );
+        if (result) {
+            return new Color(
+                parseInt(result[1], 16),
+                parseInt(result[2], 16),
+                parseInt(result[3], 16)
+            );
+        } else {
+            return Color.black;
+        }
     }
 
     public static create(r: number | Color | string = 255, g: number = 255, b: number = 255, a: number = 255): Color {
@@ -57,7 +61,7 @@ class Color {
     }
 
     public static blend(c1: Color, c2: Color, blendType: BlendType): Color {
-        let r: number, g: number, b: number, a: number;
+        let r: number = 0, g: number = 0, b: number = 0, a: number = 1;
         switch (blendType) {
             case BlendType.Normal:
                 r = c1.r;

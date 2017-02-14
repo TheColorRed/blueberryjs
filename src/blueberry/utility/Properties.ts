@@ -38,13 +38,15 @@ class Properties {
             }
         }
         // If th property doesn't exit add it
-        let prop: Property;
+        let prop: Property | null = null;
         if (typeof key == 'string' && arguments.length == 2) {
             prop = new Property(key, val);
         } else if (key instanceof Property) {
             prop = key;
         }
-        this._props.push(prop);
+        if (prop) {
+            this._props.push(prop);
+        }
         return this;
     }
 

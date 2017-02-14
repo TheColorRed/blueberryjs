@@ -125,9 +125,9 @@ class Blueberry {
     public static addElement(domElement: DOMObject) {
         this._objects.push(domElement);
         let attrs = domElement.attrs;
-        for (let key in attrs) {
-            domElement.props.set(new Property(key, attrs[key]));
-        }
+        // for (let key in attrs) {
+        //     domElement.props.set(new Property(key, attrs[key]));
+        // }
     }
 
     public static toObject(element: HTMLElement): DOMObject {
@@ -156,8 +156,8 @@ class Blueberry {
 
     public static findTemplateItems(template): { placeholder: string, value: string }[] {
         let regex = /\{\{(.+?)\}\}/g
-        let m: RegExpExecArray;
-        let matches = [];
+        let m: RegExpExecArray | null;
+        let matches: { placeholder: string, value: string }[] = [];
         while ((m = regex.exec(template))) {
             if (m.index === regex.lastIndex) { regex.lastIndex++; }
             let tmp = { placeholder: '', value: '' };
@@ -185,11 +185,11 @@ class Blueberry {
      *
      * @memberOf Blueberry
      */
-    public static query(path: string, obj = null) {
-        let previous = null;
+    public static query(path: string, obj: Object | null = null) {
+        let previous: Object | null = null;
         obj = !obj ? this : obj;
         for (let i = 0, p = path.split(/[\[\]\.]/), len = p.length; i < len; i++) {
-            if (p[i] == '') { continue; }
+            if (p[i] == '' || !obj) { continue; }
             let item = p[i];//.match(/[0-9]+/) ? path[i] : path[i];
             obj = obj[item];
             previous = obj;
@@ -206,7 +206,7 @@ class Blueberry {
      *
      * @memberOf Blueberry
      */
-    public static findById(id: string): DOMObject {
+    public static findById(id: string): DOMObject | null {
         for (let i = 0, l = this._objects.length; i < l; i++) {
             if (this._objects[i].elementId == id) {
                 return this._objects[i];
@@ -215,7 +215,7 @@ class Blueberry {
         return null;
     }
 
-    public static find<T extends Component>(query: string, type: ComponentType<T>): T {
+    public static find<T extends Component>(query: string, type: ComponentType<T>): T | null {
         let elements = document.querySelectorAll(query) as NodeListOf<HTMLElement>;
         for (let i = 0, l = elements.length; i < l; i++) {
             let element = elements[i];

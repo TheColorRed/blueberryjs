@@ -1,5 +1,5 @@
 enum LoopType { None, Repeat, PingPong }
-enum TweenType { Move, Scale, Color }
+enum TweenType { None, Move, Scale, Color }
 enum EaseType {
     EaseInBounce, EaseOutBounce, EaseInOutBounce,
     EaseInBack, EaseOutBack, EaseInOutBack,
