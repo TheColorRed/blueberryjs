@@ -1,5 +1,8 @@
-abstract class Addon {
-    public money() {
+interface Addon {
+    init?(): void;
+    ready?(): void;
+}
 
-    }
+abstract class Addon extends Obj {
+
 }

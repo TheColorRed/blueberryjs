@@ -2,10 +2,10 @@ class Blueberry {
 
     public static isActive: boolean = true;
 
-    private static _objects: DOMObject[] = [];
     private static _observable: Observable[] = [];
     private static _version: string = '0.0.1';
 
+    private static _objects: Obj[] = [];
     private static _registeredComponents: Component[] = [];
     private static _registeredAddons: Addon[] = [];
     private static _registeredServices: any[] = [];
@@ -16,12 +16,12 @@ class Blueberry {
         return this._version;
     }
 
-    public static get registered(): Component[] {
-        return this._registeredComponents;
+    public static get objects(): any[] {
+        return this._objects;
     }
 
-    public static get objects(): DOMObject[] {
-        return this._objects;
+    public static get registered(): Component[] {
+        return this._registeredComponents;
     }
 
     public static register(item, value?): Blueberry {
@@ -71,7 +71,7 @@ class Blueberry {
         if (!this._hasInit) {
             this.addonInit();
             this.initServices();
-            this.initElementsWithComponent();
+            // this.initElementsWithComponent();
             // this.initComponentInteravls();
             this.initHandlers();
             this.addonReady();
@@ -98,23 +98,6 @@ class Blueberry {
     }
 
     /**
-     * Initializes elements that have not been initialized. This can run as many times as desired, as elements that have been upgraded won't be upgraded again.
-     *
-     * @static
-     *
-     * @memberOf Blueberry
-     */
-    public static upgrade() {
-        this.initElementsWithComponent();
-        this.initHandlers();
-    }
-
-    public static on(name: string, event: (event: BlueberryEvent) => void): Blueberry {
-        this._registeredEvents.push(new BlueberryEvent(name, event));
-        return Blueberry;
-    }
-
-    /**
      * Adds an element to the the list of DomElements
      *
      * @static
@@ -122,23 +105,29 @@ class Blueberry {
      *
      * @memberOf Blueberry
      */
-    public static addElement(domElement: DOMObject) {
-        this._objects.push(domElement);
-        let attrs = domElement.attrs;
+    public static addElement(element: any) {
+        this._objects.push(element);
+        let attrs = element.attrs;
         // for (let key in attrs) {
         //     domElement.props.set(new Property(key, attrs[key]));
         // }
     }
 
-    public static toObject(element: HTMLElement): DOMObject {
-        for (let i = 0, l = this._objects.length; i < l; i++) {
-            if (this._objects[i].element == element) {
-                return this._objects[i];
-            }
-        }
-        let domObject = new DOMObject(element);
-        this.addElement(domObject);
-        return domObject;
+    /**
+     * Initializes elements that have not been initialized. This can run as many times as desired, as elements that have been upgraded won't be upgraded again.
+     *
+     * @static
+     *
+     * @memberOf Blueberry
+     */
+    // public static upgrade() {
+    //     this.initElementsWithComponent();
+    //     this.initHandlers();
+    // }
+
+    public static on(name: string, event: (event: BlueberryEvent) => void): Blueberry {
+        this._registeredEvents.push(new BlueberryEvent(name, event));
+        return Blueberry;
     }
 
     /**
@@ -198,86 +187,6 @@ class Blueberry {
     }
 
     /**
-     * Finds a Blueberry DomElement based on it's id.
-     *
-     * @static
-     * @param {string} id
-     * @returns {DomElement}
-     *
-     * @memberOf Blueberry
-     */
-    public static findById(id: string): DOMObject | null {
-        for (let i = 0, l = this._objects.length; i < l; i++) {
-            if (this._objects[i].elementId == id) {
-                return this._objects[i];
-            }
-        }
-        return null;
-    }
-
-    public static find<T extends Component>(query: string, type: ComponentType<T>): T | null {
-        let elements = document.querySelectorAll(query) as NodeListOf<HTMLElement>;
-        for (let i = 0, l = elements.length; i < l; i++) {
-            let element = elements[i];
-            for (let e = 0, len = this._objects.length; e < len; e++) {
-                let el = this._objects[e];
-                if (element == el.element) {
-                    for (let c = 0, len2 = el.components.length; c < len2; c++) {
-                        if (el.components[c] instanceof type) {
-                            return <T>el.components[c];
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Finds all elements that contain a particular component
-     *
-     * @static
-     * @template T
-     * @param {ComponentType<T>} type
-     * @returns {DomElement[]}
-     *
-     * @memberOf Blueberry
-     */
-    public static findWithComponent<T extends Component>(type: ComponentType<T>): DOMObjectList {
-        let elements = new DOMObjectList();
-        this._objects.forEach(el => {
-            el.components.forEach(comp => {
-                if (comp instanceof type) {
-                    elements.add(el);
-                }
-            });
-        });
-        return elements;
-    }
-
-    /**
-     * Finds all components of a particular type
-     *
-     * @static
-     * @template T
-     * @param {ComponentType<T>} type
-     * @returns {T[]}
-     *
-     * @memberOf Blueberry
-     */
-    public static findComponents<T extends Component>(type: ComponentType<T>): ComponentList {
-        let list = new ComponentList();
-        this.objects.forEach(el => {
-            el.components.forEach(comp => {
-                if (comp instanceof type) {
-                    list.add(<T>comp);
-                }
-            });
-        });
-        return list;
-    }
-
-    /**
      * Runs the init method in the addon. This is the first thing to run after the dom loads.
      *
      * @private
@@ -287,8 +196,8 @@ class Blueberry {
      */
     private static addonInit() {
         this._registeredAddons.forEach(addon => {
-            if (typeof addon['init'] == 'function') {
-                addon['init']();
+            if (typeof addon.init == 'function') {
+                addon.init();
             }
         });
     }
@@ -303,8 +212,8 @@ class Blueberry {
      */
     private static addonReady() {
         this._registeredAddons.forEach(addon => {
-            if (typeof addon['ready'] == 'function') {
-                addon['ready']();
+            if (typeof addon.ready == 'function') {
+                addon.ready();
             }
         })
     }
@@ -320,28 +229,6 @@ class Blueberry {
     private static initServices() {
         for (let i in this._registeredServices) {
             window[i] = new this._registeredServices[i]();
-        }
-    }
-
-    /**
-     * Initializes components that have not yet been initialized
-     *
-     * @private
-     * @static
-     *
-     * @memberOf Blueberry
-     */
-    private static initElementsWithComponent() {
-        let e = document.querySelectorAll('[component]') as NodeListOf<HTMLElement>;
-        let elen = this._objects.length;
-        loop:
-        for (let i = 0, l = e.length; i < l; i++) {
-            for (let j = 0; j < elen; j++) {
-                if (e[i] == this._objects[j].element) {
-                    continue loop;
-                }
-            }
-            this.addElement(new DOMObject(e[i]));
         }
     }
 

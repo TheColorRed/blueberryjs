@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="/blueberryjs/blueberry.js"></script>
+    <script src="/blueberryjs/dom.js"></script>
+    <script>
+        Blueberry.register(
+            class TestComponent extends Component {
+                created(){
+                    this.dom.content('hi')
+                }
+            }
+        );
+    </script>
+</head>
+<body>
+    <div component="TestComponent"></div>
+</body>
+</html>

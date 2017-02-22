@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "removeComments": true,
+        "target": "es5",
+        "module": "system",
+        "declaration": true,
+        "outFile": "./dist/dom.js",
+        "strictNullChecks": true
+    },
+    "include": [
+        "../../../dist/typings/blueberry.d.ts"
+    ],
+    "files": [
+        "./DOMObject.ts",
+        "./DOMObjectList.ts",
+        "./Dom.ts",
+        "./Class.ts",
+        "./Style.ts",
+        "./init.ts"
+    ]
+}

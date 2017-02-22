@@ -1,3 +1,12 @@
+/**
+ * The type of insertion
+ *
+ * @enum {number}
+ */
+enum Insert {
+    Before, After, Append, Prepend, Overwrite
+}
+
 class Dom {
 
     public element: HTMLElement;
@@ -37,13 +46,15 @@ class Dom {
      */
     public html(html: string): this {
         this.element.innerHTML = html;
-        Blueberry.upgrade();
+        // Blueberry.upgrade();
+        DOMObject.initElementsWithComponent();
         return this;
     }
 
     public append(html: string) {
         this.element.insertAdjacentHTML('beforeend', html);
-        Blueberry.upgrade();
+        // Blueberry.upgrade();
+        // DOMObject.initElementsWithComponent();
         return this;
     }
 
@@ -84,7 +95,8 @@ class Dom {
         } else if (this.element instanceof HTMLElement) {
             this.element.innerText = data;
         }
-        Blueberry.upgrade();
+        // Blueberry.upgrade();
+        // DOMObject.initElementsWithComponent();
         return this;
     }
 
@@ -186,8 +198,9 @@ class Dom {
         let item = document.querySelector(selector) as HTMLElement;
         if (item) {
             for (let i = 0, l = Blueberry.objects.length; i < l; i++) {
-                if (Blueberry.objects[i].element == item) {
-                    return Blueberry.objects[i];
+                let obj = Blueberry.objects[i];
+                if (obj instanceof DOMObject && obj.element == item) {
+                    return obj;
                 }
             }
             let de = new DOMObject(item);
@@ -213,8 +226,9 @@ class Dom {
             let item = items[i];
             let found: boolean = false;
             for (let j = 0, len = Blueberry.objects.length; j < len; j++) {
-                if (Blueberry.objects[j].element == item) {
-                    elements.add(Blueberry.objects[i]);
+                let obj = Blueberry.objects[i];
+                if (obj instanceof DOMObject && obj.element == item) {
+                    elements.add(obj);
                     found = true;
                     break;
                 }
@@ -226,6 +240,29 @@ class Dom {
             }
         }
         return elements;
+    }
+
+    /**
+     * Initializes components that have not yet been initialized
+     *
+     * @private
+     * @static
+     *
+     * @memberOf Blueberry
+     */
+    public static initElementsWithComponent() {
+        let e = document.querySelectorAll('[component]') as NodeListOf<HTMLElement>;
+        let elen = Blueberry.objects.length;
+        loop:
+        for (let i = 0, l = e.length; i < l; i++) {
+            for (let j = 0; j < elen; j++) {
+                let obj = Blueberry.objects[j];
+                if (obj instanceof DOMObject && e[i] == obj.element) {
+                    continue loop;
+                }
+            }
+            Blueberry.addElement(new DOMObject(e[i]));
+        }
     }
 
 }

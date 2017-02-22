@@ -8,7 +8,8 @@
         "strictNullChecks": true
     },
     "include": [
-        "../../dist/blueberry.d.ts",
+        "../../dist/typings/blueberry.d.ts",
+        "../../dist/typings/dom.d.ts",
         "../../typings/globals/es6-promise/index.d.ts"
     ],
     "files": [

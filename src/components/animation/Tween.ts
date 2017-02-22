@@ -9,7 +9,9 @@ interface TweenSettings {
     startColor?: Color,
     endColor?: Color
 }
-
+interface Component {
+    style: Style
+}
 Blueberry.register(
     class Tween extends Component {
         private _isRunning: boolean = false;

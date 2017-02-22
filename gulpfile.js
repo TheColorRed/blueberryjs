@@ -18,6 +18,7 @@ const paths = {
 
 const projects = {
     blueberry: './src/blueberry/tsconfig.json',
+    dom: './src/addons/dom/tsconfig.json',
     components: './src/components/tsconfig.json'
 };
 
@@ -42,6 +43,10 @@ gulp.task('blueberry', () => {
 gulp.task('components', () => {
     makeProject(projects.components);
 });
+
+gulp.task('dom', () => {
+    makeProject(projects.dom);
+})
 
 gulp.task('docs', () => {
     rimraf('public/api', err => {
@@ -76,8 +81,9 @@ function makeProject(projectPath) {
     let tsResult = tsProject.src().pipe(tsProject());
     // Save typescript to javascript
     // Compile non es6 project
-    tsResult.dts.pipe(flatten()).pipe(gulp.dest(path.join(__dirname, './dist')));
+    tsResult.dts.pipe(flatten()).pipe(gulp.dest(path.join(__dirname, './dist/typings')));
     let projectConfig = require(projectPath);
+    delete require.cache[require.resolve(projectPath)];
     let baseName = path.parse(projectConfig.compilerOptions.outFile).base;
     if (projectConfig.compilerOptions.target != 'es6') {
         return tsResult.js.pipe(uglify({ mangle: false })).pipe(gulp.dest('./')).on('finish', function () {
@@ -90,7 +96,6 @@ function makeProject(projectPath) {
             fs.createReadStream(`./dist/${baseName}`).pipe(fs.createWriteStream(`./public/assets/js/${baseName}`));
         });
     }
-    delete require.cache[require.resolve(projectPath)];
 }
 
 gulp.task('init', ['blueberry'], () => {

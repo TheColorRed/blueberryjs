@@ -12,10 +12,20 @@ Blueberry.register(
                 },
                 set name(value) {
                     let name = value.split(' ', 2);
-                    this.first = name[0];
-                    this.last = name[1];
+                    this.first = name[0] || '';
+                    this.last = name[1] || '';
                 }
             }
         }
     }
 );
+
+
+/**
+ * @param {string} SDK
+ */
+let item = function (SDK) {
+
+}
+
+item()

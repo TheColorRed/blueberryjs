@@ -1,3 +1,12 @@
+/**
+ * The type of ajax method
+ *
+ * @enum {number}
+ */
+enum AjaxMethod {
+    Get, Post, Put, Patch, Delete
+}
+
 class Ajax {
 
     private _done: boolean = false;

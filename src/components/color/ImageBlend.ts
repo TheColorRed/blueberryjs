@@ -4,13 +4,15 @@ interface ImageBlendSettings {
     y?: number,
     blendType?: BlendType
 }
-
+interface Component {
+    dom: Dom
+}
 Blueberry.register(
     class ImageBlend extends Component {
 
         private _settings: ImageBlendSettings[] = [];
         private _master: { canvas: HTMLCanvasElement | null, context: CanvasRenderingContext2D | null } = { canvas: null, context: null };
-        private _canvases: { canvas: HTMLCanvasElement, context: CanvasRenderingContext2D | null, settings: ImageBlendSettings }[];
+        private _canvases: { canvas: HTMLCanvasElement, context: CanvasRenderingContext2D | null, settings: ImageBlendSettings }[] = [];
 
         /**
          * Create the base canvas and load the settings
@@ -83,27 +85,24 @@ Blueberry.register(
             let can = document.createElement('canvas');
             can.width = a.width > b.width ? a.width : b.width;
             can.height = a.height > b.height ? a.height : b.height;
-            let ctx = can.getContext('2d');
-            if (!ctx) { return b; }
-            let actx = a.getContext('2d');
-            if (!actx) { return a; }
-            let ad = actx.getImageData(0, 0, a.width, a.height).data;
-            let bctx = b.getContext('2d');
-            if (!bctx) { return b; }
-            let bd = ctx.getImageData(0, 0, b.width, b.height).data;
-            let d = ctx.createImageData(a.width, a.height);
-            for (let i = 0, l = ad.length; i < l; i += 4) {
+            let ctx = can.getContext('2d') || new CanvasRenderingContext2D();
+            let actx = a.getContext('2d') || new CanvasRenderingContext2D();
+            let bctx = b.getContext('2d') || new CanvasRenderingContext2D();
+            let aData = actx.getImageData(0, 0, a.width, a.height).data;
+            let bData = ctx.getImageData(0, 0, b.width, b.height).data;
+            let finalData = ctx.createImageData(can.width, can.height);
+            for (let i = 0, l = aData.length; i < l; i += 4) {
                 let col: Color = Color.blend(
-                    new Color(ad[i], ad[i + 1], ad[i + 2], ad[i + 3]),
-                    new Color(bd[i], bd[i + 1], bd[i + 2], bd[i + 3]),
+                    new Color(aData[i], aData[i + 1], aData[i + 2], aData[i + 3]),
+                    new Color(bData[i], bData[i + 1], bData[i + 2], bData[i + 3]),
                     blendType
                 );
-                d.data[i + 0] = col.r;
-                d.data[i + 1] = col.g;
-                d.data[i + 2] = col.b;
-                d.data[i + 3] = col.a;
+                finalData.data[i + 0] = col.r;
+                finalData.data[i + 1] = col.g;
+                finalData.data[i + 2] = col.b;
+                finalData.data[i + 3] = col.a;
             }
-            ctx.putImageData(d, 0, 0);
+            ctx.putImageData(finalData, 0, 0);
             return can;
         }
     }
