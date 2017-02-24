@@ -11,24 +11,36 @@
     </style>
     <script>
         Blueberry.register(
-            class Move extends Behavior {
+            class Move extends Canvas.Behavior {
+                constructor() {
+                    super();
+                    this.speed = 1;
+                    this.text = null;
+                }
+                ready() {
+                    this.text = Canvas.findObjectOfType(Canvas.UI.Text);
+                }
                 update() {
-                    // console.log(Input.keyPressed('horizontal'))
-                    if(Input.buttonPressed('horizontal')){
-                        console.log('left pressed')
-                    }
-                    // this.transform.translate(Vector2.right.times(2));
+                    let horizontal = Canvas.Input.getAxis('horizontal') * this.speed;
+                    let vertical = Canvas.Input.getAxis('vertical') * this.speed;
+                    this.transform.translate(horizontal, vertical);
+                    this.text.transform.position = new Vector2(this.transform.position.x, this.transform.position.y - 20);
                 }
             }
         ).on('ready', evt => {
-            let go = new GameObject;
+            let go = new Canvas.GameObject;
+            let txt = new Canvas.GameObject;
 
             // Init the sprite renderer
-            let spr = go.addComponent(SpriteRenderer);
-            spr.sprite = new Sprite('./skeleton.png');
+            let spr = go.addComponent(Canvas.Renderer.Sprite);
+            spr.sprite = new Canvas.Sprite('./skeleton.png');
 
             // Init the Move Component
-            go.addComponent(Move);
+            let move = go.addComponent(Move);
+
+            // txt.addComponent(Canvas.Renderer.UI);
+            let txtC = txt.addComponent(Canvas.UI.Text);
+            txtC.text = 'Hello World';
         });
     </script>
 </head>

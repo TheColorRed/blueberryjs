@@ -20,7 +20,7 @@ Blueberry.register(
         public created() {
             this._master.canvas = document.createElement('canvas');
             this._master.context = this._master.canvas.getContext('2d');
-            this._settings = eval(`(${this.attrs.settings})`);
+            // this._settings = eval(`(${this.attrs.settings})`);
             this._settings.forEach(setting => {
                 let cvs = document.createElement('canvas');
                 let ctx = cvs.getContext('2d');

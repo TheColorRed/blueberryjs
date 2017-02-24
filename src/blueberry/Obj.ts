@@ -168,8 +168,10 @@ class Obj {
                 comp[message].apply(comp, options);
             }
             // Delete the object if requested
-            if (message == 'deleted' && this._toDelete && this.element.parentNode) {
-                this.element.parentNode.removeChild(this.element);
+            if (message == 'deleted' && this._toDelete) {
+                if (this.element && this.element.parentNode) {
+                    this.element.parentNode.removeChild(this.element);
+                }
             }
         });
     }

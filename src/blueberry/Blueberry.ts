@@ -43,6 +43,7 @@ class Blueberry {
     public static tick() {
         Time.frameTime();
         // Start Events
+        Blueberry.addonStartTick();
         Blueberry.created();
         Blueberry.ready();
 
@@ -52,7 +53,7 @@ class Blueberry {
 
         Blueberry.deleted();
 
-        Blueberry.endTick();
+        Blueberry.addonEndTick();
 
         // if (Blueberry.isActive) {
         //     requestAnimationFrame(Blueberry.tick);
@@ -283,12 +284,22 @@ class Blueberry {
         }
     }
 
-    private static endTick() {
+    private static addonEndTick() {
         let i = this._registeredAddons.length;
         while (i--) {
             let addon = this._registeredAddons[i];
             if (addon['endTick']) {
                 addon['endTick']();
+            }
+        }
+    }
+
+    private static addonStartTick() {
+        let i = this._registeredAddons.length;
+        while (i--) {
+            let addon = this._registeredAddons[i];
+            if (addon['startTick']) {
+                addon['startTick']();
             }
         }
     }

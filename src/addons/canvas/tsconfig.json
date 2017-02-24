@@ -19,8 +19,11 @@
         "./core/inputs/Keyboard.ts",
         "./core/inputs/Mouse.ts",
         "./core/Input.ts",
+        "./core/Font.ts",
         "./components/Transform.ts",
-        "./components/SpriteRenderer.ts",
+        "./components/renderer/Sprite.ts",
+        "./components/renderer/UI.ts",
+        "./components/ui/Text.ts",
         "./init.ts"
     ]
 }
