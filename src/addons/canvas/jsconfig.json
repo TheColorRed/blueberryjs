@@ -1,0 +1,6 @@
+{
+    "include": [
+        "../../../dist/typings/blueberry.d.ts",
+        "../../../dist/typings/canvas.d.ts"
+    ]
+}

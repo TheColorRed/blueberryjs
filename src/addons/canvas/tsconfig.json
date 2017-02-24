@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "removeComments": true,
+        "target": "es5",
+        "module": "system",
+        "declaration": true,
+        "outFile": "./dist/canvas.js",
+        "strictNullChecks": true
+    },
+    "include": [
+        "../../../dist/typings/blueberry.d.ts"
+    ],
+    "files": [
+        "./core/Prefab.ts",
+        "./core/Behavior.ts",
+        "./core/GameObject.ts",
+        "./core/Sprite.ts",
+        "./core/Stage.ts",
+        "./core/inputs/Keyboard.ts",
+        "./core/inputs/Mouse.ts",
+        "./core/Input.ts",
+        "./components/Transform.ts",
+        "./components/SpriteRenderer.ts",
+        "./init.ts"
+    ]
+}

@@ -52,6 +52,8 @@ class Blueberry {
 
         Blueberry.deleted();
 
+        Blueberry.endTick();
+
         // if (Blueberry.isActive) {
         //     requestAnimationFrame(Blueberry.tick);
         // } else {
@@ -90,11 +92,11 @@ class Blueberry {
     }
 
     private static initMouse() {
-        Mouse.clickHandlers();
+        MouseHandler.clickHandlers();
     }
 
     private static initKeyboard() {
-        Keyboard.inputHandler();
+        KeyboardHandler.inputHandler();
     }
 
     /**
@@ -107,7 +109,9 @@ class Blueberry {
      */
     public static addElement(element: any) {
         this._objects.push(element);
-        let attrs = element.attrs;
+        if (element) {
+            let attrs = element.attrs;
+        }
         // for (let key in attrs) {
         //     domElement.props.set(new Property(key, attrs[key]));
         // }
@@ -275,6 +279,16 @@ class Blueberry {
             element.sendMessage('deleted');
             if (element['_toDelete']) {
                 this._objects.splice(i, 1);
+            }
+        }
+    }
+
+    private static endTick() {
+        let i = this._registeredAddons.length;
+        while (i--) {
+            let addon = this._registeredAddons[i];
+            if (addon['endTick']) {
+                addon['endTick']();
             }
         }
     }

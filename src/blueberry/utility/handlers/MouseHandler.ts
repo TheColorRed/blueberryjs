@@ -1,4 +1,4 @@
-class Mouse {
+class MouseHandler {
     /**
      * Creates click event handlers for components that support it
      *

@@ -13,12 +13,15 @@ const path = require('path');
 const paths = {
     blueberrywatch: ['src/blueberry/**/*.ts', 'src/blueberry/tsconfig.json'],
     componentwatch: ['src/components/**/*.ts', 'src/components/tsconfig.json'],
-    docwatch: ['docs/**/*.pug']
+    docwatch: ['docs/**/*.pug'],
+    docwatch: ['src/addons/dom/**/*.ts', 'src/addons/dom/tsconfig.json'],
+    canvaswatch: ['src/addons/canvas/**/*.ts', 'src/addons/canvas/tsconfig.json']
 };
 
 const projects = {
     blueberry: './src/blueberry/tsconfig.json',
     dom: './src/addons/dom/tsconfig.json',
+    canvas: './src/addons/canvas/tsconfig.json',
     components: './src/components/tsconfig.json'
 };
 
@@ -46,7 +49,11 @@ gulp.task('components', () => {
 
 gulp.task('dom', () => {
     makeProject(projects.dom);
-})
+});
+
+gulp.task('canvas', () => {
+    makeProject(projects.canvas);
+});
 
 gulp.task('docs', () => {
     rimraf('public/api', err => {
@@ -99,11 +106,13 @@ function makeProject(projectPath) {
 }
 
 gulp.task('init', ['blueberry'], () => {
-    gulp.start(['components', 'docs']);
+    gulp.start(['components', 'docs', 'dom', 'canvas']);
 });
 
 gulp.task('build', ['init'], () => {
     gulp.watch(paths.blueberrywatch, ['blueberry']);
     gulp.watch(paths.componentwatch, ['components']);
+    gulp.watch(paths.domwatch, ['dom']);
+    gulp.watch(paths.canvaswatch, ['canvas']);
     gulp.watch(paths.docwatch, ['docs']);
 });

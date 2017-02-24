@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas Example</title>
+    <script src="/blueberryjs/blueberry.js"></script>
+    <script src="/blueberryjs/canvas.js"></script>
+    <style>
+        body, html { padding: 0; margin: 0; width: 100vw; height: 100vh; }
+        * { box-sizing: border-box; }
+    </style>
+    <script>
+        Blueberry.register(
+            class Move extends Behavior {
+                update() {
+                    // console.log(Input.keyPressed('horizontal'))
+                    if(Input.buttonPressed('horizontal')){
+                        console.log('left pressed')
+                    }
+                    // this.transform.translate(Vector2.right.times(2));
+                }
+            }
+        ).on('ready', evt => {
+            let go = new GameObject;
+
+            // Init the sprite renderer
+            let spr = go.addComponent(SpriteRenderer);
+            spr.sprite = new Sprite('./skeleton.png');
+
+            // Init the Move Component
+            go.addComponent(Move);
+        });
+    </script>
+</head>
+<body>
+    <canvas></canvas>
+</body>
+</html>

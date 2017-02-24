@@ -30,4 +30,20 @@ class Vector2 {
         return new Vector2(0, 1);
     }
 
+    public times(amount: number): Vector2 {
+        return new Vector2(this._x * amount, this._y * amount);
+    }
+
+    public divide(amount: number): Vector2 {
+        return new Vector2(this._x / amount, this._y / amount);
+    }
+
+    public add(amount: number): Vector2 {
+        return new Vector2(this._x + amount, this._y + amount);
+    }
+
+    public subtract(amount: number): Vector2 {
+        return new Vector2(this._x - amount, this._y - amount);
+    }
+
 }

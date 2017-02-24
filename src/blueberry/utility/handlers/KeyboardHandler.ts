@@ -1,4 +1,4 @@
-class Keyboard {
+class KeyboardHandler {
     /**
      * Creates input event handlers for components that support it
      *

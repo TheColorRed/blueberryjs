@@ -20,20 +20,8 @@ class Obj {
         return this.object.id;
     }
 
-    /**
-     * Gets all attributes attached to the HTMLElement
-     *
-     * @readonly
-     * @type {Object}
-     * @memberOf BlueberryObject
-     */
-    public get attrs(): any {
-        let attrs = {};
-        for (let i = 0, l = this.element.attributes.length; i < l; i++) {
-            let name = this.element.attributes[i].name.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
-            attrs[name] = this.element.attributes[i].value;
-        }
-        return attrs;
+    public get components(): Component[] {
+        return this._components;
     }
 
     /**
@@ -88,11 +76,13 @@ class Obj {
             }
         }
 
-        c.element = this.element;
         c.object = this.object;
-        let compAttr = (c.element.getAttribute('component') || '').split(' ');
-        compAttr.push(name);
-        c.element.setAttribute('component', compAttr.join(' '));
+        if (c.element) {
+            c.element = this.element;
+            let compAttr = (c.element.getAttribute('component') || '').split(' ');
+            compAttr.push(name);
+            c.element.setAttribute('component', compAttr.join(' '));
+        }
         // c.init();
         this.object['_components'].push(c);
         return c;
@@ -118,6 +108,17 @@ class Obj {
             }
         }
         return this;
+    }
+
+    public getComponent<T extends Component>(type: ComponentType<T>): T | null {
+        if (this.object.components) {
+            for (let comp of this.object.components) {
+                if (comp instanceof type) {
+                    return <T>comp;
+                }
+            }
+        }
+        return null;
     }
 
     public initComponentInteravls() {
