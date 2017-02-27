@@ -42,7 +42,6 @@ class Time {
         }
         Time.setFrameTime((d - Time._startTime) / 1000);
         Time.setDeltaTime(delta / Time._targetFps);
-
     }
 
     public static nextCalc() {

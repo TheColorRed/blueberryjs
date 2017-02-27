@@ -55,12 +55,8 @@ class Blueberry {
 
         Blueberry.addonEndTick();
 
-        // if (Blueberry.isActive) {
-        //     requestAnimationFrame(Blueberry.tick);
-        // } else {
         let next = Time.nextCalc();
         setTimeout(Blueberry.tick, next);
-        // }
     }
 
     /**
@@ -78,11 +74,12 @@ class Blueberry {
             // this.initComponentInteravls();
             this.initHandlers();
             this.addonReady();
-            this._registeredEvents.forEach(evt => {
+            for (let i = 0, l = this._registeredEvents.length; i < l; i++) {
+                let evt = this._registeredEvents[i];
                 if (evt.name == 'ready') {
                     evt.event(evt);
                 }
-            });
+            }
             this._hasInit = true;
         }
     }
@@ -200,11 +197,12 @@ class Blueberry {
      * @memberOf Blueberry
      */
     private static addonInit() {
-        this._registeredAddons.forEach(addon => {
+        for (let i = 0, l = this._registeredAddons.length; i < l; i++) {
+            let addon = this._registeredAddons[i];
             if (typeof addon.init == 'function') {
                 addon.init();
             }
-        });
+        }
     }
 
     /**
@@ -216,11 +214,12 @@ class Blueberry {
      * @memberOf Blueberry
      */
     private static addonReady() {
-        this._registeredAddons.forEach(addon => {
+        for (let i = 0, l = this._registeredAddons.length; i < l; i++) {
+            let addon = this._registeredAddons[i];
             if (typeof addon.ready == 'function') {
                 addon.ready();
             }
-        })
+        }
     }
 
     /**
@@ -246,9 +245,10 @@ class Blueberry {
      * @memberOf Blueberry
      */
     private static created() {
-        this._objects.forEach(element => {
+        for (let i = 0, l = this._objects.length; i < l; i++) {
+            let element = this._objects[i];
             element.sendMessage('created');
-        });
+        }
     }
 
     /**
@@ -260,9 +260,10 @@ class Blueberry {
      * @memberOf Blueberry
      */
     private static ready() {
-        this._objects.forEach(element => {
+        for (let i = 0, l = this._objects.length; i < l; i++) {
+            let element = this._objects[i];
             element.sendMessage('ready');
-        });
+        }
     }
 
     /**
@@ -313,9 +314,10 @@ class Blueberry {
      * @memberOf Blueberry
      */
     private static update() {
-        this._objects.forEach(element => {
+        for (let i = 0, l = this._objects.length; i < l; i++) {
+            let element = this._objects[i];
             element.sendMessage('update');
-        });
+        }
     }
 
     /**
@@ -327,21 +329,24 @@ class Blueberry {
      * @memberOf Blueberry
      */
     private static lateUpdate() {
-        this._objects.forEach(element => {
+        for (let i = 0, l = this._objects.length; i < l; i++) {
+            let element = this._objects[i];
             element.sendMessage('lateUpdate');
-        });
+        }
     }
 
     private static windowFocus() {
-        this._objects.forEach(element => {
+        for (let i = 0, l = this._objects.length; i < l; i++) {
+            let element = this._objects[i];
             element.sendMessage('windowFocus');
-        });
+        }
     }
 
     private static windowBlur() {
-        this._objects.forEach(element => {
+        for (let i = 0, l = this._objects.length; i < l; i++) {
+            let element = this._objects[i];
             element.sendMessage('windowBlur');
-        });
+        }
     }
 }
 

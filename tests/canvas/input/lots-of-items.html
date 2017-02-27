@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas Example</title>
+    <script src="/blueberryjs/blueberry.js"></script>
+    <script src="/blueberryjs/canvas.js"></script>
+    <script src="./components/AutoMove.js"></script>
+    <script src="./components/ItemCounter.js"></script>
+    <style>
+        body, html { padding: 0; margin: 0; }
+        * { box-sizing: border-box; }
+        div { height: 90vh }
+    </style>
+    <script>
+        Blueberry.on('ready', evt => {
+            let counter = new Canvas.CanvasObject;
+            counter.addComponent(ItemCounter);
+            setInterval(() => {
+                let go = new Canvas.CanvasObject;
+
+                // Init the sprite renderer
+                let spr = go.addComponent(Canvas.Renderer.Sprite);
+                spr.sprite = new Canvas.Sprite('./../skeleton.png');
+
+                // Init the Move Component
+                go.addComponent(AutoMove);
+                go.transform.position = new Vector2(-100, Math.random() * 800);
+            }, 10);
+        });
+    </script>
+</head>
+<body>
+    <h1>Use the arrows or wasd to move</h1>
+    <div>
+        <canvas></canvas>
+    </div>
+</body>
+</html>

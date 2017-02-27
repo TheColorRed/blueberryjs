@@ -13,7 +13,7 @@
     "files": [
         "./core/Prefab.ts",
         "./core/Behavior.ts",
-        "./core/GameObject.ts",
+        "./core/CanvasObject.ts",
         "./core/Sprite.ts",
         "./core/Stage.ts",
         "./core/inputs/Keyboard.ts",

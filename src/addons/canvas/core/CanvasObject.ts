@@ -1,5 +1,5 @@
 namespace Canvas {
-    export class GameObject extends Behavior {
+    export class CanvasObject extends Behavior {
 
         public constructor() {
             super();

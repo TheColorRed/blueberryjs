@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas Drag Example</title>
+    <script src="/blueberryjs/blueberry.js"></script>
+    <script src="/blueberryjs/canvas.js"></script>
+    <script src="./components/Drag.js"></script>
+    <style>
+        body, html { padding: 0; margin: 0; }
+        * { box-sizing: border-box; }
+        div { height: 90vh }
+    </style>
+    <script>
+        Blueberry.on('ready', evt => {
+            let co = new Canvas.CanvasObject;
+
+            // Init the sprite renderer
+            let spr = co.addComponent(Canvas.Renderer.Sprite);
+            spr.sprite = new Canvas.Sprite('./../skeleton.png');
+            co.tag = 'skeleton';
+
+            // Init the Drag Component
+            co.addComponent(Drag);
+        });
+    </script>
+</head>
+<body>
+    <h1>Click and drag on the canvas and the skeleton will follow</h1>
+    <div>
+        <canvas></canvas>
+    </div>
+</body>
+</html>

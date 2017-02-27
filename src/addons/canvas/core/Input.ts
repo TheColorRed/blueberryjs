@@ -94,9 +94,9 @@ namespace Canvas {
             while (i--) {
                 let mouse = this.mouse[i];
                 mouse.isDown = false;
-                // if (mouse.state == MouseState.Released || mouse.state == MouseState.Pressed) {
-                //     mouse.state = MouseState.None;
-                // }
+                if (mouse.state == MouseState.Released || mouse.state == MouseState.Pressed) {
+                    mouse.state = MouseState.None;
+                }
             }
         }
 

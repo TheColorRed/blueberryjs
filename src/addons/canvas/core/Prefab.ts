@@ -3,15 +3,15 @@ namespace Canvas {
 
         public components: PrefabComponent[] = [];
 
-        public static load(object: Prefab): GameObject {
-            let go = new GameObject;
+        public static load(object: Prefab): CanvasObject {
+            let go = new CanvasObject;
             for (let comp of object.components) {
                 go.addComponent(comp.component);
             }
             return go;
         }
 
-        public static save(object: GameObject): Prefab {
+        public static save(object: CanvasObject): Prefab {
             let prefab = new Prefab;
             for (let comp of object.components) {
                 let pfc = new PrefabComponent;

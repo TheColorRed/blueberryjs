@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas Example</title>
+    <script src="/blueberryjs/blueberry.js"></script>
+    <script src="/blueberryjs/canvas.js"></script>
+    <script src="./components/Move.js"></script>
+    <style>
+        body, html { padding: 0; margin: 0; }
+        * { box-sizing: border-box; }
+        div { height: 90vh }
+    </style>
+    <script>
+        Blueberry.on('ready', evt => {
+            let go = new Canvas.GameObject;
+
+            // Init the sprite renderer
+            let spr = go.addComponent(Canvas.Renderer.Sprite);
+            spr.sprite = new Canvas.Sprite('./../skeleton.png');
+
+            // Init the Move Component
+            go.addComponent(Move);
+        });
+    </script>
+</head>
+<body>
+    <h1>Use the arrows or wasd to move</h1>
+    <div>
+        <canvas></canvas>
+    </div>
+</body>
+</html>

@@ -2,25 +2,46 @@ namespace Canvas {
 
     export enum Space { Self, World };
 
-    export function findObjectOfType<T extends Component>(type: ComponentType<T>): GameObject | null {
+    export function findObjectOfType<T extends Component>(type: ComponentType<T>): CanvasObject | null {
         for (let i = 0, l = Blueberry.objects.length; i < l; i++) {
             let object = Blueberry.objects[i];
-            if (object instanceof GameObject && object.getComponent(type)) {
+            if (object instanceof CanvasObject && object.getComponent(type)) {
                 return object;
             }
         }
         return null;
     }
 
-    export function findObjectsOfType<T extends Component>(type: ComponentType<T>): GameObject[] {
-        let gos: GameObject[] = [];
+    export function findObjectsOfType<T extends Component>(type: ComponentType<T>): CanvasObject[] {
+        let gos: CanvasObject[] = [];
         for (let i = 0, l = Blueberry.objects.length; i < l; i++) {
             let object = Blueberry.objects[i];
-            if (object instanceof GameObject && object.getComponent(type)) {
+            if (object instanceof CanvasObject && object.getComponent(type)) {
                 gos.push(object);
             }
         }
         return gos;
+    }
+
+    export function findByTag(tag: string): CanvasObject | null {
+        for (let i = 0, l = Blueberry.objects.length; i < l; i++) {
+            let object = Blueberry.objects[i];
+            if (object instanceof CanvasObject && object.tag == tag) {
+                return object;
+            }
+        }
+        return null;
+    }
+
+    export function findObjectsByTag(tag: string): CanvasObject[] {
+        let gameObjects: CanvasObject[] = [];
+        for (let i = 0, l = Blueberry.objects.length; i < l; i++) {
+            let object = Blueberry.objects[i];
+            if (object instanceof CanvasObject && object.tag == tag) {
+                gameObjects.push(object);
+            }
+        }
+        return gameObjects;
     }
 
     export function destroy() {

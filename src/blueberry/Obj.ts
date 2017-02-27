@@ -144,7 +144,8 @@ class Obj {
      * @memberOf DomElement
      */
     public sendMessage(message: string, ...options: any[]) {
-        this._components.forEach(comp => {
+        for (let i = 0, l = this._components.length; i < l; i++) {
+            let comp = this._components[i];
             if (message == 'created') {
                 if (comp['_started']) { return; }
                 comp['_started'] = true;
@@ -173,7 +174,7 @@ class Obj {
                     this.element.parentNode.removeChild(this.element);
                 }
             }
-        });
+        }
     }
 
 }

@@ -1,13 +1,16 @@
 namespace Canvas {
     export abstract class Behavior extends Component {
 
+        public name: string = 'GameObject';
+        public tag: string = '';
+
         protected _transform: Transform;
 
         public get transform(): Transform {
             return this.object['_transform'];
         }
 
-        public get gameObject(): GameObject {
+        public get gameObject(): CanvasObject {
             return this.object;
         }
 
