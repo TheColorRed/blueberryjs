@@ -11,19 +11,17 @@ block content
         }
     script.
         Blueberry.register(
-            class Attributes extends Component {
-                created() {
+            class Attributes extends Behavior {
+                ready() {
                     if (this.attrs.initFg && this.attrs.initBg) {
-                        let example = Blueberry.find('#example');
+                        let example = Dom.find('#example');
                         example.style.set('color', this.attrs.initFg);
                         example.style.set('background-color', this.attrs.initBg);
                     }
                 }
                 click() {
-                    let example = Blueberry.find('#example');
+                    let example = Dom.find('#example');
                     switch (this.attrs.action) {
-                        case 'init-fg': ; break;
-                        case 'init-bg': example.style.set('color', this.attrs.color); break;
                         case 'fg': example.style.set('color', this.attrs.color); break;
                         case 'bg': example.style.set('background-color', this.attrs.color); break;
                     }
@@ -34,18 +32,30 @@ block content
         .col.s12
             .flow-text.card-panel#example(component='Attributes' init-bg='deeppink' init-fg='white') This is some test text
     .row
+        h4.col.s12 Text
         .col.m3.s12
-            button.btn.waves-effect(component='Attributes' action='fg' color='white') White Text
+            button.btn.waves-effect(component='Attributes' action='fg' color='white') White
         .col.m3.s12
-            button.btn.waves-effect(component='Attributes' action='fg' color='black') Black Text
+            button.btn.waves-effect(component='Attributes' action='fg' color='black') Black
         .col.m3.s12
-            button.btn.waves-effect(component='Attributes' action='bg' color='deeppink') Pink Background
+            button.btn.waves-effect(component='Attributes' action='fg' color='blue') Blue
         .col.m3.s12
-            button.btn.waves-effect(component='Attributes' action='bg' color='teal') Teal Background
+            button.btn.waves-effect(component='Attributes' action='fg' color='yellow') Yellow
+    .row
+        h4.col.s12 Background
+        .col.m3.s12
+            button.btn.waves-effect(component='Attributes' action='bg' color='deeppink') Pink
+        .col.m3.s12
+            button.btn.waves-effect(component='Attributes' action='bg' color='teal') Teal
+        .col.m3.s12
+            button.btn.waves-effect(component='Attributes' action='bg' color='darkorange') Orange
+        .col.m3.s12
+            button.btn.waves-effect(component='Attributes' action='bg' color='darkred') Red
     h2.header The Source Code
     h4 attributes.js
     pre: code.language-js.
-            class Attributes extends Component {
+        Blueberry.register(
+            class Attributes extends Behavior {
                 created() {
                     if (this.attrs.initFg && this.attrs.initBg) {
                         let example = Blueberry.find('#example');
@@ -74,23 +84,37 @@ block content
         ='<body>\n'
         ='    <div class="row">\n'
         ='        <div class="col s12">\n'
-        ='            <div id="example" component="Attributes" init-bg="deeppink" init-fg="white" class="flow-text card-panel">\n'
-        ='                This is some test text\n'
-        ='            </div>\n'
+        ='            <div id="example" component="Attributes" init-bg="deeppink" init-fg="white" class="flow-text card-panel">This is some test text</div>\n'
         ='        </div>\n'
         ='    </div>\n'
         ='    <div class="row">\n'
-        ='        <div class="col s3">\n'
-        ='            <button component="ComponentSwitcher" action="fg" color="white" class="btn waves-effect">White Text</button>\n'
+        ='        <h4 class="col s12">Text</h4>\n'
+        ='        <div class="col m3 s12">\n'
+        ='            <button component="Attributes" action="fg" color="white" class="btn waves-effect">White</button>\n'
         ='        </div>\n'
-        ='        <div class="col s3">\n'
-        ='            <button component="ComponentSwitcher" action="fg" color="black" class="btn waves-effect">Black Text</button>\n'
+        ='        <div class="col m3 s12">\n'
+        ='            <button component="Attributes" action="fg" color="black" class="btn waves-effect">Black</button>\n'
         ='        </div>\n'
-        ='        <div class="col s3">\n'
-        ='            <button component="ComponentSwitcher" action="bg" color="deeppink" class="btn waves-effect">Pink Background</button>\n'
+        ='        <div class="col m3 s12">\n'
+        ='            <button component="Attributes" action="fg" color="blue" class="btn waves-effect">Blue</button>\n'
         ='        </div>\n'
-        ='        <div class="col s3">\n'
-        ='            <button component="ComponentSwitcher" action="bg" color="teal" class="btn waves-effect">Teal Background</button>\n'
+        ='        <div class="col m3 s12">\n'
+        ='            <button component="Attributes" action="fg" color="yellow" class="btn waves-effect">Yellow</button>\n'
+        ='        </div>\n'
+        ='        </div>\n'
+        ='        <div class="row">\n'
+        ='        <h4 class="col s12">Background</h4>\n'
+        ='        <div class="col m3 s12">\n'
+        ='            <button component="Attributes" action="bg" color="deeppink" class="btn waves-effect">Pink</button>\n'
+        ='        </div>\n'
+        ='        <div class="col m3 s12">\n'
+        ='            <button component="Attributes" action="bg" color="teal" class="btn waves-effect">Teal</button>\n'
+        ='        </div>\n'
+        ='        <div class="col m3 s12">\n'
+        ='            <button component="Attributes" action="bg" color="darkorange" class="btn waves-effect">Orange</button>\n'
+        ='        </div>\n'
+        ='        <div class="col m3 s12">\n'
+        ='            <button component="Attributes" action="bg" color="darkred" class="btn waves-effect">Red</button>\n'
         ='        </div>\n'
         ='    </div>\n'
         ='</body>'

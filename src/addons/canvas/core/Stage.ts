@@ -12,7 +12,7 @@ namespace Canvas {
 
         private static _onscreenCanvas: CanvasStageObject = { canvas: null, context: null };
         private static _offscreenCanvas: CanvasStageObject = { canvas: null, context: null };
-        private static _offscreenCanvases: CanvasStageObject[] = [];// = { canvas: null, context: null };
+        private static _offscreenCanvases: CanvasStageObject = { canvas: null, context: null };
         private static _parent: HTMLElement;
 
         public static get width(): number {
@@ -44,21 +44,6 @@ namespace Canvas {
                 this._onscreenCanvas.canvas.width = this._parent.offsetWidth;
                 this._onscreenCanvas.canvas.height = this._parent.offsetHeight;
 
-                // Prepare the offscreen canvas
-                // for (let i = 0; i < 8; i++) {
-                //     let c = document.createElement('canvas');
-                //     c.width = Stage.width;
-                //     c.height = Stage.height;
-                //     let canvas: CanvasStageObject = {
-                //         canvas: c,
-                //         context: c.getContext('2d'),
-                //         width: Stage.width / 8,
-                //         height: Stage.height,
-                //         x: (Stage.width / 8) * i,
-                //         y: 0
-                //     };
-                //     this._offscreenCanvases.push(canvas);
-                // }
                 this._offscreenCanvas.canvas = document.createElement('canvas');
                 this._offscreenCanvas.canvas.width = this._onscreenCanvas.canvas.width;
                 this._offscreenCanvas.canvas.height = this._onscreenCanvas.canvas.height;
@@ -68,13 +53,13 @@ namespace Canvas {
             return false;
         }
 
-        private static clearCanvases() {
-            this._offscreenCanvases.forEach(canvas => {
-                if (canvas.context && canvas.width && canvas.height) {
-                    canvas.context.clearRect(0, 0, canvas.width, canvas.height);
-                }
-            });
-        }
+        // private static clearCanvases() {
+        //     this._offscreenCanvases.forEach(canvas => {
+        //         if (canvas.context && canvas.width && canvas.height) {
+        //             canvas.context.clearRect(0, 0, canvas.width, canvas.height);
+        //         }
+        //     });
+        // }
 
         public static render() {
             // if (
@@ -175,19 +160,19 @@ namespace Canvas {
             }
         }
 
-        private static getCanvases(itemX: number, itemW: number): CanvasStageObject[] {
-            let canvases: CanvasStageObject[] = [];
-            let itemR = itemX + itemW;
-            this._offscreenCanvases.forEach(canvas => {
-                if (
-                    (itemX > canvas.x && itemX < canvas.x + canvas.width) ||
-                    (itemR > canvas.x && itemR < canvas.x + canvas.width)
-                ) {
-                    canvases.push(canvas);
-                }
-            });
-            return canvases;
-        }
+        // private static getCanvases(itemX: number, itemW: number): CanvasStageObject[] {
+        //     let canvases: CanvasStageObject[] = [];
+        //     let itemR = itemX + itemW;
+        //     this._offscreenCanvases.forEach(canvas => {
+        //         if (
+        //             (itemX > canvas.x && itemX < canvas.x + canvas.width) ||
+        //             (itemR > canvas.x && itemR < canvas.x + canvas.width)
+        //         ) {
+        //             canvases.push(canvas);
+        //         }
+        //     });
+        //     return canvases;
+        // }
 
     }
 }

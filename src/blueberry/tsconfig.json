@@ -27,7 +27,6 @@
         "./utility/list/ObjList.ts",
         "./utility/list/ComponentList.ts",
         "./utility/list/AjaxResponseList.ts",
-        "./utility/list/DOMObjectList.ts",
         "./utility/handlers/KeyboardHandler.ts",
         "./utility/handlers/MouseHandler.ts",
         "./utility/color/ColorBlend.ts",

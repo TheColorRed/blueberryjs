@@ -72,7 +72,7 @@ class Blueberry {
             this.initServices();
             // this.initElementsWithComponent();
             // this.initComponentInteravls();
-            this.initHandlers();
+            // this.initHandlers();
             this.addonReady();
             for (let i = 0, l = this._registeredEvents.length; i < l; i++) {
                 let evt = this._registeredEvents[i];
@@ -84,18 +84,18 @@ class Blueberry {
         }
     }
 
-    private static initHandlers() {
-        this.initMouse();
-        this.initKeyboard();
-    }
+    // private static initHandlers() {
+    //     this.initMouse();
+    //     this.initKeyboard();
+    // }
 
-    private static initMouse() {
-        MouseHandler.clickHandlers();
-    }
+    // private static initMouse() {
+    //     MouseHandler.clickHandlers();
+    // }
 
-    private static initKeyboard() {
-        KeyboardHandler.inputHandler();
-    }
+    // private static initKeyboard() {
+    //     KeyboardHandler.inputHandler();
+    // }
 
     /**
      * Adds an element to the the list of DomElements

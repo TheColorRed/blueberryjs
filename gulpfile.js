@@ -14,7 +14,7 @@ const paths = {
     blueberrywatch: ['src/blueberry/**/*.ts', 'src/blueberry/tsconfig.json'],
     componentwatch: ['src/components/**/*.ts', 'src/components/tsconfig.json'],
     docwatch: ['docs/**/*.pug'],
-    docwatch: ['src/addons/dom/**/*.ts', 'src/addons/dom/tsconfig.json'],
+    domwatch: ['src/addons/dom/**/*.ts', 'src/addons/dom/tsconfig.json'],
     canvaswatch: ['src/addons/canvas/**/*.ts', 'src/addons/canvas/tsconfig.json']
 };
 
