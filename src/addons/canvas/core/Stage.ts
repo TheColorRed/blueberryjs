@@ -11,7 +11,8 @@ namespace Canvas {
         private constructor() { }
 
         private static _onscreenCanvas: CanvasStageObject = { canvas: null, context: null };
-        private static _offscreenCanvas: CanvasStageObject[] = [];// = { canvas: null, context: null };
+        private static _offscreenCanvas: CanvasStageObject = { canvas: null, context: null };
+        private static _offscreenCanvases: CanvasStageObject[] = [];// = { canvas: null, context: null };
         private static _parent: HTMLElement;
 
         public static get width(): number {
@@ -44,30 +45,55 @@ namespace Canvas {
                 this._onscreenCanvas.canvas.height = this._parent.offsetHeight;
 
                 // Prepare the offscreen canvas
-                for (let i = 0; i < 8; i++) {
-                    let c = document.createElement('canvas');
-                    c.width = Stage.width;
-                    c.height = Stage.height;
-                    let cx = c.getContext('2d');
-                    let canvas: CanvasStageObject = {
-                        canvas: c, context: cx,
-                        width: Stage.width / 8,
-                        height: Stage.height,
-                        x: (Stage.width / 8) * i,
-                        y: 0
-                    };
-                    this._offscreenCanvas.push(canvas);
-                    // this._offscreenCanvas.canvas = document.createElement('canvas');
-                    // this._offscreenCanvas.canvas.width = this._onscreenCanvas.canvas.width;
-                    // this._offscreenCanvas.canvas.height = this._onscreenCanvas.canvas.height;
-                    // this._offscreenCanvas.context = this._offscreenCanvas.canvas.getContext('2d');
-                }
+                // for (let i = 0; i < 8; i++) {
+                //     let c = document.createElement('canvas');
+                //     c.width = Stage.width;
+                //     c.height = Stage.height;
+                //     let canvas: CanvasStageObject = {
+                //         canvas: c,
+                //         context: c.getContext('2d'),
+                //         width: Stage.width / 8,
+                //         height: Stage.height,
+                //         x: (Stage.width / 8) * i,
+                //         y: 0
+                //     };
+                //     this._offscreenCanvases.push(canvas);
+                // }
+                this._offscreenCanvas.canvas = document.createElement('canvas');
+                this._offscreenCanvas.canvas.width = this._onscreenCanvas.canvas.width;
+                this._offscreenCanvas.canvas.height = this._onscreenCanvas.canvas.height;
+                this._offscreenCanvas.context = this._offscreenCanvas.canvas.getContext('2d');
                 return true;
             }
             return false;
         }
 
+        private static clearCanvases() {
+            this._offscreenCanvases.forEach(canvas => {
+                if (canvas.context && canvas.width && canvas.height) {
+                    canvas.context.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            });
+        }
+
         public static render() {
+            // if (
+            //     this._onscreenCanvas.context &&
+            //     this._onscreenCanvas.canvas &&
+            //     this._offscreenCanvases.length > 0
+            // ) {
+            //     this.clearCanvases();
+            //     for (let i = 0, l = Blueberry.objects.length; i < l; i++) {
+            //         let object = Blueberry.objects[i];
+            //         if (object instanceof CanvasObject) {
+            //             if (!object.getComponent(Renderer.UI)) {
+            //                 let spr = object.getComponent(Renderer.Sprite);
+            //                 if (spr) {
+            //                     this.drawSprite(spr);
+            //                 }
+            //             }
+            //         }
+            //     }
             if (
                 this._offscreenCanvas.context instanceof CanvasRenderingContext2D &&
                 this._onscreenCanvas.context instanceof CanvasRenderingContext2D &&
@@ -106,6 +132,12 @@ namespace Canvas {
                         }
                     }
                 }
+                // this._onscreenCanvas.context.clearRect(0, 0, Stage.width, Stage.height);
+                // this._offscreenCanvases.forEach(canvas => {
+                //     if (canvas.canvas && this._onscreenCanvas.context && canvas.x) {
+                //         this._onscreenCanvas.context.drawImage(canvas.canvas, canvas.x, 0);
+                //     }
+                // });
                 this._onscreenCanvas.context.clearRect(0, 0, this._onscreenCanvas.canvas.width, this._onscreenCanvas.canvas.height)
                 this._onscreenCanvas.context.drawImage(
                     this._offscreenCanvas.canvas, 0, 0,
@@ -115,6 +147,16 @@ namespace Canvas {
         }
 
         private static drawSprite(spr: Renderer.Sprite) {
+            // let x = (spr.transform.position.x) << 0;
+            // let y = (spr.transform.position.y) << 0;
+            // let width = spr.sprite.width;
+            // let height = spr.sprite.height;
+            // let canvases = this.getCanvases(x, width);
+            // canvases.forEach(canvas => {
+            //     if (canvas.context && canvas.x) {
+            //         canvas.context.drawImage(spr.sprite.image, canvas.x - x, y);
+            //     }
+            // });
             if (this._offscreenCanvas.context instanceof CanvasRenderingContext2D && spr.isVisible) {
                 this._offscreenCanvas.context.drawImage(
                     spr.sprite.image,
@@ -131,6 +173,20 @@ namespace Canvas {
                 this._offscreenCanvas.context.fillStyle = '#' + text.font.color.hex();
                 this._offscreenCanvas.context.fillText(text.text, (text.transform.position.x) << 0, (text.transform.position.y) << 0);
             }
+        }
+
+        private static getCanvases(itemX: number, itemW: number): CanvasStageObject[] {
+            let canvases: CanvasStageObject[] = [];
+            let itemR = itemX + itemW;
+            this._offscreenCanvases.forEach(canvas => {
+                if (
+                    (itemX > canvas.x && itemX < canvas.x + canvas.width) ||
+                    (itemR > canvas.x && itemR < canvas.x + canvas.width)
+                ) {
+                    canvases.push(canvas);
+                }
+            });
+            return canvases;
         }
 
     }
