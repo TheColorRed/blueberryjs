@@ -125,12 +125,14 @@ class Obj {
         this._components.forEach(comp => {
             if (typeof comp['interval'] == 'function') {
                 let delay = comp['interval']();
-                this._intervals[(<any>comp).constructor.name] = setInterval(() => {
-                    let itmdelay = comp['interval']();
-                    if (!itmdelay) {
-                        clearInterval(this._intervals[(<any>comp).constructor.name]);
-                    }
-                }, delay);
+                if (delay > 0) {
+                    this._intervals[(<any>comp).constructor.name] = setInterval(() => {
+                        let itmdelay = comp['interval']();
+                        if (!itmdelay) {
+                            clearInterval(this._intervals[(<any>comp).constructor.name]);
+                        }
+                    }, delay);
+                }
             }
         });
     }

@@ -11,7 +11,7 @@ namespace Canvas {
         private constructor() { }
 
         private static _onscreenCanvas: CanvasStageObject = { canvas: null, context: null };
-        private static _offscreenCanvas: CanvasStageObject[] = [];// = { canvas: null, context: null };
+        private static _offscreenCanvas: CanvasStageObject = { canvas: null, context: null };
         private static _parent: HTMLElement;
 
         public static get width(): number {
@@ -44,24 +44,24 @@ namespace Canvas {
                 this._onscreenCanvas.canvas.height = this._parent.offsetHeight;
 
                 // Prepare the offscreen canvas
-                for (let i = 0; i < 8; i++) {
-                    let c = document.createElement('canvas');
-                    c.width = Stage.width;
-                    c.height = Stage.height;
-                    let cx = c.getContext('2d');
-                    let canvas: CanvasStageObject = {
-                        canvas: c, context: cx,
-                        width: Stage.width / 8,
-                        height: Stage.height,
-                        x: (Stage.width / 8) * i,
-                        y: 0
-                    };
-                    this._offscreenCanvas.push(canvas);
-                    // this._offscreenCanvas.canvas = document.createElement('canvas');
-                    // this._offscreenCanvas.canvas.width = this._onscreenCanvas.canvas.width;
-                    // this._offscreenCanvas.canvas.height = this._onscreenCanvas.canvas.height;
-                    // this._offscreenCanvas.context = this._offscreenCanvas.canvas.getContext('2d');
-                }
+                // for (let i = 0; i < 8; i++) {
+                //     let c = document.createElement('canvas');
+                //     c.width = Stage.width;
+                //     c.height = Stage.height;
+                //     let cx = c.getContext('2d');
+                //     let canvas: CanvasStageObject = {
+                //         canvas: c, context: cx,
+                //         width: Stage.width / 8,
+                //         height: Stage.height,
+                //         x: (Stage.width / 8) * i,
+                //         y: 0
+                //     };
+                // this._offscreenCanvas.push(canvas);
+                this._offscreenCanvas.canvas = document.createElement('canvas');
+                this._offscreenCanvas.canvas.width = this._onscreenCanvas.canvas.width;
+                this._offscreenCanvas.canvas.height = this._onscreenCanvas.canvas.height;
+                this._offscreenCanvas.context = this._offscreenCanvas.canvas.getContext('2d');
+                // }
                 return true;
             }
             return false;

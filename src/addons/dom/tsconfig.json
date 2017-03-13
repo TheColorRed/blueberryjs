@@ -11,11 +11,14 @@
         "../../../dist/typings/blueberry.d.ts"
     ],
     "files": [
-        "./DOMObject.ts",
-        "./DOMObjectList.ts",
-        "./Dom.ts",
-        "./Class.ts",
-        "./Style.ts",
+        "./core/DOMObject.ts",
+        "./core/DOMObjectList.ts",
+        "./core/Dom.ts",
+        "./core/Class.ts",
+        "./core/Style.ts",
+        "./core/Behavior.ts",
+        "./handlers/MouseHandler.ts",
+        "./handlers/KeyboardHandler.ts",
         "./init.ts"
     ]
 }

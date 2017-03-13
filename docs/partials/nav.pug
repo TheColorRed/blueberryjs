@@ -13,6 +13,9 @@ mixin collapsible(text, root)
                             a.button-collapse(href='#', data-activates='main-menu')
                                 i.material-icons menu
 ul.side-nav.fixed#main-menu
+    li.logo
+        a(href='/' class='brand-logo' style='height: 150px;')
+            img(src='/assets/images/blueberry.svg' width='150' style='margin-left:30px;margin-top: -60px;')
     li
         ul
             +listItem('Getting Started', 'getting-started')

@@ -13,10 +13,10 @@ block content
         Blueberry.register(
             class ComponentSwitcher extends Component {
                 click() {
-                    let example = Blueberry.find('#example');
-                    switch(this.attrs.action){
+                    let example = DOMObject.find('#example');
+                    switch(this.attrs.action) {
                         case 'pink-bg':  example.removeComponent(Tealbg).addComponent(Pinkbg);break;
-                        case 'teal-bg':   example.removeComponent(Pinkbg).addComponent(Tealbg);break;
+                        case 'teal-bg':  example.removeComponent(Pinkbg).addComponent(Tealbg);break;
                         case 'white-fg': example.removeComponent(Blackfg).addComponent(Whitefg);break;
                         case 'black-fg': example.removeComponent(Whitefg).addComponent(Blackfg);break;
                     }
@@ -57,7 +57,7 @@ block content
         Blueberry.register(
             class ComponentSwitcher extends Component {
                 click() {
-                    let example = Blueberry.find('#example');
+                    let example = DOMObject.find('#example');
                     switch(this.attrs.action){
                         case 'pink-bg':  example.removeComponent(Tealbg).addComponent(Pinkbg);   break;
                         case 'teal-bg':  example.removeComponent(Pinkbg).addComponent(Tealbg);   break;
