@@ -40,19 +40,19 @@ const pugFiles = [
 ];
 
 gulp.task('blueberry', () => {
-    makeProject(projects.blueberry);
+    return makeProject(projects.blueberry);
 });
 
 gulp.task('components', () => {
-    makeProject(projects.components);
+    return makeProject(projects.components);
 });
 
 gulp.task('dom', () => {
-    makeProject(projects.dom);
+    return makeProject(projects.dom);
 });
 
 gulp.task('canvas', () => {
-    makeProject(projects.canvas);
+    return makeProject(projects.canvas);
 });
 
 gulp.task('docs', () => {
