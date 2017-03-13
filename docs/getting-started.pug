@@ -2,4 +2,17 @@ extends partials/head.pug
 block title
     title Getting Started
 block content
-    h1 Hello!
+    h2.thin Getting Started
+    p To get started you need to add the following JavaScript code to every page that will be using the blueberry framework.
+    pre: code.language-markup
+        ='<script src="http://cdn.blueberryjs.com/blueberry.js"></script>'
+    h2.thin Addons
+    p You should choose at least one addon, as the framework alone is pretty much useless by itself. Each addon adds additional functionality based on what you need.
+    h4 Dom
+    p The Dom addon allows you to interact with the dom by adding, removing and modifying elements.
+    pre: code.language-markup
+        ='<script src="http://cdn.blueberryjs.com/dom.js"></script>'
+    h4 Canvas
+    p The Canvas addon allows you to interact with a canvas to make graphs, games, or what ever you need to do with a canvas.
+    pre: code.language-markup
+        ='<script src="http://cdn.blueberryjs.com/canvas.js"></script>'

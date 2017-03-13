@@ -94,13 +94,13 @@ function makeProject(projectPath) {
     let baseName = path.parse(projectConfig.compilerOptions.outFile).base;
     if (projectConfig.compilerOptions.target != 'es6') {
         return tsResult.js.pipe(uglify({ mangle: false })).pipe(gulp.dest('./')).on('finish', function () {
-            fs.createReadStream(`./dist/${baseName}`).pipe(fs.createWriteStream(`./public/assets/js/${baseName}`));
+            fs.createReadStream(`./dist/${baseName}`).pipe(fs.createWriteStream(`./public/assets/js/cdn/${baseName}`));
         });
     }
     // Compile es6 project
     else {
         return tsResult.js.pipe(gulp.dest('./')).on('finish', function () {
-            fs.createReadStream(`./dist/${baseName}`).pipe(fs.createWriteStream(`./public/assets/js/${baseName}`));
+            fs.createReadStream(`./dist/${baseName}`).pipe(fs.createWriteStream(`./public/assets/js/cdn/${baseName}`));
         });
     }
 }

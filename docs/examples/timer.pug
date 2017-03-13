@@ -9,16 +9,13 @@ block content
         Blueberry.register(
             class Timer extends Component {
                 observe() {
-                    return { elapsed: 0 };
-                }
-                created() {
-                    this.started = new Date();
+                    return { elapsed: 0, started: new Date() };
                 }
                 update() {
                     this.set({ elapsed: this.time });
                 }
                 get time() {
-                    return ((new Date().getTime() - this.started.getTime()) / 1000).toFixed(1);
+                    return ((new Date().getTime() - this.get('started').getTime()) / 1000).toFixed(1);
                 }
             }
         );
@@ -29,16 +26,13 @@ block content
         Blueberry.register(
             class Timer extends Component {
                 observe() {
-                    return { elapsed: 0 };
-                }
-                created() {
-                    this.started = new Date();
+                    return { elapsed: 0, started: new Date() };
                 }
                 update() {
                     this.set({ elapsed: this.time });
                 }
                 get time() {
-                    return ((new Date().getTime() - this.started.getTime()) / 1000).toFixed(1);
+                    return ((new Date().getTime() - this.get('started').getTime()) / 1000).toFixed(1);
                 }
             }
         );

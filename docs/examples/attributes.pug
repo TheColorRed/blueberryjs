@@ -66,8 +66,6 @@ block content
                 click() {
                     let example = Blueberry.find('#example');
                     switch (this.dom.attrs.action) {
-                        case 'init-fg': ; break;
-                        case 'init-bg': example.style.set('color', this.dom.attrs.color); break;
                         case 'fg': example.style.set('color', this.dom.attrs.color); break;
                         case 'bg': example.style.set('background-color', this.dom.attrs.color); break;
                     }
