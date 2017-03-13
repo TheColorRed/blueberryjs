@@ -24,6 +24,22 @@ class Dom {
     }
 
     /**
+     * Gets all attributes attached to the HTMLElement
+     *
+     * @readonly
+     * @type {Object}
+     * @memberOf BlueberryObject
+     */
+    public get attrs(): Object {
+        let attrs = {};
+        for (let i = 0, l = this.element.attributes.length; i < l; i++) {
+            let name = this.element.attributes[i].name.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+            attrs[name] = this.element.attributes[i].value;
+        }
+        return attrs;
+    }
+
+    /**
      * Sets the text value for an HTMLElement
      *
      * @param {string} text

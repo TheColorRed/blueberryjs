@@ -10,7 +10,7 @@ block index
         h1,h4.row { margin-bottom: 40px; }
     script.
         bb.register(
-            class GitHub extends Component {
+            class GitHub extends Behavior {
                 observe() {
                     return {
                         hash: '',
@@ -22,41 +22,19 @@ block index
                         let r = response.data[0];
                         this.set({
                             hash: r.sha,
-                            ago: this.timeSince(new Date(r.commit.author.date))
+                            ago: Time.timeSince(new Date(r.commit.author.date))
                         });
-                        this.findChild('.commit').element.href = r.html_url;
-                        console.log(r);
+                        this.object.findChild('.commit').dom.attr('href', r.html_url);
                     });
-                }
-                timeSince(date) {
-                    var seconds = Math.floor((new Date() - date) / 1000);
-                    var interval = Math.floor(seconds / 31536000);
-                    if (interval > 1) {
-                        return interval + " years";
-                    }
-                    interval = Math.floor(seconds / 2592000);
-                    if (interval > 1) {
-                        return interval + " months";
-                    }
-                    interval = Math.floor(seconds / 86400);
-                    if (interval > 1) {
-                        return interval + " days";
-                    }
-                    interval = Math.floor(seconds / 3600);
-                    if (interval > 1) {
-                        return interval + " hours";
-                    }
-                    interval = Math.floor(seconds / 60);
-                    if (interval > 1) {
-                        return interval + " minutes";
-                    }
-                    return Math.floor(seconds) + " seconds";
                 }
             }
         );
     .section.blue.white-text.no-pad-bot
         .container
-            h1.thin Blueberry
+            h1.thin
+                a.button-collapse(href='#' data-activates='main-menu')
+                    i.material-icons menu
+                span Blueberry
             .center
                 h4.row.light.white-text A modern JavaScript framework without boundaries
                 .row: a(href='/getting-started.html').btn-large.blue.lighten-2.waves-effect.waves-light Get Started

@@ -16,7 +16,7 @@ block content
                     };
                 }
                 click(target) {
-                    let url = target.attrs.href || null;
+                    let url = target.dom.attrs.href || null;
                     if (url && url.length > 0) {
                         Ajax.request({url: url, data:{one:'one',two:'two'}}).success(response => {
                             this.set({
@@ -29,14 +29,14 @@ block content
                 }
             }
         );
-    .row.valign-wrapper(component='GetJsonFile')
-        .col.s6
+    .row(component='GetJsonFile')
+        .col.s12.m6
             .row
                 .col.s6
                     a.blue.waves-effect.btn-large(href='/assets/examples/ajax.json') Click Me!
                 .col.s6
                     a.blue.waves-effect.btn-large(href='/assets/examples/ajax2.json') Or Click Me!
-        .col.s6
+        .col.s12.m6
             h4(observe='title')
             p(observe='descr')
     h2.header The Source Code

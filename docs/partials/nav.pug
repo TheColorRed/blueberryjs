@@ -22,7 +22,7 @@ ul.side-nav.fixed#main-menu
         ul.collapsible.collapsible-accordion
             li
                 //- JavaScript Api
-                +collapsible('JavaScript Api', 'api/js')
+                +collapsible('Core Api', 'api/js')
                 .collapsible-body
                     ul
                         +listItem('Blueberry', 'api/js/blueberry')
@@ -32,10 +32,15 @@ ul.side-nav.fixed#main-menu
                         +listItem('Services', 'api/js/service')
             li
                 //- HTML API
-                +collapsible('HTML Api', 'api/html')
+                +collapsible('Dom Api', 'api/dom')
                 .collapsible-body
                     ul
-                        +listItem('Components', 'api/html/component')
+                        +listItem('Components', 'api/dom/component')
+            li
+                +collapsible('Canvas Api', 'api/canvas')
+                .collapsible-body
+                    ul
+                        +listItem('Components', 'api/canvas/component')
             li
                 //- Examples
                 +collapsible('Examples', 'examples')

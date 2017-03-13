@@ -1,13 +1,16 @@
+interface AjaxResponseObject {
+    headers: AjaxHeader[]
+}
 class AjaxResponseList extends List<AjaxResponse> {
 
-    public allData(key?: string): Object[] {
+    public get(index: number): AjaxResponse {
+        return this.list[index];
+    }
+
+    public get responses(): Object[] {
         let data: Object[] = [];
         this.each(item => {
-            if (key) {
-                item = Blueberry.query(key, item.data);
-            } else {
-                item = <any>item.data;
-            }
+            item = <any>item.data;
             if (Array.isArray(item)) {
                 item.forEach(itm => data.push(itm));
             } else {
@@ -17,14 +20,29 @@ class AjaxResponseList extends List<AjaxResponse> {
         return data;
     }
 
-    public get allHeaders(): AjaxHeader[] {
-        let headers: AjaxHeader[] = [];
+    public findInEach(key: string): Object[] {
+        let data: Object[] = [];
         this.each(item => {
-            if (Array.isArray(item.headers)) {
-                item.headers.forEach(itm => headers.push(itm));
-            } else {
-                headers.concat(item.headers);
-            }
+            data.push(Blueberry.query(key, item.data));
+        });
+        return data;
+    }
+
+    public getResponseHeaders(index: number): AjaxHeader[] | null {
+        let resp = this.list[index];
+        if (!resp) { return null; }
+        return resp.headers;
+    }
+
+    public get headers(): Object[] {
+        let headers: Object[] = [];
+        this.each(item => {
+            headers.push(item.headers);
+            // if (Array.isArray(item.headers)) {
+            //     item.headers.forEach(itm => headers.push(itm));
+            // } else {
+            //     headers.concat(item.headers);
+            // }
         });
         return headers;
     }

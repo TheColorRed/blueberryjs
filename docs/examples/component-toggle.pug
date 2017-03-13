@@ -11,31 +11,31 @@ block content
         }
     script.
         Blueberry.register(
-            class ComponentSwitcher extends Component {
+            class ComponentSwitcher extends Behavior {
                 click() {
-                    let example = DOMObject.find('#example');
-                    switch(this.attrs.action) {
-                        case 'pink-bg':  example.removeComponent(Tealbg).addComponent(Pinkbg);break;
-                        case 'teal-bg':  example.removeComponent(Pinkbg).addComponent(Tealbg);break;
-                        case 'white-fg': example.removeComponent(Blackfg).addComponent(Whitefg);break;
-                        case 'black-fg': example.removeComponent(Whitefg).addComponent(Blackfg);break;
+                    let example = Dom.find('#example');
+                    switch(this.dom.attrs.action) {
+                        case 'pink-bg':  example.removeComponent(Tealbg).addComponent(Pinkbg);   break;
+                        case 'teal-bg':  example.removeComponent(Pinkbg).addComponent(Tealbg);   break;
+                        case 'white-fg': example.removeComponent(Blackfg).addComponent(Whitefg); break;
+                        case 'black-fg': example.removeComponent(Whitefg).addComponent(Blackfg); break;
                     }
                 }
             }
         ).register(
-            class Pinkbg extends Component {
+            class Pinkbg extends Behavior {
                 created() { this.style.set('background-color', 'deeppink'); }
             }
         ).register(
-            class Tealbg extends Component {
+            class Tealbg extends Behavior {
                 created() { this.style.set('background-color', 'teal'); }
             }
         ).register(
-            class Whitefg extends Component {
+            class Whitefg extends Behavior {
                 created() { this.style.set('color', 'white'); }
             }
         ).register(
-            class Blackfg extends Component {
+            class Blackfg extends Behavior {
                 created() { this.style.set('color', 'black'); }
             }
         );

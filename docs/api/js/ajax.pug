@@ -88,6 +88,89 @@ block content
         ul.properties
             +property('name', 'string', 'The name of the header')
             +property('value', 'string', 'The value of the header')
+    .scrollspy.section#ajax-watch
+        h2.thin Watch
+        p When something needs to happen after multiple ajax requests are made, they can be watched. This will watch all requests and when they are all done, an event will be triggered.
+    .scrollspy.section#ajax-watch-all
+        h4.header Watch.all()
+        p Watches a list of Ajax Requests.
+        ul.properties
+            +property('...toWatch', 'string[]', 'A list of requests to watch')
+        pre: code.language-javascript.
+            let req1 = Ajax.request('http://blueberryjs.com/1');
+            let req2 = Ajax.request('http://blueberryjs.com/2');
+            let req3 = Ajax.request('http://blueberryjs.com/3');
+            Watch.all(req1, req2, req3);
+    .scrollspy.section#ajax-watch-done
+        h4.header Watch.done()
+        p Once all of the request have completed, the done event is triggered. The done will contain an AjaxResponseList, which then can access each items AjaxResponse object.
+        ul.properties
+            +property('callback', 'Function', 'A callback to execute upon completion')
+        pre: code.language-javascript.
+            let req1 = Ajax.request('http://blueberryjs.com/1');
+            let req2 = Ajax.request('http://blueberryjs.com/2');
+            let req3 = Ajax.request('http://blueberryjs.com/3');
+            Watch.all(req1, req2, req3).done(list => {
+                let res1 = list.get(0); // Gets the response from the first request
+                let res2 = list.get(1); // Gets the response from the second request
+                let res3 = list.get(2); // Gets the response from the thrid request
+            });
+    .scrollspy.section#ajaxresponselist
+        h2.thin AjaxResponseList
+        p A list of ajax responses created by a watch.
+    .scrollspy.section#ajaxresponselist-responses
+        +def('AjaxResponseList.responses', 'A list of all the responses')
+        +returnVal('AjaxResponse[]', 'All of the responses that from the requests')
+        pre: code.language-javascript.
+            let req1 = Ajax.request('http://blueberryjs.com/1');
+            let req2 = Ajax.request('http://blueberryjs.com/2');
+            Watch.all(req1, req2).done(list => {
+                console.log(list.responses);
+            });
+    .scrollspy.section#ajaxresponselist-headers
+        +def('AjaxResponseList.headers', 'A list of all the headers')
+        +returnVal('Object[]', 'An array of request objects containing headers')
+        pre: code.language-javascript.
+            let req1 = Ajax.request('http://blueberryjs.com/1');
+            let req2 = Ajax.request('http://blueberryjs.com/2');
+            Watch.all(req1, req2).done(list => {
+                console.log(list.headers);
+            });
+    .scrollspy.section#ajaxresponselist-get
+        +def('AjaxResponseList.get()', 'Gets an AjaxResponse from the list of responses')
+        ul.properties
+            +property('index', 'number', 'The index of the request')
+        +returnVal('AjaxResponse', 'The response from the request')
+        pre: code.language-javascript.
+            let req1 = Ajax.request('http://blueberryjs.com/1');
+            let req2 = Ajax.request('http://blueberryjs.com/2');
+            Watch.all(req1, req2).done(list => {
+                console.log(list.get(0));
+                console.log(list.get(1));
+            });
+    .scrollspy.section#ajaxresponselist-getResponseHeaders
+        +def('AjaxResponseList.getResponseHeaders()', 'Gets an AjaxHeader[] from a response')
+        ul.properties
+            +property('index', 'number', 'The index of the request')
+        +returnVal('AjaxHeader[]', 'The headers from the request')
+        pre: code.language-javascript.
+            let req1 = Ajax.request('http://blueberryjs.com/1');
+            let req2 = Ajax.request('http://blueberryjs.com/2');
+            Watch.all(req1, req2).done(list => {
+                console.log(list.getResponseHeaders(0));
+                console.log(list.getResponseHeaders(1));
+            });
+    .scrollspy.section#ajaxresponselist-findInEach
+        +def('AjaxResponseList.findInEach()', 'Gets an object found in each response')
+        ul.properties
+            +property('key', 'string', 'The query selector to search the response for')
+        +returnVal('any', 'The value from each object')
+        pre: code.language-javascript.
+            let req1 = Ajax.request('http://blueberryjs.com/1');
+            let req2 = Ajax.request('http://blueberryjs.com/2');
+            Watch.all(req1, req2).done(list => {
+                console.log(list.findInEach('user[10]'));
+            });
 block sideContent
     ul.section.table-of-contents.pinned
         li: a(href='#intro') Introduction
@@ -102,3 +185,14 @@ block sideContent
         li: a(href='#ajaxresponse-getheadervalue') AjaxResponse Get Header Value
         li AjaxHeader
         li: a(href='#ajaxheader') AjaxHeader
+        li Watch
+        li: a(href='#ajax-watch') Watch
+        li: a(href='#ajax-watch-all') Watch All
+        li: a(href='#ajax-watch-done') Watch Done
+        li AjaxResponseList
+        li: a(href='#ajaxresponselist') AjaxResponseList
+        li: a(href='#ajaxresponselist-responses') All Responses
+        li: a(href='#ajaxresponselist-headers') Get Headers
+        li: a(href='#ajaxresponselist-get') Get a Response
+        li: a(href='#ajaxresponselist-getResponseHeaders') Get Response Headers
+        li: a(href='#ajaxresponselist-findInEach') Find in Each Response

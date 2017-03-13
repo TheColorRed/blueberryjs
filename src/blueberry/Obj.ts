@@ -99,7 +99,7 @@ class Obj {
      */
     public removeComponent<T extends Component>(type: ComponentType<T>): this {
         let i = this.object.components.length;
-        let name = (<any>type).constructor.name;
+        let name = (<any>type).prototype.constructor.name;
         while (i--) {
             let comp = this.object.components[i];
             if (comp instanceof Component && name == (<any>comp).constructor.name) {
@@ -148,6 +148,7 @@ class Obj {
     public sendMessage(message: string, ...options: any[]) {
         for (let i = 0, l = this._components.length; i < l; i++) {
             let comp = this._components[i];
+            if (!comp) { return; }
             if (message == 'created') {
                 if (comp['_started']) { return; }
                 comp['_started'] = true;
