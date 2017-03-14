@@ -7,7 +7,7 @@ block content
     h2.header Final Result
     script.
         Blueberry.register(
-            class Clock extends Component {
+            class Clock extends Behavior {
                 observe() {
                     return { time: 0 };
                 }
@@ -22,7 +22,7 @@ block content
     h4 clock.js
     pre: code.language-javascript.
         Blueberry.register(
-            class Clock extends Component {
+            class Clock extends Behavior {
                 observe() {
                     return { time: 0 };
                 }

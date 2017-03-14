@@ -55,7 +55,7 @@ block content
     h4 component-toggle.js
     pre: code.language-js.
         Blueberry.register(
-            class ComponentSwitcher extends Component {
+            class ComponentSwitcher extends Behavior {
                 click() {
                     let example = DOMObject.find('#example');
                     switch(this.attrs.action){
@@ -67,19 +67,19 @@ block content
                 }
             }
         ).register(
-            class Pinkbg extends Component {
+            class Pinkbg extends Behavior {
                 created() { this.style.set('background-color', 'pink'); }
             }
         ).register(
-            class Tealbg extends Component {
+            class Tealbg extends Behavior {
                 created() { this.style.set('background-color', 'teal'); }
             }
         ).register(
-            class Whitefg extends Component {
+            class Whitefg extends Behavior {
                 created() { this.style.set('color', 'white'); }
             }
         ).register(
-            class Blackfg extends Component {
+            class Blackfg extends Behavior {
                 created() { this.style.set('color', 'black'); }
             }
         );

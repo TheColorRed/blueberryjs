@@ -25,10 +25,11 @@ class Class extends Dom {
      *
      * @memberOf Class
      */
-    public add(className: string) {
+    public add(className: string): this {
         className.split(' ').forEach(c => {
             this.element.classList.add(c);
         });
+        return this;
     }
 
     /**
@@ -38,10 +39,11 @@ class Class extends Dom {
      *
      * @memberOf Class
      */
-    public remove(className: string) {
+    public remove(className: string): this {
         className.split(' ').forEach(c => {
             this.element.classList.remove(c);
         });
+        return this;
     }
 
     /**
@@ -51,10 +53,11 @@ class Class extends Dom {
      *
      * @memberOf Class
      */
-    public toggle(className: string) {
+    public toggle(className: string): this {
         className.split(' ').forEach(c => {
             this.element.classList.toggle(c);
         });
+        return this;
     }
 
 }

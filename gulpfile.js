@@ -32,11 +32,11 @@ const pugFiles = [
     'examples/stopwatch',
     'examples/observe',
     'examples/ajax',
-    'api/js/ajax',
-    'api/js/component',
-    'api/js/blueberry',
-    'api/js/blueberry-object',
-    'api/html/component',
+    'api/core/ajax',
+    'api/core/component',
+    'api/core/blueberry',
+    'api/core/blueberry-object',
+    'api/dom/component',
 ];
 
 gulp.task('blueberry', () => {
@@ -94,13 +94,13 @@ function makeProject(projectPath) {
     let baseName = path.parse(projectConfig.compilerOptions.outFile).base;
     if (projectConfig.compilerOptions.target != 'es6') {
         return tsResult.js.pipe(uglify({ mangle: false })).pipe(gulp.dest('./')).on('finish', function () {
-            fs.createReadStream(`./dist/${baseName}`).pipe(fs.createWriteStream(`./public/assets/js/cdn/${baseName}`));
+            fs.createReadStream(`./dist/${baseName}`).pipe(fs.createWriteStream(`./public/assets/js/cdn/latest/${baseName}`));
         });
     }
     // Compile es6 project
     else {
         return tsResult.js.pipe(gulp.dest('./')).on('finish', function () {
-            fs.createReadStream(`./dist/${baseName}`).pipe(fs.createWriteStream(`./public/assets/js/cdn/${baseName}`));
+            fs.createReadStream(`./dist/${baseName}`).pipe(fs.createWriteStream(`./public/assets/js/cdn/latest/${baseName}`));
         });
     }
 }

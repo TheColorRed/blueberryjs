@@ -3,6 +3,7 @@ Blueberry.registerAddon(
         public init() {
             DOMObject.initElementsWithComponent();
             MouseHandler.clickHandlers();
+            KeyboardHandler.inputHandler();
         }
     }
 );

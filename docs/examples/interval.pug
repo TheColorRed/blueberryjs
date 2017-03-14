@@ -7,7 +7,7 @@ block content
     h2.header Final Result
     script.
         Blueberry.register(
-            class Interval extends Component {
+            class Interval extends Behavior {
                 observe() {
                     return { c: 0, numbers: [] };
                 }
@@ -30,7 +30,7 @@ block content
     h4 interval.js
     pre: code.language-javascript.
         Blueberry.register(
-            class Interval extends Component {
+            class Interval extends Behavior {
                 observe() {
                     return { c: 0, numbers: [] };
                 }

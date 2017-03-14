@@ -7,7 +7,7 @@ block content
     h2.header Final Result
     script.
         Blueberry.register(
-            class BuildFromTemplate extends Component {
+            class BuildFromTemplate extends Behavior {
                 created() {
                     let data = [
                         {first: 'Billy', last: 'Bob', color: 'red'},
@@ -23,7 +23,7 @@ block content
     h4 template.js
     pre: code.language-js.
         Blueberry.register(
-            class BuildFromTemplate extends Component {
+            class BuildFromTemplate extends Behavior {
                 created() {
                     let data = [
                         { first: 'Billy',  last: 'Bob',  color: 'red'   },
@@ -55,7 +55,7 @@ block content
     h2.header Final Result
     script.
         Blueberry.register(
-            class BuildFromTemplate2 extends Component {
+            class BuildFromTemplate2 extends Behavior {
                 observe() {
                     return {
                         names: [
@@ -75,7 +75,7 @@ block content
     h4 template2.js
     pre: code.language-js.
         Blueberry.register(
-            class BuildFromTemplate2 extends Component {
+            class BuildFromTemplate2 extends Behavior {
                 observe() {
                     return {
                         names: [

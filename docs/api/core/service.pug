@@ -16,13 +16,13 @@ block content
                     }
                 }
             ).register(
-                class MyComponent extends Component {
+                class MyComponent extends Behavior {
                     created() {
                         myService.number = 456;
                     }
                 }
             ).register(
-                class MyOtherComponent extends Component {
+                class MyOtherComponent extends Behavior {
                     click() {
                         console.log(myService.number);
                     }

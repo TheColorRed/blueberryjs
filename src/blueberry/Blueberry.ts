@@ -3,7 +3,7 @@ class Blueberry {
     public static isActive: boolean = true;
 
     private static _observable: Observable[] = [];
-    private static _version: string = '0.0.1';
+    private static _version: string = '0.1.0';
 
     private static _objects: Obj[] = [];
     private static _registeredComponents: Component[] = [];

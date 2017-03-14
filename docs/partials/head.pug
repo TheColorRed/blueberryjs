@@ -12,6 +12,8 @@ mixin property(prop, type, text)
 //- An item the inherits from another item link
 mixin inherit(text, url)
     p.flow-text Inherits from #[a(href=`${url}.html`) #{text}]
+mixin see(text, url)
+    p.flow-text See #[a(href=`${url}.html`) #{text}]
 //- A document header item
 mixin header(title, message)
     h2.header!= title
@@ -32,9 +34,9 @@ html
         script(src='https://code.jquery.com/jquery-2.2.4.js')
         script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js')
         script(src='/assets/js/prism.js')
+        script(src='/assets/js/cdn/latest/blueberry.js')
+        script(src='/assets/js/cdn/latest/dom.js')
         script(src='/assets/js/master.js')
-        script(src='/assets/js/cdn/blueberry.js')
-        script(src='/assets/js/cdn/dom.js')
         style.
             body{font-size:16px;display:flex;min-height:100vh;flex-direction: column;}
             main{flex: 1 0 auto;}
@@ -50,6 +52,8 @@ html
             ul.return>li{font-size: 20px;}
             ul.return>li>ul>li{font-size: 16px;color:rgba(0,0,0,0.87);}
             .side-nav a { padding: 0 16px; }
+            .table-of-contents { width: 10%; }
+            .table-of-contents a { display: block; }
         script.
             $(document).ready(function(){
                 $('.scrollspy').scrollSpy({scrollOffset: 100});

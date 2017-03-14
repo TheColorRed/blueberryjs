@@ -11,7 +11,7 @@ block content
         +def('Component', `This is the class that you will want to extend to utilize Blueberry's messages. These messages will excuted bassed on the message that occurs, such as when the item is <code>created</code>, <code>deleted</code>, <code>click</code>'d, etc.`)
         pre: code.language-javascript.
             Blueberry.register(
-                class MyClass extends Component { /* Messages will go here */ }
+                class MyClass extends Behavior { /* Messages will go here */ }
             );
         p We also need to register the component with Blueberry itself so it knows that the class exists. If this isn't done JavaScript will throw an error message.
 
@@ -22,7 +22,7 @@ block content
         ul.return
             +returnVal('object', 'Your observe method should return an object of items to watch.')
         pre: code.language-javascript.
-            class MyClass extends Component {
+            class MyClass extends Behavior {
                 observe() {
                     return {
                         first: 'Billy',
@@ -38,7 +38,7 @@ block content
         +def('created()', 'When a Blueberry element is created this message will get fired. This message is only fired one time for the life of the element.')
         p If you would like to access another component don't do it here as this message is only for initialization of the component. If you would like to access another component in the creation process, use the #[a(href='#message-ready') ready] message.
         pre: code.language-javascript.
-            class MyClass extends Component {
+            class MyClass extends Behavior {
                 created() {
                     console.log('I was created!');
                 }
@@ -47,16 +47,16 @@ block content
     .scrollspy.section#message-ready
         +def('ready()', 'Once all the items have been created the ready state is then triggered. Here you can then access all elements.')
         pre: code.language-javascript.
-            class MyClass extends Component {
+            class MyClass extends Behavior {
                 ready() {
-                    Blueberry.find('.tween', Tween).start();
+                    Dom.find('.tween', Tween).start();
                 }
             }
     //- The deleted message
     .scrollspy.section#message-deleted
         +def('deleted()', 'When a Blueberry element gets deleted this message will get triggered. This event is only called when <code>this.destroy()</code> is called. Deleting the object without using Blueberry will not trigger the <code>deleted</code> message')
         pre: code.language-javascript.
-            class MyClass extends Component {
+            class MyClass extends Behavior {
                 created() {
                     // Destroy the object in 5 seconds
                     this.destroy(5);
@@ -69,7 +69,7 @@ block content
     .scrollspy.section#message-update
         +def('update()', 'This message is called about 60 times per second if it is on your component. It can be used for animations or things that need to be ran at a constant rate.')
         pre: code.language-javascript.
-            class MyClass extends Component {
+            class MyClass extends Behavior {
                 update() {
                     console.log('I was updated!');
                 }
@@ -79,21 +79,9 @@ block content
         +def('lateUpdate()', 'This message is called about 60 times per second if it is on your component. It can be used to get data from other components that have updated.')
         p Since #[code messages] run on one component at a time #[code ComponentA] might need data from #[code ComponentB] but #[code ComponentB] may not have run its #[code update] yet, in your #[code ComponentA] you would then add a #[code lateUpdate] to get that data.
         pre: code.language-javascript.
-            class MyClass extends Component {
+            class MyClass extends Behavior {
                 lateUpdate() {
                     console.log('I was updated!');
-                }
-            }
-    //- The click message
-    .scrollspy.section#message-click
-        h4 click()
-        p When you click on the component this #[code message] gets fired.
-        ul.properties
-            +property('event', 'Event', 'The JavaScript Event')
-        pre: code.language-javascript.
-            class MyClass extends Component {
-                click(event) {
-                    alert('You clicked me!');
                 }
             }
 block sideContent
@@ -108,4 +96,3 @@ block sideContent
         li: a(href='#message-deleted') Deleted
         li: a(href='#message-update') Update
         li: a(href='#message-lateupdate') Late Update
-        li: a(href='#message-click') Click

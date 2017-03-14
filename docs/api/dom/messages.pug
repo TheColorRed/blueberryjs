@@ -1,0 +1,74 @@
+extends ../../partials/head.pug
+block title
+    title Dom Api &ndash; Messages
+block content
+    .scrollspy#intro
+        h2.header Dom Messages
+        +see('Core Components', '/api/core/component')
+        p.flow-text.card-panel Dom components are used to attach a defined JavaScript component to a HTML DOM element.
+    +header('Messages', 'Dom messages are built in particular to the Dom addon, using these message with another addon may have other effects.')
+    .scrollspy.section#message-click
+        h4 click()
+        p When you click on the component this #[code message] gets fired.
+        ul.properties
+            +property('event', 'Event', 'The JavaScript Event')
+        pre: code.language-javascript.
+            class MyClass extends Behavior {
+                click(event) {
+                    alert('You clicked me!');
+                }
+            }
+    .scrollspy.section#message-dblclick
+        h4 doubleClick()
+        p When you double click on the component this #[code message] gets fired.
+        ul.properties
+            +property('event', 'Event', 'The JavaScript Event')
+        pre: code.language-javascript.
+            class MyClass extends Behavior {
+                doubleClick(event) {
+                    alert('You clicked me!');
+                }
+            }
+    .scrollspy.section#message-input
+        h4 input()
+        p When an text field received input from the keyboard.
+        ul.properties
+            +property('event', 'Event', 'The JavaScript Event')
+        pre: code.language-javascript.
+            class MyClass extends Behavior {
+                input(event) {
+                    console.log('input');
+                }
+            }
+    .scrollspy.section#message-keydown
+        h4 keyDown()
+        p When the user presses the key on the keyboard in a text field.
+        ul.properties
+            +property('event', 'Event', 'The JavaScript Event')
+        pre: code.language-javascript.
+            class MyClass extends Behavior {
+                keyDown(event) {
+                    console.log('key down');
+                }
+            }
+    .scrollspy.section#message-keyup
+        h4 keyUp()
+        p When the user releases the key on the keyboard in a text field.
+        ul.properties
+            +property('event', 'Event', 'The JavaScript Event')
+        pre: code.language-javascript.
+            class MyClass extends Behavior {
+                keyUp(event) {
+                    console.log('key up');
+                }
+            }
+block sideContent
+    ul.section.table-of-contents.pinned
+        li: a(href='#intro') Introduction
+        li Mouse
+        li: a(href='#message-click') Click
+        li: a(href='#message-dblclick') Double Click
+        li Keyboard
+        li: a(href='#message-input') Input
+        li: a(href='#message-keydown') Key Down
+        li: a(href='#message-keyup') Key Up

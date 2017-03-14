@@ -7,7 +7,7 @@ block content
     h2.header Final Result
     script.
         Blueberry.register(
-            class Observe extends Component {
+            class Observe extends Behavior {
                 observe() {
                     return {
                         first: 'Who knows?',
@@ -32,7 +32,7 @@ block content
     h4 observe.js
     pre: code.language-js.
         Blueberry.register(
-            class Observe extends Component {
+            class Observe extends Behavior {
                 observe() {
                     return {
                         first: 'Who knows?',

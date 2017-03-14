@@ -7,7 +7,7 @@ block content
     h2.header Final Result
     script.
         Blueberry.register(
-            class Timer extends Component {
+            class Timer extends Behavior {
                 observe() {
                     return { elapsed: 0, started: new Date() };
                 }
@@ -24,7 +24,7 @@ block content
     h4 timer.js
     pre: code.language-javascript.
         Blueberry.register(
-            class Timer extends Component {
+            class Timer extends Behavior {
                 observe() {
                     return { elapsed: 0, started: new Date() };
                 }

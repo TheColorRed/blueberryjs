@@ -58,13 +58,13 @@ block content
             class Attributes extends Behavior {
                 created() {
                     if (this.dom.attrs.initFg && this.dom.attrs.initBg) {
-                        let example = Blueberry.find('#example');
+                        let example = Dom.find('#example');
                         example.style.set('color', this.dom.attrs.initFg);
                         example.style.set('background-color', this.dom.attrs.initBg);
                     }
                 }
                 click() {
-                    let example = Blueberry.find('#example');
+                    let example = Dom.find('#example');
                     switch (this.dom.attrs.action) {
                         case 'fg': example.style.set('color', this.dom.attrs.color); break;
                         case 'bg': example.style.set('background-color', this.dom.attrs.color); break;
