@@ -3,20 +3,17 @@ $(document).ready(e => {
 });
 
 Blueberry.register(
-    class BluberryVersion extends Behavior {
+    class VersionSelect extends Behavior {
         created() {
             this.cdn = 'http://cdn.blueberryjs.com';
-            let defaultVersion = this.dom.attrs.default == 'true' ? true : false;
-            if (defaultVersion) {
-                this.setVersion();
-            }
+            Exp.one(this.dom.attrs.default, 'true', '1') ? this.setVersion() : null;
         }
         click() {
             this.setVersion();
         }
         setVersion() {
-            // Reset the buttons
-            Dom.findByComponent(BluberryVersion).removeClass('red').addClass('blue');
+            // Reset all the buttons
+            Dom.findByComponent(VersionSelect).removeClass('red').addClass('blue');
             // Make the selected button red
             this.class.add('red').remove('blue');
             // Update the dom

@@ -18,6 +18,7 @@
         "./http/Watch.ts",
         "./plugin/Addon.ts",
         "./utility/Types.ts",
+        "./utility/Expression.ts",
         "./utility/Time.ts",
         "./utility/Mathf.ts",
         "./utility/Properties.ts",
